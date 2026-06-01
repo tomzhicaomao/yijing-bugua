@@ -6,3 +6,7 @@ dist/
 test-results/
 .claude/
 *.tsbuildinfo
+*.bak
+.DS_Store
+__pycache__/
+*.bak
