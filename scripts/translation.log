@@ -1,0 +1,328 @@
+Loaded 64 hexagrams from hexagrams_raw.json
+Using model: deepseek-chat
+
+Processing 64 hexagrams...
+  [1] 乾...
+    judgment ✓
+    image ✓
+  Progress complete for [1] 乾
+  Overall: 1/64
+  [10] 履...
+    judgment ✓
+    image ✓
+  Progress complete for [10] 履
+  Overall: 2/64
+  [11] 泰...
+    judgment ✓
+    image ✓
+  Progress complete for [11] 泰
+  Overall: 3/64
+  [12] 否...
+    judgment ✓
+    image ✓
+  Progress complete for [12] 否
+  Overall: 4/64
+  [13] 同人...
+    judgment ✓
+    image ✓
+  Progress complete for [13] 同人
+  Overall: 5/64
+  [14] 大有...
+    judgment ✓
+    image ✓
+  Progress complete for [14] 大有
+  Overall: 6/64
+  [15] 謙...
+    judgment ✓
+    image ✓
+  Progress complete for [15] 謙
+  Overall: 7/64
+  [16] 豫...
+    judgment ✓
+    image ✓
+  Progress complete for [16] 豫
+  Overall: 8/64
+  [17] 隨...
+    judgment ✓
+    image ✓
+  Progress complete for [17] 隨
+  Overall: 9/64
+  [18] 蠱...
+    judgment ✓
+    image ✓
+  Progress complete for [18] 蠱
+  Overall: 10/64
+  [19] 臨...
+    judgment ✓
+    image ✓
+  Progress complete for [19] 臨
+  Overall: 11/64
+  [2] 坤...
+    judgment ✓
+    image ✓
+  Progress complete for [2] 坤
+  Overall: 12/64
+  [20] 觀...
+    judgment ✓
+    image ✓
+  Progress complete for [20] 觀
+  Overall: 13/64
+  [21] 噬嗑...
+    judgment ✓
+    image ✓
+  Progress complete for [21] 噬嗑
+  Overall: 14/64
+  [22] 賁...
+    judgment ✓
+    image ✓
+  Progress complete for [22] 賁
+  Overall: 15/64
+  [23] 剝...
+    judgment ✓
+    image ✓
+  Progress complete for [23] 剝
+  Overall: 16/64
+  [24] 復...
+    judgment ✓
+    image ✓
+  Progress complete for [24] 復
+  Overall: 17/64
+  [25] 無妄...
+    judgment ✓
+    image ✓
+  Progress complete for [25] 無妄
+  Overall: 18/64
+  [26] 大畜...
+    judgment ✓
+    image ✓
+  Progress complete for [26] 大畜
+  Overall: 19/64
+  [27] 頤...
+    judgment ✓
+    image ✓
+  Progress complete for [27] 頤
+  Overall: 20/64
+  [28] 大過...
+    judgment ✓
+    image ✓
+  Progress complete for [28] 大過
+  Overall: 21/64
+  [29] 坎...
+    judgment ✓
+    image ✓
+  Progress complete for [29] 坎
+  Overall: 22/64
+  [3] 屯...
+    judgment ✓
+    image ✓
+  Progress complete for [3] 屯
+  Overall: 23/64
+  [30] 離...
+    judgment ✓
+    image ✓
+  Progress complete for [30] 離
+  Overall: 24/64
+  [31] 咸...
+    judgment ✓
+    image ✓
+  Progress complete for [31] 咸
+  Overall: 25/64
+  [32] 恆...
+    judgment ✓
+    image ✓
+  Progress complete for [32] 恆
+  Overall: 26/64
+  [33] 遯...
+    judgment ✓
+    image ✓
+  Progress complete for [33] 遯
+  Overall: 27/64
+  [34] 大壯...
+    judgment ✓
+    image ✓
+  Progress complete for [34] 大壯
+  Overall: 28/64
+  [35] 晉...
+    judgment ✓
+    image ✓
+  Progress complete for [35] 晉
+  Overall: 29/64
+  [36] 明夷...
+    judgment ✓
+    image ✓
+  Progress complete for [36] 明夷
+  Overall: 30/64
+  [37] 家人...
+    judgment ✓
+    image ✓
+  Progress complete for [37] 家人
+  Overall: 31/64
+  [38] 睽...
+    judgment ✓
+    image ✓
+  Progress complete for [38] 睽
+  Overall: 32/64
+  [39] 蹇...
+    judgment ✓
+    image ✓
+  Progress complete for [39] 蹇
+  Overall: 33/64
+  [4] 蒙...
+    judgment ✓
+    image ✓
+  Progress complete for [4] 蒙
+  Overall: 34/64
+  [40] 解...
+    judgment ✓
+    image ✓
+  Progress complete for [40] 解
+  Overall: 35/64
+  [41] 損...
+    judgment ✓
+    image ✓
+  Progress complete for [41] 損
+  Overall: 36/64
+  [42] 益...
+    judgment ✓
+    image ✓
+  Progress complete for [42] 益
+  Overall: 37/64
+  [43] 夬...
+    judgment ✓
+    image ✓
+  Progress complete for [43] 夬
+  Overall: 38/64
+  [44] 姤...
+    judgment ✓
+    image ✓
+  Progress complete for [44] 姤
+  Overall: 39/64
+  [45] 萃...
+    judgment ✓
+    image ✓
+  Progress complete for [45] 萃
+  Overall: 40/64
+  [46] 升...
+    judgment ✓
+    image ✓
+  Progress complete for [46] 升
+  Overall: 41/64
+  [47] 困...
+    judgment ✓
+    image ✓
+  Progress complete for [47] 困
+  Overall: 42/64
+  [48] 井...
+    judgment ✓
+    image ✓
+  Progress complete for [48] 井
+  Overall: 43/64
+  [49] 革...
+    judgment ✓
+    image ✓
+  Progress complete for [49] 革
+  Overall: 44/64
+  [5] 需...
+    judgment ✓
+    image ✓
+  Progress complete for [5] 需
+  Overall: 45/64
+  [50] 鼎...
+    judgment ✓
+    image ✓
+  Progress complete for [50] 鼎
+  Overall: 46/64
+  [51] 震...
+    judgment ✓
+    image ✓
+  Progress complete for [51] 震
+  Overall: 47/64
+  [52] 艮...
+    judgment ✓
+    image ✓
+  Progress complete for [52] 艮
+  Overall: 48/64
+  [53] 漸...
+    judgment ✓
+    image ✓
+  Progress complete for [53] 漸
+  Overall: 49/64
+  [54] 歸妹...
+    judgment ✓
+    image ✓
+  Progress complete for [54] 歸妹
+  Overall: 50/64
+  [55] 豐...
+    judgment ✓
+    image ✓
+  Progress complete for [55] 豐
+  Overall: 51/64
+  [56] 旅...
+    judgment ✓
+    image ✓
+  Progress complete for [56] 旅
+  Overall: 52/64
+  [57] 巽...
+    judgment ✓
+    image ✓
+  Progress complete for [57] 巽
+  Overall: 53/64
+  [58] 兌...
+    judgment ✓
+    image ✓
+  Progress complete for [58] 兌
+  Overall: 54/64
+  [59] 渙...
+    judgment ✓
+    image ✓
+  Progress complete for [59] 渙
+  Overall: 55/64
+  [6] 訟...
+    judgment ✓
+    image ✓
+  Progress complete for [6] 訟
+  Overall: 56/64
+  [60] 節...
+    judgment ✓
+    image ✓
+  Progress complete for [60] 節
+  Overall: 57/64
+  [61] 中孚...
+    judgment ✓
+    image ✓
+  Progress complete for [61] 中孚
+  Overall: 58/64
+  [62] 小過...
+    judgment ✓
+    image ✓
+  Progress complete for [62] 小過
+  Overall: 59/64
+  [63] 既濟...
+    judgment ✓
+    image ✓
+  Progress complete for [63] 既濟
+  Overall: 60/64
+  [64] 未濟...
+    judgment ✓
+    image ✓
+  Progress complete for [64] 未濟
+  Overall: 61/64
+  [7] 師...
+    judgment ✓
+    image ✓
+  Progress complete for [7] 師
+  Overall: 62/64
+  [8] 比...
+    judgment ✓
+    image ✓
+  Progress complete for [8] 比
+  Overall: 63/64
+  [9] 小畜...
+    judgment ✓
+    image ✓
+  Progress complete for [9] 小畜
+  Overall: 64/64
+
+✓ Output: hexagrams_translated.json
+  Judgments translated: 64/64
+  Lines translated:     386

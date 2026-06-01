@@ -1,0 +1,18 @@
+import { Link } from 'react-router-dom'
+
+export default function HomeView() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-6 py-16">
+      <h1 className="text-3xl font-semibold">易经占卜</h1>
+      <p className="text-gray-600 text-center max-w-md">
+        周易古占 · 实验派决策辅助工具
+      </p>
+      <Link
+        to="/divine"
+        className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+      >
+        开始起卦
+      </Link>
+    </div>
+  )
+}
