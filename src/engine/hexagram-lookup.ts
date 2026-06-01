@@ -31,7 +31,7 @@ export function getLineText(hexagramId: number, changingLines: number[]): LineTe
     return { type: 'judgment', text: hexagram.judgment }
   }
 
-  const texts = changingLines
+  const texts = [...changingLines]
     .sort((a, b) => a - b)
     .map((pos) => {
       const line = hexagram.lines.find((l) => l.position === pos)

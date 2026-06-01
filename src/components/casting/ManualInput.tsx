@@ -4,7 +4,7 @@ interface ManualInputProps {
   lines: (LineValue | null)[]
   currentIndex: number
   onSelectBack: (count: number) => void
-  onComplete: () => void
+  onComplete: () => void | Promise<void>
 }
 
 const BACK_OPTIONS = [

@@ -74,7 +74,7 @@ describe('checkDuplicate', () => {
     ]
     const result = checkDuplicate('一样的问题', records, 24)
     expect(result).not.toBeNull()
-    expect(result!.countWithin24h).toBe(1)
+    expect(result!.countInWindow).toBe(1)
     expect(result!.relatedRecordIds).toContain('existing-1')
   })
 
@@ -92,7 +92,7 @@ describe('checkDuplicate', () => {
       }),
     ]
     const result = checkDuplicate('一样的问题', records, 24)
-    expect(result!.countWithin24h).toBe(2)
+    expect(result!.countInWindow).toBe(2)
     expect(result!.relatedRecordIds).toEqual(['r1', 'r2'])
   })
 })

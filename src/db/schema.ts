@@ -17,6 +17,9 @@ export function getDB(): Promise<IDBPDatabase> {
         store.createIndex('feedbackDueAt', 'feedback.dueAt')
         store.createIndex('schemaVersion', 'schemaVersion')
       },
+    }).catch((err) => {
+      dbPromise = null
+      throw err
     })
   }
   return dbPromise

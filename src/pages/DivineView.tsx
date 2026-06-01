@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 import QuestionInput from "../components/casting/QuestionInput"
 import BeforeDivination from "../components/casting/BeforeDivination"
 import MethodToggle from "../components/casting/MethodToggle"
@@ -10,9 +10,13 @@ import type { BeforeDivination as BeforeDivinationData } from "../types"
 
 export default function DivineView() {
   const { step, question, category, beforeDivination, method, lines, currentIndex, setQuestionAndCategory, updateBeforeDivination, setBeforeAndContinue, setLineValue, startCasting, selectManualBack, completeCasting, setQuestion, setCategory, setMethod } = useDivination()
+  const completingRef = useRef(false)
 
   useEffect(() => {
-    if (step === "casting" && currentIndex >= 6) { completeCasting() }
+    if (step === "casting" && currentIndex >= 6 && !completingRef.current) {
+      completingRef.current = true
+      completeCasting().finally(() => { completingRef.current = false })
+    }
   }, [step, currentIndex, completeCasting])
 
   return (

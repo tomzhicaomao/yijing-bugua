@@ -67,10 +67,11 @@ function AIInterpretation({ interpretation }: { interpretation: IResult }) {
       </div>
 
       <div>
-        <span className="inline-block px-2 py-1 rounded text-sm font-bold bg-white border
-          {interpretation.trend === '利' ? 'text-green-700 border-green-300' :
-           interpretation.trend === '不利' ? 'text-red-700 border-red-300' :
-           'text-gray-700 border-gray-300'}">
+        <span className={`inline-block px-2 py-1 rounded text-sm font-bold bg-white border ${
+          interpretation.trend === '利' ? 'text-green-700 border-green-300' :
+          interpretation.trend === '不利' ? 'text-red-700 border-red-300' :
+          'text-gray-700 border-gray-300'
+        }`}>
           趋势：{interpretation.trend}
         </span>
         <span className="text-xs text-gray-400 ml-2">置信度：{interpretation.confidence}</span>

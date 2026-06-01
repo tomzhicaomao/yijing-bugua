@@ -69,7 +69,7 @@ export interface BeforeDivination {
 }
 
 export interface DuplicateInfo {
-  countWithin24h: number
+  countInWindow: number
   relatedRecordIds: string[]
 }
 

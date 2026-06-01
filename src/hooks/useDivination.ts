@@ -116,10 +116,17 @@ export function useDivination() {
       duplicate: undefined, // TODO: check duplicate
     }
 
-    await createRecord(record)
-    setSavedRecordId(record.id)
-    setStep('result')
-    navigate(`/result/${record.id}`)
+    try {
+      await createRecord(record)
+      setSavedRecordId(record.id)
+      setStep('result')
+      navigate(`/result/${record.id}`)
+    } catch (err) {
+      console.error('Failed to save record:', err)
+      setSavedRecordId(record.id)
+      setStep('result')
+      navigate(`/result/${record.id}`)
+    }
   }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate])
 
   return {

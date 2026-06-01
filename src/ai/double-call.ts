@@ -56,6 +56,7 @@ export async function runDoubleCall(
     return {
       success: true,
       interpretation: reasoningResult.interpretation,
+      narrative: undefined,
       progress: "done",
       error: "叙事调用失败，显示推理结果",
     }

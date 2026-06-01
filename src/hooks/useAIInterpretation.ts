@@ -46,6 +46,7 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
     if (result.success && result.interpretation) {
       setInterpretation(result.interpretation)
       if (result.narrative) setNarrative(result.narrative)
+      if (result.error) setError(result.error)
 
       // Update the record in IndexedDB with the interpretation
       const updated = {

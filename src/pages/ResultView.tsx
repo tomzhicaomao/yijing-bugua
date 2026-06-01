@@ -21,10 +21,14 @@ export default function ResultView() {
 
   useEffect(() => {
     if (!id) return
-    getRecordById(id).then((r) => {
-      setRecord(r)
-      setLoading(false)
-    })
+    getRecordById(id)
+      .then((r) => {
+        setRecord(r)
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
   }, [id])
 
   useEffect(() => {

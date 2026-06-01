@@ -34,7 +34,7 @@ export function checkDuplicate(
   if (related.length === 0) return null
 
   return {
-    countWithin24h: related.length,
+    countInWindow: related.length,
     relatedRecordIds: related.map((r) => r.id),
   }
 }

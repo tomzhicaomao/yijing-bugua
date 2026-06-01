@@ -63,7 +63,7 @@ const feedbackSchema = z.object({
 
 // ========== Duplicate info ==========
 const duplicateInfoSchema = z.object({
-  countWithin24h: z.number().int().gte(0),
+  countInWindow: z.number().int().gte(0),
   relatedRecordIds: z.array(z.string()),
 })
 

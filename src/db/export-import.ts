@@ -15,7 +15,7 @@ export async function exportToJSON(): Promise<string> {
   const records = await getAllRecords()
   const data: ExportData = {
     app: 'yijing-bugua',
-    schemaVersion: 1,
+    schemaVersion: SCHEMA_VERSION,
     exportedAt: new Date().toISOString(),
     records,
   }

@@ -17,6 +17,42 @@
 
 ## 2026-06-01
 
+### 🐛 代码审查发现的10个Bug修复
+
+**问题**：通过全面代码审查发现的10个Bug，涵盖正确性、错误处理、数据完整性和UI显示问题。
+
+**修复清单**：
+
+| # | 文件 | 问题 | 严重性 |
+|---|------|------|--------|
+| 1 | `Interpretation.tsx` | className 使用普通字符串而非模板字面量，导致趋势标签始终显示灰色 | CRITICAL |
+| 2 | `DivineView.tsx` | useEffect 和 ManualInput 按钮同时调用 completeCasting 导致重复记录 | HIGH |
+| 3 | `hexagram-lookup.ts` | getLineText 的 .sort() 修改调用方数组，破坏不可变性 | HIGH |
+| 4 | `schema.ts` | getDB() 缓存被拒绝的 Promise，导致应用永久不可用 | HIGH |
+| 5 | `ResultView.tsx` | getRecordById 无 .catch()，IndexedDB 失败时永久显示加载中 | HIGH |
+| 6 | `useDivination.ts` | createRecord 无 try/catch，IndexedDB 写入失败时用户无反馈 | HIGH |
+| 7 | `double-call.ts` | 叙事调用失败时返回 success:true 但错误信息被静默吞没 | HIGH |
+| 8 | `ManualInput.tsx` | onComplete 类型为 () => void 但实际是 async 函数 | MEDIUM |
+| 9 | `duplicate-check.ts` | countWithin24h 字段名与参数化 windowHours 不匹配 | MEDIUM |
+| 10 | `export-import.ts` | 硬编码 schemaVersion:1 而非使用 SCHEMA_VERSION 常量 | MEDIUM |
+
+**详细修复**：
+
+1. **Interpretation.tsx:70** - 使用模板字面量 `` className={`... ${condition ? 'class' : 'other'}`} ``
+2. **DivineView.tsx:14-16** - 添加 useRef 防重复调用守卫
+3. **hexagram-lookup.ts:34** - 改为 `[...changingLines].sort()` 排序副本
+4. **schema.ts:10** - 添加 `.catch()` 处理，失败时重置 dbPromise 为 null 允许重试
+5. **ResultView.tsx:24** - 添加 `.catch()` 处理，失败时 setLoading(false)
+6. **useDivination.ts:119** - 添加 try/catch，失败时仍导航到结果页
+7. **double-call.ts:54** - 显式设置 `narrative: undefined`，useAIInterpretation 中读取 result.error
+8. **ManualInput.tsx:7** - 类型改为 `() => void | Promise<void>`
+9. **duplicate-check.ts:37** - 字段重命名为 `countInWindow`，同步更新类型、Schema 和测试
+10. **export-import.ts:18** - 使用 `SCHEMA_VERSION` 常量
+
+**涉及文件**：`Interpretation.tsx`、`DivineView.tsx`、`hexagram-lookup.ts`、`schema.ts`、`ResultView.tsx`、`useDivination.ts`、`double-call.ts`、`ManualInput.tsx`、`duplicate-check.ts`、`export-import.ts`、`types/index.ts`、`schemas.ts`、`useAIInterpretation.ts`、`duplicate-check.test.ts`
+
+---
+
 ### 🐛 虚拟摇卦三枚铜钱无差异化结果
 
 **问题**：`VirtualCoins.tsx` 三枚铜钱在翻转动画和结果展示时都显示相同的 `○` 和 `?`，没有体现每枚铜钱的独立结果（字/背）。
