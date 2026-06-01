@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import Interpretation from '../components/result/Interpretation'
 import AIProgressIndicator from '../components/result/AIProgressIndicator'
 import { getRecordById } from '../db/records.js'
@@ -11,6 +11,7 @@ export default function ResultView() {
   const { id } = useParams<{ id: string }>()
   const [record, setRecord] = useState<DivinationRecord | null>(null)
   const [loading, setLoading] = useState(true)
+  const [hasAutoTriggered, setHasAutoTriggered] = useState(false)
   const {
     progress,
     error: aiError,
@@ -32,10 +33,11 @@ export default function ResultView() {
   }, [id])
 
   useEffect(() => {
-    if (record && hasKey && record.interpretations.length === 0 && !loading) {
+    if (record && hasKey && record.interpretations.length === 0 && !loading && !hasAutoTriggered) {
+      setHasAutoTriggered(true)
       triggerDefault(record)
     }
-  }, [record, hasKey, loading, triggerDefault])
+  }, [record, hasKey, loading, hasAutoTriggered, triggerDefault])
 
   useEffect(() => {
     if (record && progress === 'done') {
@@ -68,12 +70,39 @@ export default function ResultView() {
 
       <Interpretation record={record} />
 
-      {hasKey && record.interpretations.length > 0 && !record.interpretations.some(it => it.type === 'deep') && progress !== 'reasoning' && progress !== 'narrative' && (
-        <div className="text-center">
-          <button onClick={() => triggerDeep(record)} className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700">
-            深度分析 (deepseek-v4-pro)
-          </button>
-          <p className="text-xs text-gray-400 mt-1">使用更强大的模型进行深度推理</p>
+      {/* AI trigger area */}
+      {!loading && progress === 'idle' && (
+        <div className="text-center space-y-2">
+          {!hasKey && record.interpretations.length === 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+              <p className="text-amber-800 text-sm">请先在设置中配置 DeepSeek API Key</p>
+              <Link to="/settings" className="mt-2 inline-block text-blue-600 hover:underline text-sm">前往设置 →</Link>
+            </div>
+          )}
+          {hasKey && record.interpretations.length === 0 && !hasAutoTriggered && (
+            <button onClick={() => { setHasAutoTriggered(true); triggerDefault(record) }} className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
+              获取 AI 解读
+            </button>
+          )}
+          {hasKey && record.interpretations.length === 0 && aiError === null && (
+            <button onClick={() => triggerDefault(record)} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+              重新获取 AI 解读
+            </button>
+          )}
+          {hasKey && record.interpretations.length === 0 && aiError && (
+            <div className="space-y-3">
+              <p className="text-red-600 text-sm">{aiError}</p>
+              <div className="flex justify-center gap-3">
+                <button onClick={() => triggerDefault(record)} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">重试</button>
+                <Link to="/settings" className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">检查 API Key</Link>
+              </div>
+            </div>
+          )}
+          {hasKey && record.interpretations.length > 0 && !record.interpretations.some(it => it.type === 'deep') && (
+            <button onClick={() => triggerDeep(record)} className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700">
+              深度分析 (deepseek-v4-pro)
+            </button>
+          )}
         </div>
       )}
 
