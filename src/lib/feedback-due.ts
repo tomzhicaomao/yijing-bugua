@@ -1,13 +1,5 @@
 import type { Category } from '../types'
-
-/** Default feedback due days by category */
-const DEFAULT_DUE_DAYS: Record<Category, number> = {
-  '工作': 7,
-  '人际': 7,
-  '财务': 7,
-  '健康': 14,
-  '其他': 7,
-}
+import { FEEDBACK_DUE_DAYS } from './constants.js'
 
 /**
  * Calculate default feedback due date from a given timestamp and category.
@@ -20,7 +12,7 @@ export function calculateDefaultDueAt(
 ): string | null {
   if (!enableReminder) return null
 
-  const days = DEFAULT_DUE_DAYS[category] ?? 7
+  const days = FEEDBACK_DUE_DAYS[category] ?? 7
   const dueDate = new Date(timestamp)
   dueDate.setDate(dueDate.getDate() + days)
   return dueDate.toISOString()

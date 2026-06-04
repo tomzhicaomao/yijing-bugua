@@ -10,8 +10,10 @@ export default function HomeView() {
 
   useEffect(() => {
     getAllRecords().then(r => setTotal(r.length))
-    queryPendingDue().then(r => setPending(r.length))
-    queryPendingDue().then(r => { if (r.length > 0) setShowFeedback(true) })
+    queryPendingDue().then(r => {
+      setPending(r.length)
+      if (r.length > 0) setShowFeedback(true)
+    })
   }, [])
 
   if (showFeedback) return <FeedbackList onAllDone={() => setShowFeedback(false)} />

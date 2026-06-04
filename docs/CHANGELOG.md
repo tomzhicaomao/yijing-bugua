@@ -15,6 +15,53 @@
 
 ---
 
+
+## 2026-06-04
+
+### 🏗️ 代码审查问题全面修复（13项）
+
+**背景**：对项目进行完整代码审查后，逐一修复发现的架构缺陷、代码重复、类型安全和 UI 逻辑问题。
+
+**修复清单**：
+
+| # | 类型 | 文件 | 问题 | 严重性 |
+|---|------|------|------|--------|
+| 1 | 🏗️ | `deepseek-client.ts` | API Key 管理函数重复定义（与 `api-key.ts` 完全相同） | HIGH |
+| 2 | 🏗️ | `feedback-due.ts` | `FEEDBACK_DUE_DAYS` 重复定义（与 `constants.ts` 完全相同） | HIGH |
+| 3 | 🐛 | `useDivination.ts` | 重复占问检查为 TODO，`duplicate-check.ts` 引擎函数从未被调用 | HIGH |
+| 4 | 🐛 | `FeedbackList.tsx` | 在 render 阶段直接调用 `onAllDone` 回调导致 React state 级联更新 | HIGH |
+| 5 | 🏗️ | `FeedbackForm.tsx` `FeedbackList.tsx` `useFeedback.ts` | 多处 `any` 类型（`onChange` 事件、`submitDetail` 参数） | MEDIUM |
+| 6 | 🐛 | `ResultView.tsx` | "获取 AI 解读"和"重新获取 AI 解读"按钮同时显示 | MEDIUM |
+| 7 | 🏗️ | `HomeView.tsx` | `queryPendingDue` 被调用两次 | LOW |
+| 8 | 🐛 | `supabase.ts` | 环境变量缺失时直接 `throw`，应用崩溃无法启动 | HIGH |
+| 9 | 🐛 | `sync.ts` | 未检查 Supabase 配置状态，调用云同步时抛出未捕获错误 | HIGH |
+| 10 | 🏗️ | `index.html` | `lang="en"`，但界面语言为中文 | LOW |
+| 11 | 🐛 | `vercel.json` | 缺少 SPA 路由回退规则，刷新子路由返回 404 | MEDIUM |
+| 12 | 🏗️ | `.gitignore` | `.bak` 和 `.DS_Store` 各出现两次 | LOW |
+| 13 | 🏗️ | `HomeView.tsx.bak` | 残留备份文件 | LOW |
+
+**详细修复**：
+
+1. **API Key 去重** — `deepseek-client.ts` 移除 `getApiKey`/`setApiKey`/`removeApiKey`/`hasApiKey` 四个函数，改为 `import { getApiKey } from '../lib/api-key.js'`；`double-call.ts` 和 `useAIInterpretation.ts` 的 `hasApiKey` 导入改为从 `api-key.js`
+2. **FEEDBACK_DUE_DAYS 去重** — `feedback-due.ts` 移除本地 `DEFAULT_DUE_DAYS` 常量，改为 `import { FEEDBACK_DUE_DAYS } from './constants.js'`
+3. **重复占问检查集成** — `useDivination.ts` 的 `completeCasting` 中新增 `getAllRecords()` + `checkDuplicate(question, allRecords, 24)` 调用，将结果写入 `record.duplicate`
+4. **FeedbackList render-phase 修复** — 新增 `loaded` 状态，`queryPendingDue` 结果为空时在 `useEffect` 中调用 `onAllDone`；移除 render 阶段的直接回调调用
+5. **any 类型消除** — `FeedbackForm.tsx` 中 5 处 `(e: any)` 替换为 `React.ChangeEvent<HTMLInputElement>`；`FeedbackList.tsx` 中 `FeedbackDetailForm` 的 `onSave` 参数类型从 `any` 改为 `FeedbackDetail`；`useFeedback.ts` 的 `submitDetail` 参数类型从 `any` 改为 `FeedbackDetail`
+6. **ResultView 按钮合并** — 合并为单个按钮，文本根据 `hasAutoTriggered` 状态动态显示"获取 AI 解读"或"重新获取 AI 解读"
+7. **HomeView 查询合并** — 将两次 `queryPendingDue` 调用合并为一次，`.then` 中同时设置 `pending` 和 `showFeedback`
+8. **supabase.ts 优雅降级** — 新增 `supabaseReady` 标志导出，环境变量缺失时使用占位 Supabase 客户端，不再 throw
+9. **sync.ts 配置守卫** — `syncOnLogin` 和 `uploadLocalData` 开头检查 `supabaseReady`，未配置时返回 `{ errors: ['Supabase 未配置，云同步不可用'] }`
+10. **index.html 语言** — `lang="en"` 改为 `lang="zh-CN"`
+11. **vercel.json SPA 路由** — 新增 `"rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]`
+12. **.gitignore 清理** — 移除重复的 `.bak` 和 `.DS_Store` 条目
+13. **残留文件清理** — 删除 `src/pages/HomeView.tsx.bak`
+
+**涉及文件**：`deepseek-client.ts`、`api-key.ts`、`double-call.ts`、`useAIInterpretation.ts`、`feedback-due.ts`、`useDivination.ts`、`FeedbackList.tsx`、`FeedbackForm.tsx`、`useFeedback.ts`、`ResultView.tsx`、`HomeView.tsx`、`supabase.ts`、`sync.ts`、`index.html`、`vercel.json`、`.gitignore`
+
+**验证**：41 个单元测试全部通过，TypeScript 编译无错误，Vite 构建成功。
+
+---
+
 ## 2026-06-01
 
 ### 🐛 代码审查发现的10个Bug修复

@@ -1,3 +1,4 @@
+import type { FeedbackDetail } from "../types"
 import { useState, useCallback } from "react"
 import { queryPendingDue, updateRecord } from "../db/records.js"
 import { remindLater } from "../lib/feedback-due.js"
@@ -24,7 +25,7 @@ export function useFeedback() {
     await refresh()
   }, [refresh])
 
-  const submitDetail = useCallback(async (id: string, detail: any) => {
+  const submitDetail = useCallback(async (id: string, detail: FeedbackDetail) => {
     const r = await (await import("../db/records.js")).getRecordById(id)
     if (!r) return
     await updateRecord({ ...r, feedback: { ...r.feedback, detail } })

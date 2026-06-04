@@ -79,14 +79,12 @@ export default function ResultView() {
               <Link to="/settings" className="mt-2 inline-block text-blue-600 hover:underline text-sm">前往设置 →</Link>
             </div>
           )}
-          {hasKey && record.interpretations.length === 0 && !hasAutoTriggered && (
-            <button onClick={() => { setHasAutoTriggered(true); triggerDefault(record) }} className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
-              获取 AI 解读
-            </button>
-          )}
-          {hasKey && record.interpretations.length === 0 && aiError === null && (
-            <button onClick={() => triggerDefault(record)} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
-              重新获取 AI 解读
+          {hasKey && record.interpretations.length === 0 && !aiError && (
+            <button
+              onClick={() => { setHasAutoTriggered(true); triggerDefault(record) }}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+            >
+              {hasAutoTriggered ? '重新获取 AI 解读' : '获取 AI 解读'}
             </button>
           )}
           {hasKey && record.interpretations.length === 0 && aiError && (

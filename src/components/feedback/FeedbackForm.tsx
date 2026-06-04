@@ -95,19 +95,19 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
         <div className="space-y-3 pt-2 border-t">
           <div>
             <label className="block text-xs text-gray-500 mb-1">实际结果</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualResult} onChange={(e: any) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
+            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">满意度 ({satisfaction}/5)</label>
-            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: any) => setSatisfaction(+e.target.value)} className="w-full" />
+            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">实际耗时（天）</label>
-            <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualDuration} onChange={(e: any) => setActualDuration(+e.target.value)} min="0" />
+            <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualDuration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualDuration(+e.target.value)} min="0" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">实际行动</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actionTaken} onChange={(e: any) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
+            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">AI 是否影响了你的决策？</label>
@@ -147,7 +147,7 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
 
           <div>
             <label className="block text-xs text-gray-500 mb-1">备注</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={notes} onChange={(e: any) => setNotes(e.target.value)} placeholder="其他想记录的..." />
+            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} placeholder="其他想记录的..." />
           </div>
 
           <button onClick={submitDetail} disabled={submitting} className="w-full py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50">

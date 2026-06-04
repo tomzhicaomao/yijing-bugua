@@ -4,6 +4,8 @@ import type { LineValue, CastingMethod, Category, BeforeDivination } from '../ty
 import { castLine, tossResultToLineValue, calculateHexagram } from '../engine/casting.js'
 import { createRecord } from '../db/records.js'
 import { calculateDefaultDueAt } from '../lib/feedback-due.js'
+import { checkDuplicate } from '../engine/duplicate-check.js'
+import { getAllRecords } from '../db/records.js'
 import { v4 as uuidv4 } from 'uuid'
 import type { DivinationRecord } from '../types'
 
@@ -95,6 +97,9 @@ export function useDivination() {
     if (validLines.length !== 6) return
 
     const calc = calculateHexagram(validLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
+    // Check for duplicate questions in the last 24 hours
+    const allRecords = await getAllRecords()
+    const duplicate = checkDuplicate(question, allRecords, 24) ?? undefined
     const record: DivinationRecord = {
       schemaVersion: 1,
       id: uuidv4(),
@@ -113,7 +118,7 @@ export function useDivination() {
         dueAt: calculateDefaultDueAt(castingTimestamp || new Date().toISOString(), category),
         status: 'pending',
       },
-      duplicate: undefined, // TODO: check duplicate
+      duplicate,
     }
 
     try {

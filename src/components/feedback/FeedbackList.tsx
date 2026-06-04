@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { queryPendingDue, updateRecord } from "../../db/records.js"
 import { remindLater } from "../../lib/feedback-due.js"
-import type { DivinationRecord, FeedbackStatus } from "../../types"
+import type { DivinationRecord, FeedbackStatus, FeedbackDetail } from "../../types"
 
 interface FeedbackListProps { onAllDone: () => void }
 
@@ -9,8 +9,15 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
+  const [loaded, setLoaded] = useState(false)
 
-  useEffect(() => { queryPendingDue().then(setRecords) }, [])
+  useEffect(() => {
+    queryPendingDue().then((r) => {
+      setRecords(r)
+      setLoaded(true)
+      if (r.length === 0) onAllDone()
+    })
+  }, [onAllDone])
 
   const advance = () => {
     const next = currentIdx + 1
@@ -19,21 +26,21 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
     setShowDetail(false)
   }
 
-  const handleStatus = async (status: FeedbackStatus) => {
+  const handleStatus = async (status: FeedbackStatus): Promise<void> => {
     const record = records[currentIdx]
     if (!record) return
     await updateRecord({ ...record, feedback: { ...record.feedback, status } })
     advance()
   }
 
-  const handleRemind = async () => {
+  const handleRemind = async (): Promise<void> => {
     const record = records[currentIdx]
     if (!record) return
     await updateRecord({ ...record, feedback: { ...record.feedback, dueAt: remindLater() } })
     advance()
   }
 
-  if (records.length === 0) { onAllDone(); return null }
+  if (!loaded || records.length === 0) return null
 
   const r = records[currentIdx]
   if (!r) return null
@@ -59,7 +66,7 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   )
 }
 
-function FeedbackDetailForm({ record: _r, onSave }: { record: DivinationRecord; onSave: (d: any) => Promise<void> }) {
+function FeedbackDetailForm({ record: _r, onSave }: { record: DivinationRecord; onSave: (d: FeedbackDetail) => Promise<void> }) {
   const [actualResult, setActualResult] = useState("")
   const [satisfaction, setSatisfaction] = useState(3)
   const [actionTaken, setActionTaken] = useState("")
@@ -68,11 +75,11 @@ function FeedbackDetailForm({ record: _r, onSave }: { record: DivinationRecord; 
 
   return (
     <div className="space-y-3 pt-3 border-t">
-      <div><label className="block text-xs text-gray-500 mb-1">实际结果</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualResult} onChange={(e: any) => setActualResult(e.target.value)} placeholder="发生了什么事？" /></div>
-      <div><label className="block text-xs text-gray-500 mb-1">满意度 ({satisfaction}/5)</label><input type="range" min="1" max="5" value={satisfaction} onChange={(e: any) => setSatisfaction(+e.target.value)} className="w-full" /></div>
-      <div><label className="block text-xs text-gray-500 mb-1">实际行动</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actionTaken} onChange={(e: any) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" /></div>
+      <div><label className="block text-xs text-gray-500 mb-1">实际结果</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="发生了什么事？" /></div>
+      <div><label className="block text-xs text-gray-500 mb-1">满意度 ({satisfaction}/5)</label><input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full" /></div>
+      <div><label className="block text-xs text-gray-500 mb-1">实际行动</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" /></div>
       <div><label className="block text-xs text-gray-500 mb-1">AI 是否影响了你的决策？</label><div className="flex gap-4"><label className="text-sm"><input type="radio" name="ai" checked={aiInfluenced===true} onChange={()=>setAiInfluenced(true)} /> 是</label><label className="text-sm"><input type="radio" name="ai" checked={aiInfluenced===false} onChange={()=>setAiInfluenced(false)} /> 否</label></div></div>
-      <div><label className="block text-xs text-gray-500 mb-1">备注</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={notes} onChange={(e: any) => setNotes(e.target.value)} /></div>
+      <div><label className="block text-xs text-gray-500 mb-1">备注</label><input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} /></div>
       <button onClick={() => onSave({ actualResult: actualResult||undefined, satisfaction, actionTaken: actionTaken||undefined, aiInfluencedDecision: aiInfluenced??undefined, notes: notes||undefined })} className="w-full py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">保存详情</button>
     </div>
   )

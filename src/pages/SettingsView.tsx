@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { getApiKey, setApiKey, removeApiKey } from '../ai/deepseek-client.js'
+import { useAuth } from '../auth/AuthContext'
+import { useSync } from '../hooks/useSync'
+import { getApiKey, setApiKey, removeApiKey } from '../lib/api-key'
 import { exportToJSON, exportFilename, importFromJSON } from '../db/export-import.js'
 import { SCHEMA_VERSION, PROMPT_VERSION, DEFAULT_MODEL, DEEP_MODEL } from '../lib/constants.js'
 
 export default function SettingsView() {
+  const { user, signOut } = useAuth()
+  const { syncStatus, lastSyncTime, error: syncError, sync, upload } = useSync()
   const [apiKey, setApiKeyState] = useState(getApiKey() ?? '')
   const [showKey, setShowKey] = useState(false)
   const [importResult, setImportResult] = useState<string | null>(null)
@@ -52,6 +56,61 @@ export default function SettingsView() {
   return (
     <div className="max-w-lg mx-auto py-6 space-y-8">
       <h2 className="text-xl font-semibold">设置</h2>
+
+      {/* User info */}
+      {user && (
+        <div className="bg-gray-50 rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium">{user.email?.split('@')[0]}</p>
+              <p className="text-sm text-gray-500">{user.email}</p>
+            </div>
+            <button onClick={signOut} className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">
+              退出登录
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Sync status */}
+      <div className="space-y-3">
+        <h3 className="font-medium">云端同步</h3>
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <p className="text-sm text-gray-600">
+              状态: {syncStatus === 'syncing' ? '同步中...' : 
+                     syncStatus === 'success' ? '已同步' :
+                     syncStatus === 'error' ? '同步失败' : '未同步'}
+            </p>
+            {lastSyncTime && (
+              <p className="text-xs text-gray-400">
+                上次同步: {lastSyncTime.toLocaleString('zh-CN')}
+              </p>
+            )}
+            {syncError && (
+              <p className="text-xs text-red-500">{syncError}</p>
+            )}
+          </div>
+          <button 
+            onClick={sync} 
+            disabled={syncStatus === 'syncing'}
+            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          >
+            同步
+          </button>
+        </div>
+        <button 
+          onClick={upload} 
+          disabled={syncStatus === 'syncing'}
+          className="w-full px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 disabled:opacity-50"
+        >
+          上传本地数据到云端
+        </button>
+        <p className="text-xs text-gray-400">
+          登录时自动同步。上传按钮可将本地数据迁移到云端。
+        </p>
+      </div>
+
       <div className="space-y-3">
         <h3 className="font-medium">DeepSeek API Key</h3>
         <div className="flex gap-2">
@@ -71,7 +130,7 @@ export default function SettingsView() {
           <button onClick={() => { removeApiKey(); setApiKeyState('') }} className="px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">删除</button>
           {saved && <span className="text-sm text-green-600 py-2">已保存</span>}
         </div>
-        <p className="text-xs text-gray-400">API Key 仅存储在浏览器 localStorage，不会上传至任何服务器</p>
+        <p className="text-xs text-gray-400">API Key 登录后会自动同步到云端</p>
       </div>
 
       <div className="space-y-3">

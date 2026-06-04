@@ -1,3 +1,5 @@
+import { getApiKey } from '../lib/api-key.js'
+
 const DEEPSEEK_BASE = 'https://api.deepseek.com/chat/completions'
 
 export interface DeepSeekMessage {
@@ -28,22 +30,6 @@ export class DeepSeekError extends Error {
     this.name = 'DeepSeekError'
     this.status = status
   }
-}
-
-export function getApiKey(): string | null {
-  return localStorage.getItem('deepseek-api-key')
-}
-
-export function setApiKey(key: string): void {
-  localStorage.setItem('deepseek-api-key', key)
-}
-
-export function removeApiKey(): void {
-  localStorage.removeItem('deepseek-api-key')
-}
-
-export function hasApiKey(): boolean {
-  return Boolean(getApiKey())
 }
 
 export async function callDeepSeek(req: DeepSeekRequest): Promise<DeepSeekResponse> {

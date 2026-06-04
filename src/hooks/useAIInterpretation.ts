@@ -2,7 +2,7 @@ import { useState, useCallback } from "react"
 import { runDoubleCall, type AIProgress } from "../ai/double-call.js"
 import type { InterpretationResult, DivinationRecord } from "../types"
 import { updateRecord } from "../db/records.js"
-import { hasApiKey } from "../ai/deepseek-client.js"
+import { hasApiKey } from "../lib/api-key.js"
 
 interface UseAIInterpretationReturn {
   progress: AIProgress

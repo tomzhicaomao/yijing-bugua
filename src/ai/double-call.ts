@@ -2,7 +2,7 @@ import { callReasoning } from "./reasoning-call.js"
 import { callNarrative } from "./narrative-call.js"
 import { DEFAULT_MODEL, DEEP_MODEL } from "../lib/constants.js"
 import type { InterpretationResult } from "../types"
-import { hasApiKey } from "./deepseek-client.js"
+import { hasApiKey } from "../lib/api-key.js"
 
 export type AIProgress = "idle" | "reasoning" | "narrative" | "done" | "error"
 
