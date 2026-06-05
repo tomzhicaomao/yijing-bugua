@@ -15,6 +15,36 @@
 
 ---
 
+## 2026-06-05 (Supabase 云同步)
+
+### ✨ Supabase 云同步服务配置完成
+
+**背景**：项目已有云同步代码（`supabase.ts`、`sync.ts`、`records`/`user_settings` 表 schema），但未连接真实 Supabase 后端。本次完成从 CLI 初始化到服务验证的全流程配置。
+
+**完成事项**：
+
+| # | 步骤 | 状态 |
+|---|------|------|
+| 1 | Supabase CLI 安装（v2.105.0 via brew） | ✅ |
+| 2 | `supabase link --project-ref hiqnvjeoaqtdkevpalvp` | ✅ |
+| 3 | 数据库 schema 迁移推送（`records` + `user_settings` 表 + RLS 策略） | ✅ |
+| 4 | Auth 邮箱确认关闭（`mailer_autoconfirm: true`，适配虚拟邮箱 `@yijing-bugua.local`） | ✅ |
+| 5 | `.env` 写入 Supabase URL + anon key（已在 `.gitignore` 中） | ✅ |
+| 6 | `npm run build` 验证通过（vite v8.0.14，2.97s） | ✅ |
+
+**Supabase 项目信息**：
+- Project Ref: `hiqnvjeoaqtdkevpalvp`
+- URL: `https://hiqnvjeoaqtdkevpalvp.supabase.co`
+- Region: AWS ap-south-1
+- 数据库表：`records`（占卜记录）、`user_settings`（用户设置）
+
+**网络说明**：`supabase db push --linked` 因本地 VPN/代理网络导致 TLS 连接超时（DNS 解析到 `198.18.0.49`），改用 Supabase Management API（`/v1/projects/{ref}/database/query`）成功推送。后续如需重新推送迁移，建议暂时关闭 VPN。
+
+**验证**：TypeScript 编译无错误，Vite 构建成功，`supabaseReady` 评估为 `true`。
+
+---
+
+
 
 
 ## 2026-06-05
