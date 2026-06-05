@@ -21,28 +21,28 @@ export default function HexagramBoard({
   label,
 }: HexagramBoardProps) {
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
-      {label && <h3 className="text-sm font-medium text-gray-600 mb-3">{label}</h3>}
-      <div className="space-y-2">
+    <div className="bg-stone-800 rounded-lg p-5 shadow-inner">
+      {label && <h3 className="text-sm font-medium text-stone-400 mb-3">{label}</h3>}
+      <div className="space-y-1.5">
         {[...lines].reverse().map((value, i) => {
-          const position = 6 - i // 上爻(6) to 初爻(1)
+          const position = 6 - i
           const isChanging = value !== null && changingLinePositions.includes(position)
 
           return (
             <div
               key={position}
-              className={`flex items-center gap-3 p-2 rounded border transition-colors
-                ${isChanging ? 'border-orange-400 bg-orange-50' : 'border-gray-200'}
+              className={`flex items-center gap-3 px-3 py-2 rounded transition-colors
+                ${isChanging ? 'bg-vermillion/20 border border-vermillion/40' : 'border border-stone-700'}
                 ${value === null ? 'opacity-30' : ''}`}
             >
-              <span className="text-xs text-gray-500 w-8 text-right">
+              <span className="text-xs text-stone-500 w-8 text-right">
                 {POSITION_NAMES[position - 1]}爻
               </span>
-              <span className="text-lg font-mono">
+              <span className="text-lg text-stone-200 tracking-wider">
                 {value !== null ? LINE_LABELS[value] : '···'}
               </span>
               {isChanging && (
-                <span className="text-xs text-orange-600 font-medium">动</span>
+                <span className="text-xs text-vermillion font-medium ml-auto">动</span>
               )}
             </div>
           )

@@ -19,33 +19,33 @@ export default function HistoryDetailView() {
   }, [id])
 
   if (loading) {
-    return <div className="flex justify-center py-12 text-gray-400">加载中...</div>
+    return <div className="flex justify-center py-12 text-stone-400">加载中...</div>
   }
 
   if (!record) {
-    return <div className="text-center py-12 text-gray-400">记录未找到</div>
+    return <div className="text-center py-12 text-stone-400">记录未找到</div>
   }
 
   return (
     <div className="max-w-lg mx-auto py-6 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">{record.question}</h2>
-        <p className="text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-ink">{record.question}</h2>
+        <p className="text-sm text-stone-500 mt-1">
           {record.category} · {new Date(record.timestamp).toLocaleString('zh-CN')} · {record.method === 'virtual' ? '虚拟摇卦' : '手动输入'}
         </p>
       </div>
 
       {record.beforeDivination && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 space-y-1 text-sm">
-          <span className="font-medium text-yellow-800">占前记录</span>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-1 text-sm">
+          <span className="font-medium text-amber-800">占前记录</span>
           {record.beforeDivination.userExpectation && (
-            <p className="text-yellow-700">预判：{record.beforeDivination.userExpectation}</p>
+            <p className="text-amber-700">预判：{record.beforeDivination.userExpectation}</p>
           )}
           {record.beforeDivination.userConfidence && (
-            <p className="text-yellow-600">信心：{record.beforeDivination.userConfidence}/5</p>
+            <p className="text-amber-600">信心：{record.beforeDivination.userConfidence}/5</p>
           )}
           {record.beforeDivination.intendedAction && (
-            <p className="text-yellow-700">计划行动：{record.beforeDivination.intendedAction}</p>
+            <p className="text-amber-700">计划行动：{record.beforeDivination.intendedAction}</p>
           )}
         </div>
       )}
@@ -55,27 +55,27 @@ export default function HistoryDetailView() {
       <FeedbackForm record={record} onUpdated={(r) => setRecord(r)} />
 
       {record.feedback.detail && (
-        <div className="border rounded-lg p-4 space-y-2">
-          <h3 className="text-sm font-medium text-gray-700">反馈详情</h3>
+        <div className="bg-white border border-stone-200 rounded-lg p-5 space-y-2 shadow-sm">
+          <h3 className="text-sm font-medium text-ink-light">反馈详情</h3>
           {record.feedback.detail.actualResult && (
-            <p className="text-sm"><span className="text-gray-500">实际结果：</span>{record.feedback.detail.actualResult}</p>
+            <p className="text-sm"><span className="text-stone-500">实际结果：</span><span className="text-ink">{record.feedback.detail.actualResult}</span></p>
           )}
           {record.feedback.detail.satisfaction && (
-            <p className="text-sm"><span className="text-gray-500">满意度：</span>{record.feedback.detail.satisfaction}/5</p>
+            <p className="text-sm"><span className="text-stone-500">满意度：</span><span className="text-ink">{record.feedback.detail.satisfaction}/5</span></p>
           )}
           {record.feedback.detail.actualDuration && (
-            <p className="text-sm"><span className="text-gray-500">实际耗时：</span>{record.feedback.detail.actualDuration} 天</p>
+            <p className="text-sm"><span className="text-stone-500">实际耗时：</span><span className="text-ink">{record.feedback.detail.actualDuration} 天</span></p>
           )}
           {record.feedback.detail.actionTaken && (
-            <p className="text-sm"><span className="text-gray-500">实际行动：</span>{record.feedback.detail.actionTaken}</p>
+            <p className="text-sm"><span className="text-stone-500">实际行动：</span><span className="text-ink">{record.feedback.detail.actionTaken}</span></p>
           )}
           {record.feedback.detail.notes && (
-            <p className="text-sm"><span className="text-gray-500">备注：</span>{record.feedback.detail.notes}</p>
+            <p className="text-sm"><span className="text-stone-500">备注：</span><span className="text-ink">{record.feedback.detail.notes}</span></p>
           )}
           {record.feedback.detail.aiInfluencedDecision !== undefined && (
             <p className="text-sm">
-              <span className="text-gray-500">AI 是否影响决策：</span>
-              {record.feedback.detail.aiInfluencedDecision ? '是' : '否'}
+              <span className="text-stone-500">AI 是否影响决策：</span>
+              <span className="text-ink">{record.feedback.detail.aiInfluencedDecision ? '是' : '否'}</span>
             </p>
           )}
         </div>

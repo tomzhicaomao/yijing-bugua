@@ -25,7 +25,7 @@ export default function DivineView() {
         <QuestionInput question={question} category={category} onQuestionChange={setQuestion} onCategoryChange={setCategory} onNext={() => { if (question.trim() && category) setQuestionAndCategory(question.trim(), category) }} />
       )}
       {step === "before-divination" && (<BeforeDivination data={beforeDivination} onChange={(bd: BeforeDivinationData) => updateBeforeDivination(bd)} onNext={() => setBeforeAndContinue(beforeDivination)} onSkip={() => setBeforeAndContinue(beforeDivination)} />)}
-      {step === "method" && (<div className="space-y-6"><h3 className="text-lg font-semibold">选择起卦方式</h3><MethodToggle method={method} onChange={setMethod} /><button onClick={() => startCasting(method)} className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">开始起卦</button></div>)}
+      {step === "method" && (<div className="space-y-6"><h3 className="text-lg font-semibold text-ink">选择起卦方式</h3><MethodToggle method={method} onChange={setMethod} /><button onClick={() => startCasting(method)} className="w-full py-3 bg-vermillion text-white rounded-lg font-medium hover:bg-vermillion-dark shadow-md transition-all">开始起卦</button></div>)}
       {step === "casting" && (<div className="space-y-6"><HexagramBoard lines={lines} label="本卦" />{method === "virtual" && (<VirtualCoins currentIndex={currentIndex} onCast={setLineValue} />)}{method === "manual" && (<ManualInput lines={lines} currentIndex={currentIndex} onSelectBack={selectManualBack} onComplete={completeCasting} />)}</div>)}
     </div>
   )

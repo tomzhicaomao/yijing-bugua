@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-parchment: #f7f3ee;
+  --color-parchment-dark: #ece6db;
+  --color-ink: #2c1810;
+  --color-ink-light: #5c4a3a;
+  --color-vermillion: #b94234;
+  --color-vermillion-dark: #953028;
+  --color-bronze: #8b6914;
+  --color-bronze-light: #c49a1a;
+  --color-gold: #d4a843;
+  --color-jade: #4a7c59;
+}
+
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -9,8 +22,16 @@
 
 body {
   margin: 0;
+  background-color: var(--color-parchment);
+  color: var(--color-ink);
+  font-family: "Songti SC", "Noto Serif SC", "STSong", "SimSun", Georgia, serif;
 }
 
 #root {
-  min-height: 100svh;
+  min-h-screen: 100svh;
+}
+
+/* Sans-serif for UI elements */
+.font-ui {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }

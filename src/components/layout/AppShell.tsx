@@ -11,9 +11,9 @@ const navItems = [
 export default function AppShell() {
   return (
     <div className="min-h-svh flex flex-col">
-      <header className="border-b border-gray-200">
-        <nav className="flex items-center gap-4 px-4 h-12 max-w-3xl mx-auto">
-          <span className="font-semibold text-lg mr-4">易经</span>
+      <header className="bg-stone-900 shadow-md">
+        <nav className="flex items-center gap-6 px-6 h-14 max-w-3xl mx-auto">
+          <span className="font-bold text-lg text-gold tracking-wider mr-2">易经</span>
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -21,8 +21,8 @@ export default function AppShell() {
               end={item.to === '/'}
               className={({ isActive }) =>
                 isActive
-                  ? 'text-blue-600 font-medium'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'text-gold font-medium border-b-2 border-gold pb-0.5'
+                  : 'text-stone-400 hover:text-stone-200 transition-colors'
               }
             >
               {item.label}

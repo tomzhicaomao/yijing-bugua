@@ -26,10 +26,10 @@ export default function ManualInput({
   if (isComplete) {
     return (
       <div className="text-center py-6">
-        <p className="text-green-600 font-medium mb-4">六爻已全部输入</p>
+        <p className="text-jade font-medium mb-4">六爻已全部输入</p>
         <button
           onClick={onComplete}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+          className="px-8 py-3 bg-vermillion text-white rounded-lg font-medium hover:bg-vermillion-dark shadow-md transition-all"
         >
           完成起卦
         </button>
@@ -40,18 +40,18 @@ export default function ManualInput({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium">
+        <h3 className="font-medium text-ink">
           第 {currentIndex + 1} 爻 · {POSITION_NAMES[currentIndex]}
         </h3>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-stone-500">
           {currentIndex}/6 已输入
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full bg-parchment-dark rounded-full h-2">
         <div
-          className="bg-blue-600 h-2 rounded-full transition-all"
+          className="bg-vermillion h-2 rounded-full transition-all"
           style={{ width: `${(currentIndex / 6) * 100}%` }}
         />
       </div>
@@ -62,10 +62,10 @@ export default function ManualInput({
           <button
             key={opt.count}
             onClick={() => onSelectBack(opt.count)}
-            className="flex flex-col items-center py-3 px-2 border border-gray-300 rounded-lg hover:bg-blue-50 hover:border-blue-400 transition-colors"
+            className="flex flex-col items-center py-3 px-2 border border-stone-300 rounded-lg bg-white hover:border-vermillion/50 hover:bg-parchment transition-all"
           >
-            <span className="text-lg font-bold">{opt.label}</span>
-            <span className="text-xs text-gray-500">{opt.desc}</span>
+            <span className="text-lg font-bold text-ink">{opt.label}</span>
+            <span className="text-xs text-stone-500">{opt.desc}</span>
           </button>
         ))}
       </div>

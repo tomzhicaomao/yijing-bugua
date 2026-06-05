@@ -19,15 +19,27 @@ export default function HomeView() {
   if (showFeedback) return <FeedbackList onAllDone={() => setShowFeedback(false)} />
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6 py-16">
-      <h1 className="text-3xl font-semibold">易经占卜</h1>
-      <p className="text-gray-600 text-center max-w-md">周易古占 · 实验派个人决策辅助工具</p>
-      {total > 0 && (<p className="text-sm text-gray-500">共 {total} 条记录，{pending} 条待反馈</p>)}
-      <Link to="/divine" className="inline-block px-8 py-4 bg-blue-600 text-white rounded-lg font-medium text-lg hover:bg-blue-700 shadow-lg">开始起卦</Link>
-      <div className="flex gap-4 text-sm text-gray-500">
-        <Link to="/history" className="hover:text-gray-700">历史</Link>
-        <Link to="/stats" className="hover:text-gray-700">统计</Link>
-        <Link to="/settings" className="hover:text-gray-700">设置</Link>
+    <div className="flex flex-col items-center justify-center gap-8 py-16">
+      <div className="text-center space-y-2">
+        <h1 className="text-4xl font-bold text-ink tracking-widest">易经占卜</h1>
+        <div className="w-16 h-0.5 bg-gold mx-auto rounded-full" />
+        <p className="text-ink-light text-center max-w-md mt-3">周易古占 · 实验派个人决策辅助工具</p>
+      </div>
+      {total > 0 && (
+        <p className="text-sm text-stone-500 bg-parchment-dark px-4 py-1.5 rounded-full">
+          共 {total} 条记录，{pending} 条待反馈
+        </p>
+      )}
+      <Link
+        to="/divine"
+        className="inline-block px-10 py-4 bg-vermillion text-white rounded-lg font-medium text-lg hover:bg-vermillion-dark shadow-lg hover:shadow-xl transition-all active:scale-95"
+      >
+        开始起卦
+      </Link>
+      <div className="flex gap-6 text-sm text-stone-500">
+        <Link to="/history" className="hover:text-vermillion transition-colors">历史</Link>
+        <Link to="/stats" className="hover:text-vermillion transition-colors">统计</Link>
+        <Link to="/settings" className="hover:text-vermillion transition-colors">设置</Link>
       </div>
     </div>
   )

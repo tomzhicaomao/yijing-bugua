@@ -13,42 +13,42 @@ function RuleEngineResult({ record }: { record: DivinationRecord }) {
   return (
     <div className="space-y-4">
       {/* Hexagram info */}
-      <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold">{hexagram?.name}</span>
-          <span className="text-gray-500">{hexagram?.trigramLower}{hexagram?.trigramUpper}</span>
+      <div className="bg-stone-800 rounded-lg p-5 space-y-2 text-stone-200">
+        <div className="flex items-baseline gap-3">
+          <span className="text-2xl font-bold text-gold">{hexagram?.name}</span>
+          <span className="text-stone-400">{hexagram?.trigramLower}{hexagram?.trigramUpper}</span>
         </div>
 
         {changed && (
-          <div className="flex items-baseline gap-2 text-orange-600">
+          <div className="flex items-baseline gap-2 text-vermillion">
             <span className="text-sm">→ 变卦</span>
             <span className="text-xl font-bold">{changed.name}</span>
-            <span>{changed.trigramLower}{changed.trigramUpper}</span>
+            <span className="text-stone-400">{changed.trigramLower}{changed.trigramUpper}</span>
           </div>
         )}
 
         {record.hexagram.changingLines.length > 0 && (
-          <p className="text-sm text-orange-600">
+          <p className="text-sm text-bronze">
             动爻：第 {record.hexagram.changingLines.join('、')} 爻
           </p>
         )}
       </div>
 
       {/* Judgment / Line text */}
-      <div className="border rounded-lg p-4">
-        <h3 className="text-sm font-medium text-gray-500 mb-2">卦辞</h3>
-        <p className="text-gray-900 leading-relaxed">{hexagram?.judgment}</p>
-        <p className="text-sm text-gray-500 mt-1">{hexagram?.judgmentModern}</p>
+      <div className="bg-white rounded-lg p-5 border border-stone-200 shadow-sm">
+        <h3 className="text-xs font-medium text-stone-500 mb-2 uppercase tracking-wider">卦辞</h3>
+        <p className="text-ink leading-relaxed">{hexagram?.judgment}</p>
+        <p className="text-sm text-stone-500 mt-2 leading-relaxed">{hexagram?.judgmentModern}</p>
       </div>
 
       {lineResult.type === 'lines' && (
-        <div className="border rounded-lg p-4">
-          <h3 className="text-sm font-medium text-gray-500 mb-2">
+        <div className="bg-white rounded-lg p-5 border border-stone-200 shadow-sm">
+          <h3 className="text-xs font-medium text-stone-500 mb-2 uppercase tracking-wider">
             爻辞
-            {lineResult.allMoving && <span className="text-orange-500 ml-1">· 六爻皆动</span>}
+            {lineResult.allMoving && <span className="text-vermillion ml-1 normal-case">· 六爻皆动</span>}
           </h3>
           {Array.isArray(lineResult.text) && lineResult.text.map((t, i) => (
-            <p key={i} className="text-gray-900 leading-relaxed mb-2">{t}</p>
+            <p key={i} className="text-ink leading-relaxed mb-2">{t}</p>
           ))}
         </div>
       )}
@@ -58,34 +58,34 @@ function RuleEngineResult({ record }: { record: DivinationRecord }) {
 
 function AIInterpretation({ interpretation }: { interpretation: IResult }) {
   return (
-    <div className="border border-blue-200 rounded-lg p-4 space-y-4 bg-blue-50/30">
+    <div className="border border-bronze/30 rounded-lg p-5 space-y-4 bg-parchment shadow-sm">
       <div className="flex items-center gap-2">
-        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-medium">
+        <span className="text-xs bg-bronze/15 text-bronze px-2.5 py-0.5 rounded font-medium">
           {interpretation.type === 'deep' ? '深度分析' : 'AI 解读'}
         </span>
-        <span className="text-xs text-gray-400">{interpretation.model}</span>
+        <span className="text-xs text-stone-400">{interpretation.model}</span>
       </div>
 
       <div>
-        <span className={`inline-block px-2 py-1 rounded text-sm font-bold bg-white border ${
-          interpretation.trend === '利' ? 'text-green-700 border-green-300' :
-          interpretation.trend === '不利' ? 'text-red-700 border-red-300' :
-          'text-gray-700 border-gray-300'
+        <span className={`inline-block px-2.5 py-1 rounded text-sm font-bold bg-white border ${
+          interpretation.trend === '利' ? 'text-jade border-jade/30' :
+          interpretation.trend === '不利' ? 'text-vermillion border-vermillion/30' :
+          'text-stone-600 border-stone-300'
         }`}>
           趋势：{interpretation.trend}
         </span>
-        <span className="text-xs text-gray-400 ml-2">置信度：{interpretation.confidence}</span>
+        <span className="text-xs text-stone-400 ml-2">置信度：{interpretation.confidence}</span>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-gray-700 mb-1">分析</h4>
-        <p className="text-gray-900 leading-relaxed">{interpretation.analysis}</p>
+        <h4 className="text-sm font-medium text-ink-light mb-1">分析</h4>
+        <p className="text-ink leading-relaxed">{interpretation.analysis}</p>
       </div>
 
       {interpretation.conditions.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-1">核心条件</h4>
-          <ul className="list-disc list-inside text-gray-900">
+          <h4 className="text-sm font-medium text-ink-light mb-1">核心条件</h4>
+          <ul className="list-disc list-inside text-ink space-y-0.5">
             {interpretation.conditions.map((c, i) => (
               <li key={i}>{c}</li>
             ))}
@@ -94,13 +94,13 @@ function AIInterpretation({ interpretation }: { interpretation: IResult }) {
       )}
 
       <div>
-        <h4 className="text-sm font-medium text-gray-700 mb-1">时间窗口</h4>
-        <p className="text-gray-900">{interpretation.timeWindow}</p>
+        <h4 className="text-sm font-medium text-ink-light mb-1">时间窗口</h4>
+        <p className="text-ink">{interpretation.timeWindow}</p>
       </div>
 
-      <div className="border-t border-blue-200 pt-3">
-        <h4 className="text-sm font-medium text-gray-700 mb-1">综合判断</h4>
-        <p className="text-gray-900 font-medium">{interpretation.answer}</p>
+      <div className="border-t border-bronze/20 pt-3">
+        <h4 className="text-sm font-medium text-ink-light mb-1">综合判断</h4>
+        <p className="text-ink font-medium">{interpretation.answer}</p>
       </div>
     </div>
   )
@@ -114,9 +114,9 @@ export default function Interpretation({ record }: InterpretationProps) {
         <AIInterpretation key={interp.id} interpretation={interp} />
       ))}
       {record.interpretations.length === 0 && (
-        <div className="text-center text-gray-400 py-4">
+        <div className="text-center text-stone-400 py-6">
           <p>暂无 AI 解读</p>
-          <p className="text-sm">请先在设置页面配置 DeepSeek API Key</p>
+          <p className="text-sm mt-1">请先在设置页面配置 DeepSeek API Key</p>
         </div>
       )}
     </div>

@@ -46,23 +46,23 @@ export default function ResultView() {
   }, [progress, record?.id])
 
 
-  if (loading) return <div className="flex justify-center py-12 text-gray-400">加载中...</div>
-  if (!record) return <div className="text-center py-12 text-gray-400">记录未找到</div>
+  if (loading) return <div className="flex justify-center py-12 text-stone-400">加载中...</div>
+  if (!record) return <div className="text-center py-12 text-stone-400">记录未找到</div>
 
   return (
     <div className="max-w-lg mx-auto py-6 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold">{record.question}</h2>
-        <p className="text-sm text-gray-500">
+        <h2 className="text-xl font-semibold text-ink">{record.question}</h2>
+        <p className="text-sm text-stone-500 mt-1">
           {record.category} · {new Date(record.timestamp).toLocaleString('zh-CN')}
         </p>
       </div>
 
       {record.beforeDivination && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm">
-          <span className="font-medium text-yellow-800">占前预判：</span>
-          {record.beforeDivination.userExpectation && (<span className="text-yellow-700">{record.beforeDivination.userExpectation}</span>)}
-          {record.beforeDivination.userConfidence && (<span className="text-yellow-600 ml-2">信心 {record.beforeDivination.userConfidence}/5</span>)}
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm">
+          <span className="font-medium text-amber-800">占前预判：</span>
+          {record.beforeDivination.userExpectation && (<span className="text-amber-700">{record.beforeDivination.userExpectation}</span>)}
+          {record.beforeDivination.userConfidence && (<span className="text-amber-600 ml-2">信心 {record.beforeDivination.userConfidence}/5</span>)}
         </div>
       )}
 
@@ -72,17 +72,17 @@ export default function ResultView() {
 
       {/* AI trigger area */}
       {!loading && progress === 'idle' && (
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-3">
           {!hasKey && record.interpretations.length === 0 && (
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
               <p className="text-amber-800 text-sm">请先在设置中配置 DeepSeek API Key</p>
-              <Link to="/settings" className="mt-2 inline-block text-blue-600 hover:underline text-sm">前往设置 →</Link>
+              <Link to="/settings" className="mt-2 inline-block text-vermillion hover:text-vermillion-dark text-sm">前往设置 →</Link>
             </div>
           )}
           {hasKey && record.interpretations.length === 0 && !aiError && (
             <button
               onClick={() => { setHasAutoTriggered(true); triggerDefault(record) }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700"
+              className="px-6 py-3 bg-vermillion text-white rounded-lg font-medium hover:bg-vermillion-dark shadow-md transition-all"
             >
               {hasAutoTriggered ? '重新获取 AI 解读' : '获取 AI 解读'}
             </button>
@@ -91,13 +91,13 @@ export default function ResultView() {
             <div className="space-y-3">
               <p className="text-red-600 text-sm">{aiError}</p>
               <div className="flex justify-center gap-3">
-                <button onClick={() => triggerDefault(record)} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">重试</button>
-                <Link to="/settings" className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300">检查 API Key</Link>
+                <button onClick={() => triggerDefault(record)} className="px-4 py-2 bg-vermillion text-white rounded-lg text-sm hover:bg-vermillion-dark transition-colors">重试</button>
+                <Link to="/settings" className="px-4 py-2 bg-parchment-dark text-ink-light rounded-lg text-sm hover:bg-stone-300 transition-colors">检查 API Key</Link>
               </div>
             </div>
           )}
           {hasKey && record.interpretations.length > 0 && !record.interpretations.some(it => it.type === 'deep') && (
-            <button onClick={() => triggerDeep(record)} className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700">
+            <button onClick={() => triggerDeep(record)} className="px-6 py-3 bg-bronze text-white rounded-lg font-medium hover:bg-bronze-light shadow-md transition-all">
               深度分析 (deepseek-v4-pro)
             </button>
           )}

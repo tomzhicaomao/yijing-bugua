@@ -28,14 +28,14 @@ export default function QuestionInput({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold">你想问什么？</h2>
+      <h2 className="text-xl font-semibold text-ink">你想问什么？</h2>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-ink-light mb-2">
           你的问题
         </label>
         <textarea
-          className="w-full border border-gray-300 rounded-lg p-3 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-stone-300 rounded-lg p-3 h-28 resize-none bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/40 focus:border-vermillion"
           placeholder="例如：跟老板谈加薪能成吗？"
           value={question}
           onChange={(e) => onQuestionChange(e.target.value)}
@@ -43,7 +43,7 @@ export default function QuestionInput({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-ink-light mb-2">
           问题分类
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -53,8 +53,8 @@ export default function QuestionInput({
               onClick={() => onCategoryChange(cat)}
               className={`py-2 px-2 rounded-lg text-sm font-medium border transition-colors
                 ${category === cat
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                  ? 'bg-vermillion text-white border-vermillion'
+                  : 'bg-white text-ink-light border-stone-300 hover:border-vermillion/40 hover:bg-parchment'
                 }`}
             >
               {CATEGORY_LABELS[cat]}
@@ -66,10 +66,10 @@ export default function QuestionInput({
       <button
         onClick={onNext}
         disabled={!canProceed}
-        className={`w-full py-3 rounded-lg font-medium transition-colors
+        className={`w-full py-3 rounded-lg font-medium transition-all
           ${canProceed
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            ? 'bg-vermillion text-white hover:bg-vermillion-dark shadow-md hover:shadow-lg'
+            : 'bg-stone-200 text-stone-400 cursor-not-allowed'
           }`}
       >
         下一步

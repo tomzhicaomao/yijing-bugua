@@ -59,8 +59,8 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
   const isPending = record.feedback.status === 'pending'
 
   return (
-    <div className="border rounded-lg p-4 space-y-4">
-      <h3 className="text-sm font-medium text-gray-700">反馈结果</h3>
+    <div className="bg-white rounded-lg border border-stone-200 p-5 space-y-4 shadow-sm">
+      <h3 className="text-sm font-medium text-ink-light">反馈结果</h3>
 
       {!isPending && (
         <p className="text-sm">
@@ -73,59 +73,59 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
       <div className="flex gap-2">
         {isPending ? (
           <>
-            <button onClick={() => submitQuick('accurate')} disabled={submitting} className="flex-1 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 disabled:opacity-50">准</button>
-            <button onClick={() => submitQuick('inaccurate')} disabled={submitting} className="flex-1 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 disabled:opacity-50">不准</button>
-            <button onClick={() => submitQuick('unclear')} disabled={submitting} className="flex-1 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 disabled:opacity-50">不清楚</button>
+            <button onClick={() => submitQuick('accurate')} disabled={submitting} className="flex-1 py-3 bg-jade text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-all">准</button>
+            <button onClick={() => submitQuick('inaccurate')} disabled={submitting} className="flex-1 py-3 bg-vermillion text-white rounded-lg font-medium hover:bg-vermillion-dark disabled:opacity-50 transition-all">不准</button>
+            <button onClick={() => submitQuick('unclear')} disabled={submitting} className="flex-1 py-3 bg-stone-500 text-white rounded-lg font-medium hover:bg-stone-600 disabled:opacity-50 transition-all">不清楚</button>
           </>
         ) : (
-          <button onClick={() => submitQuick('pending')} disabled={submitting} className="px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 disabled:opacity-50">撤销反馈</button>
+          <button onClick={() => submitQuick('pending')} disabled={submitting} className="px-4 py-2 text-sm bg-parchment-dark text-stone-600 rounded-lg hover:bg-stone-300 disabled:opacity-50 transition-colors">撤销反馈</button>
         )}
       </div>
 
       <div className="flex justify-between text-sm">
-        <button onClick={() => setShowDetail(!showDetail)} className="text-blue-600 hover:underline">
+        <button onClick={() => setShowDetail(!showDetail)} className="text-vermillion hover:text-vermillion-dark">
           {showDetail ? '收起详情' : (isPending ? '详细记录' : '编辑详情')}
         </button>
         {isPending && (
-          <button onClick={handleRemindLater} disabled={submitting} className="text-gray-500 hover:underline disabled:opacity-50">稍后提醒</button>
+          <button onClick={handleRemindLater} disabled={submitting} className="text-stone-500 hover:text-ink-light disabled:opacity-50">稍后提醒</button>
         )}
       </div>
 
       {showDetail && (
-        <div className="space-y-3 pt-2 border-t">
+        <div className="space-y-3 pt-3 border-t border-stone-200">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">实际结果</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
+            <label className="block text-xs text-stone-500 mb-1">实际结果</label>
+            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">满意度 ({satisfaction}/5)</label>
-            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full" />
+            <label className="block text-xs text-stone-500 mb-1">满意度 ({satisfaction}/5)</label>
+            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full accent-vermillion" />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">实际耗时（天）</label>
-            <input type="number" className="w-full border border-gray-300 rounded p-2 text-sm" value={actualDuration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualDuration(+e.target.value)} min="0" />
+            <label className="block text-xs text-stone-500 mb-1">实际耗时（天）</label>
+            <input type="number" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actualDuration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualDuration(+e.target.value)} min="0" />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">实际行动</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
+            <label className="block text-xs text-stone-500 mb-1">实际行动</label>
+            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">AI 是否影响了你的决策？</label>
+            <label className="block text-xs text-stone-500 mb-1">AI 是否影响了你的决策？</label>
             <div className="flex gap-4">
-              <label className="text-sm"><input type="radio" name="ai" checked={aiInfluenced===true} onChange={() => setAiInfluenced(true)} /> 是</label>
-              <label className="text-sm"><input type="radio" name="ai" checked={aiInfluenced===false} onChange={() => setAiInfluenced(false)} /> 否</label>
+              <label className="text-sm text-ink-light"><input type="radio" name="ai" checked={aiInfluenced===true} onChange={() => setAiInfluenced(true)} className="accent-vermillion" /> 是</label>
+              <label className="text-sm text-ink-light"><input type="radio" name="ai" checked={aiInfluenced===false} onChange={() => setAiInfluenced(false)} className="accent-vermillion" /> 否</label>
             </div>
           </div>
 
           {allClaims.length > 0 && (
             <div>
-              <label className="block text-xs text-gray-500 mb-2">逐条判断反馈</label>
+              <label className="block text-xs text-stone-500 mb-2">逐条判断反馈</label>
               {allClaims.map(c => {
                 const cf = claimFeedback.find(f => f.claimId === c.id)
                 const status = cf?.status ?? null
                 return (
-                  <div key={c.id} className="flex items-center justify-between py-1.5 border-b border-gray-100 last:border-0">
-                    <span className="text-xs text-gray-700 flex-1">{c.text}</span>
+                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-stone-100 last:border-0">
+                    <span className="text-xs text-ink-light flex-1">{c.text}</span>
                     <div className="flex gap-1 shrink-0 ml-2">
                       {(['hit', 'miss', 'unclear'] as const).map(s => (
                         <button key={s}
@@ -133,7 +133,7 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
                             const others = claimFeedback.filter(f => f.claimId !== c.id)
                             setClaimFeedback(status === s ? others : [...others, { claimId: c.id, status: s }])
                           }}
-                          className={`text-xs px-2 py-0.5 rounded ${status === s ? (s === 'hit' ? 'bg-green-100 text-green-700' : s === 'miss' ? 'bg-red-100 text-red-700' : 'bg-gray-200 text-gray-600') : 'bg-gray-50 text-gray-400 hover:bg-gray-100'}`}
+                          className={`text-xs px-2 py-0.5 rounded transition-colors ${status === s ? (s === 'hit' ? 'bg-green-100 text-green-700' : s === 'miss' ? 'bg-red-100 text-red-700' : 'bg-stone-200 text-stone-600') : 'bg-parchment text-stone-400 hover:bg-parchment-dark'}`}
                         >
                           {s === 'hit' ? '✓' : s === 'miss' ? '✗' : '?'}
                         </button>
@@ -146,18 +146,18 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
           )}
 
           <div>
-            <label className="block text-xs text-gray-500 mb-1">备注</label>
-            <input type="text" className="w-full border border-gray-300 rounded p-2 text-sm" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} placeholder="其他想记录的..." />
+            <label className="block text-xs text-stone-500 mb-1">备注</label>
+            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} placeholder="其他想记录的..." />
           </div>
 
-          <button onClick={submitDetail} disabled={submitting} className="w-full py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50">
+          <button onClick={submitDetail} disabled={submitting} className="w-full py-2.5 bg-vermillion text-white text-sm rounded-lg font-medium hover:bg-vermillion-dark disabled:opacity-50 transition-colors">
             {isPending ? '保存反馈详情' : '更新反馈详情'}
           </button>
         </div>
       )}
 
       {!showDetail && !isPending && record.feedback.detail && (
-        <div className="text-xs text-gray-500 space-y-1 pt-1">
+        <div className="text-xs text-stone-500 space-y-1 pt-1">
           {record.feedback.detail.actualResult && <p>结果：{record.feedback.detail.actualResult}</p>}
           {record.feedback.detail.satisfaction && <p>满意度：{record.feedback.detail.satisfaction}/5</p>}
         </div>
