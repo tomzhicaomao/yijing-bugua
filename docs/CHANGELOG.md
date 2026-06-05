@@ -1,5 +1,19 @@
 # 项目变更记录
 
+## 2026-06-06
+
+### 🐛 Vercel 部署后注册/登录 "Load failed"
+
+**问题**：项目部署到 Vercel 后，注册账号时显示 "Load failed"。
+
+**根因**：`.gitignore` 排除了 `.env` 文件，导致 Supabase URL 和 anon key 未推送到 GitHub。Vercel 构建时读不到 `VITE_SUPABASE_URL` 和 `VITE_SUPABASE_ANON_KEY`，应用 fallback 到 `https://placeholder.supabase.co`，请求自然失败。
+
+**修复**：从 `.gitignore` 中移除 `.env` 条目，将 `.env` 文件纳入版本控制。由于 `.env` 中仅包含 Supabase URL 和 anon key（均为客户端公开值，Vite 会将 `VITE_` 前缀变量打包到前端 JS），不存在安全风险。
+
+**涉及文件**：`.gitignore`、`.env`
+
+---
+
 ## 项目：易经占卜 (yijing-bugua)
 
 ---
