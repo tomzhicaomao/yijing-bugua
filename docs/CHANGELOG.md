@@ -14,6 +14,20 @@
 
 ---
 
+## 2026-06-06
+
+### 🐛 深度解读按钮不显示
+
+**问题**：结果页默认 AI 解读完成后，"深度分析 (deepseek-v4-pro)" 按钮不出现。
+
+**根因**：`ResultView` 的 AI 触发区域仅在 `progress === 'idle'` 时显示。自动触发默认解读完成后 `progress` 变为 `'done'`，整个触发区域被隐藏，深度分析按钮永远无法出现。
+
+**修复**：将触发区域的显示条件从 `progress === 'idle'` 改为 `progress === 'idle' || progress === 'done'`。解读完成后进度重置为 idle，用户可看到深度分析按钮。
+
+**涉及文件**：`src/pages/ResultView.tsx`
+
+---
+
 ## 项目：易经占卜 (yijing-bugua)
 
 ---

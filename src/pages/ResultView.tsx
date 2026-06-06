@@ -71,7 +71,7 @@ export default function ResultView() {
       <Interpretation record={record} />
 
       {/* AI trigger area */}
-      {!loading && progress === 'idle' && (
+      {!loading && (progress === 'idle' || progress === 'done') && (
         <div className="text-center space-y-3">
           {!hasKey && record.interpretations.length === 0 && (
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
