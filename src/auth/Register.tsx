@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './AuthContext'
+import GlassCard from '../components/ui/GlassCard'
+import Button from '../components/ui/Button'
+import Input from '../components/ui/Input'
 
 export default function Register() {
   const [username, setUsername] = useState('')
@@ -39,92 +42,76 @@ export default function Register() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-parchment">
-        <div className="max-w-md w-full text-center">
-          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-4">
-            注册成功！正在跳转到登录页...
-          </div>
-        </div>
+      <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center px-6">
+        <GlassCard className="p-8 text-center">
+          <p className="text-gold">注册成功！正在跳转到登录页...</p>
+        </GlassCard>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-parchment py-12 px-4">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="text-center text-3xl font-bold text-ink tracking-widest">
-            注册账号
-          </h2>
-          <div className="w-12 h-0.5 bg-gold mx-auto rounded-full mt-3" />
-          <p className="mt-4 text-center text-sm text-stone-500">
+    <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center px-6">
+      <div className="w-full max-w-md space-y-8">
+        {/* 标题 */}
+        <div className="text-center">
+          <h1 className="font-display text-3xl font-light tracking-[0.2em] mb-3">注册账号</h1>
+          <div className="divider w-16 mx-auto" />
+          <p className="mt-4 text-sm text-white/40">
             或者{' '}
-            <Link to="/login" className="font-medium text-vermillion hover:text-vermillion-dark">
+            <Link to="/login" className="text-gold hover:text-gold-light transition-colors">
               登录已有账号
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-          <div className="space-y-4">
+
+        {/* 注册表单 */}
+        <GlassCard className="p-6">
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {error && (
+              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400">
+                {error}
+              </div>
+            )}
+
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-ink-light">
-                用户名
-              </label>
-              <input
-                id="username"
-                name="username"
+              <label className="block text-sm text-white/40 mb-2 tracking-wide">用户名</label>
+              <Input
                 type="text"
                 required
+                placeholder="请输入用户名"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 block w-full px-3 py-2.5 border border-stone-300 rounded-lg bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/40 focus:border-vermillion text-sm"
-                placeholder="请输入用户名"
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-ink-light">
-                密码
-              </label>
-              <input
-                id="password"
-                name="password"
+              <label className="block text-sm text-white/40 mb-2 tracking-wide">密码</label>
+              <Input
                 type="password"
                 required
+                placeholder="请输入密码（至少6位）"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2.5 border border-stone-300 rounded-lg bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/40 focus:border-vermillion text-sm"
-                placeholder="请输入密码（至少6位）"
               />
             </div>
+
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-ink-light">
-                确认密码
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
+              <label className="block text-sm text-white/40 mb-2 tracking-wide">确认密码</label>
+              <Input
                 type="password"
                 required
+                placeholder="请再次输入密码"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2.5 border border-stone-300 rounded-lg bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/40 focus:border-vermillion text-sm"
-                placeholder="请再次输入密码"
               />
             </div>
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full flex justify-center py-2.5 px-4 text-sm font-medium rounded-lg text-white bg-vermillion hover:bg-vermillion-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vermillion disabled:opacity-50 transition-colors"
-          >
-            {loading ? '注册中...' : '注册'}
-          </button>
-        </form>
+
+            <Button type="submit" disabled={loading} className="w-full py-3">
+              {loading ? '注册中...' : '注册'}
+            </Button>
+          </form>
+        </GlassCard>
       </div>
     </div>
   )

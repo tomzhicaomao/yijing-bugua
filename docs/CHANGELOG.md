@@ -28,6 +28,34 @@
 
 ---
 
+## 2026-06-07
+
+### ✨ 前端全面审阅修复（11项）
+
+**背景**：对项目前端进行全面审阅，修复页面逻辑问题和主题一致性问题。
+
+**修复清单**：
+
+| # | 类型 | 文件 | 问题 |
+|---|------|------|------|
+| 1 | 🐛 | `AppShell.tsx` | 导航栏是死代码，每个页面都有自己的固定导航，AppShell 的导航被覆盖 |
+| 2 | 🐛 | `HomeView.tsx` | "准确率 78%" 硬编码，改为占位符 "—" |
+| 3 | 🐛 | `HomeView.tsx` | "今日已占 X 次" 显示总数而非今日数，改为过滤今日记录 |
+| 4 | 🐛 | `HistoryDetailView.tsx` | `getRecordById` 缺少 `.catch()` 错误处理 |
+| 5 | ✨ | `index.css` | 新增 `glass-card-hover`、`step-indicator`、`tag-luxury.active`、`coin` 样式 |
+| 6 | ✨ | `AIProgressIndicator.tsx` | 旧浅色主题 → 深色奢华主题 |
+| 7 | ✨ | `Interpretation.tsx` | 混用新旧主题 → 统一深色奢华主题 |
+| 8 | ✨ | `FeedbackForm.tsx` | 旧浅色主题 → 深色奢华主题 |
+| 9 | ✨ | `FeedbackList.tsx` | 旧浅色主题 → 深色奢华主题 |
+| 10 | ✨ | `ManualInput.tsx` | 旧浅色主题 → 深色奢华主题 |
+| 11 | ✨ | `HexagramBoard.tsx` | 旧浅色主题 → 深色奢华主题 |
+
+**不涉及的变更**：零核心逻辑变更（卜卦引擎、AI 解读、随机逻辑、数据存储完全不变）
+
+**验证**：Vite 构建成功（987ms）。
+
+---
+
 ## 项目：易经占卜 (yijing-bugua)
 
 ---

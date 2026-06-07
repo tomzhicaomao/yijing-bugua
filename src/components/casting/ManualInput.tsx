@@ -40,16 +40,16 @@ export default function ManualInput({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-ink">
+        <h3 className="font-medium text-luxury-50">
           第 {currentIndex + 1} 爻 · {POSITION_NAMES[currentIndex]}
         </h3>
-        <span className="text-sm text-stone-500">
+        <span className="text-sm text-white/40">
           {currentIndex}/6 已输入
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-parchment-dark rounded-full h-2">
+      <div className="w-full bg-white/10 rounded-full h-2">
         <div
           className="bg-vermillion h-2 rounded-full transition-all"
           style={{ width: `${(currentIndex / 6) * 100}%` }}
@@ -62,10 +62,10 @@ export default function ManualInput({
           <button
             key={opt.count}
             onClick={() => onSelectBack(opt.count)}
-            className="flex flex-col items-center py-3 px-2 border border-stone-300 rounded-lg bg-white hover:border-vermillion/50 hover:bg-parchment transition-all"
+            className="flex flex-col items-center py-3 px-2 border border-white/10 rounded-lg bg-white/5 hover:border-vermillion/50 hover:bg-white/10 transition-all"
           >
-            <span className="text-lg font-bold text-ink">{opt.label}</span>
-            <span className="text-xs text-stone-500">{opt.desc}</span>
+            <span className="text-lg font-bold text-luxury-50">{opt.label}</span>
+            <span className="text-xs text-white/40">{opt.desc}</span>
           </button>
         ))}
       </div>

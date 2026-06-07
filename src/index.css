@@ -1,6 +1,27 @@
 @import "tailwindcss";
 
 @theme {
+  /* 高端典雅配色 */
+  --color-luxury-50: #faf8f5;
+  --color-luxury-100: #f5f0ea;
+  --color-luxury-200: #e8dfd4;
+  --color-luxury-300: #d4c4b0;
+  --color-luxury-400: #b8a08a;
+  --color-luxury-500: #9c7c64;
+  --color-luxury-600: #8b6914;
+  --color-luxury-700: #6d5210;
+  --color-luxury-800: #4f3b0c;
+  --color-luxury-900: #312508;
+
+  --color-gold: #d4a843;
+  --color-gold-light: #e8c878;
+  --color-gold-dark: #b8922e;
+
+  --color-obsidian: #0a0a0a;
+  --color-charcoal: #1a1a1a;
+  --color-smoke: #2a2a2a;
+
+  /* 保留原有配色 */
   --color-parchment: #f7f3ee;
   --color-parchment-dark: #ece6db;
   --color-ink: #2c1810;
@@ -9,7 +30,6 @@
   --color-vermillion-dark: #953028;
   --color-bronze: #8b6914;
   --color-bronze-light: #c49a1a;
-  --color-gold: #d4a843;
   --color-jade: #4a7c59;
 }
 
@@ -22,16 +42,184 @@
 
 body {
   margin: 0;
-  background-color: var(--color-parchment);
-  color: var(--color-ink);
-  font-family: "Songti SC", "Noto Serif SC", "STSong", "SimSun", Georgia, serif;
+  background-color: var(--color-obsidian);
+  color: var(--color-luxury-50);
+  font-family: "Noto Serif SC", "Songti SC", serif;
 }
 
 #root {
   min-h-screen: 100svh;
 }
 
-/* Sans-serif for UI elements */
-.font-ui {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+/* 高端典雅字体 */
+.font-display {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+}
+
+.font-body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+.font-mono {
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+/* 玻璃拟态效果 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+}
+
+/* 高端按钮 */
+.btn-gold {
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
+  color: var(--color-obsidian);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 168, 67, 0.3);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  color: var(--color-gold);
+  transition: all 0.3s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(212, 168, 67, 0.1);
+  border-color: var(--color-gold);
+}
+
+/* 高端输入框 */
+.input-luxury {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: var(--color-luxury-50);
+  transition: all 0.3s ease;
+}
+
+.input-luxury:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.1);
+}
+
+.input-luxury::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* 高端标签 */
+.tag-luxury {
+  background: rgba(212, 168, 67, 0.1);
+  border: 1px solid rgba(212, 168, 67, 0.2);
+  color: var(--color-gold);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.tag-luxury:hover {
+  background: rgba(212, 168, 67, 0.2);
+}
+
+.tag-luxury.active {
+  background: rgba(212, 168, 67, 0.25);
+  border-color: var(--color-gold);
+  color: var(--color-gold-light);
+}
+
+.glass-card-hover {
+  transition: all 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(212, 168, 67, 0.15);
+  transform: translateY(-1px);
+}
+
+.step-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  background: var(--color-gold);
+  box-shadow: 0 0 8px rgba(212, 168, 67, 0.4);
+}
+
+.step-indicator.completed {
+  background: rgba(212, 168, 67, 0.4);
+}
+
+.coin {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4a843 0%, #b8922e 50%, #d4a843 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--color-obsidian);
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.coin::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.coin:hover {
+  transform: scale(1.05);
+}
+
+.coin.flipping {
+  animation: coin-flip 1s ease-in-out;
+}
+
+@keyframes coin-flip {
+  0% { transform: rotateY(0deg) scale(1); }
+  25% { transform: rotateY(90deg) scale(1.1); }
+  50% { transform: rotateY(180deg) scale(1); }
+  75% { transform: rotateY(270deg) scale(1.1); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+
+/* 分割线 */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.3), transparent);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 67, 0.3);
+  border-radius: 2px;
 }

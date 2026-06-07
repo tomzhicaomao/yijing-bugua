@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>易经占卜 — 高端典雅</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwindcss.config = {
+      theme: {
+        extend: {
+          colors: {
+            luxury: {
+              50: '#faf8f5',
+              100: '#f5f0ea',
+              200: '#e8dfd4',
+              300: '#d4c4b0',
+              400: '#b8a08a',
+              500: '#9c7c64',
+              600: '#8b6914',
+              700: '#6d5210',
+              800: '#4f3b0c',
+              900: '#312508',
+            },
+            gold: '#d4a843',
+            'gold-light': '#e8c878',
+            'gold-dark': '#b8922e',
+            obsidian: '#0a0a0a',
+            charcoal: '#1a1a1a',
+            smoke: '#2a2a2a',
+          },
+          fontFamily: {
+            display: ['"Noto Serif SC"', '"Songti SC"', 'serif'],
+            body: ['"PingFang SC"', '"Hiragino Sans GB"', 'sans-serif'],
+            mono: ['"SF Mono"', '"Fira Code"', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+      background: #0a0a0a;
+      color: #faf8f5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* 背景纹理 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(212,168,67,0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(212,168,67,0.02) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* 动画 */
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    .slide-up {
+      animation: slideUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .glow {
+      animation: glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 20px rgba(212,168,67,0.3)); }
+      to { filter: drop-shadow(0 0 40px rgba(212,168,67,0.5)); }
+    }
+    
+    /* 玻璃拟态卡片 */
+    .glass-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 16px;
+    }
+    
+    .glass-card-hover:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(212,168,67,0.2);
+    }
+    
+    /* 按钮样式 */
+    .btn-gold {
+      background: linear-gradient(135deg, #d4a843 0%, #c9a96e 100%);
+      color: #0a0a0a;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212,168,67,0.3);
+    }
+    
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(212,168,67,0.3);
+      color: #d4a843;
+      transition: all 0.3s ease;
+    }
+    .btn-ghost:hover {
+      background: rgba(212,168,67,0.1);
+      border-color: #d4a843;
+    }
+    
+    /* 铜钱 */
+    .coin {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d4a843 0%, #b8922e 50%, #d4a843 100%);
+      box-shadow: 
+        0 4px 16px rgba(212,168,67,0.3),
+        inset 0 2px 4px rgba(255,255,255,0.4),
+        inset 0 -2px 4px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    .coin:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 8px 32px rgba(212,168,67,0.4),
+        inset 0 2px 4px rgba(255,255,255,0.4),
+        inset 0 -2px 4px rgba(0,0,0,0.2);
+    }
+    .coin.flipping {
+      animation: coinFlip 1s ease-in-out;
+    }
+    @keyframes coinFlip {
+      0% { transform: rotateY(0deg) scale(1); }
+      50% { transform: rotateY(180deg) scale(1.2); }
+      100% { transform: rotateY(360deg) scale(1); }
+    }
+    
+    /* 进度指示器 */
+    .step-indicator {
+      width: 32px;
+      height: 2px;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+    .step-indicator.active {
+      background: #d4a843;
+      width: 48px;
+    }
+    .step-indicator.completed {
+      background: #d4a843;
+    }
+    
+    /* 分割线 */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,67,0.3), transparent);
+    }
+    
+    /* 滚动条 */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(212,168,67,0.3);
+      border-radius: 2px;
+    }
+    
+    /* 输入框 */
+    .input-luxury {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: #faf8f5;
+      transition: all 0.3s ease;
+    }
+    .input-luxury:focus {
+      outline: none;
+      border-color: #d4a843;
+      box-shadow: 0 0 0 3px rgba(212,168,67,0.1);
+    }
+    .input-luxury::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+    
+    /* 标签 */
+    .tag-luxury {
+      background: rgba(212,168,67,0.1);
+      border: 1px solid rgba(212,168,67,0.2);
+      color: #d4a843;
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      transition: all 0.3s ease;
+    }
+    .tag-luxury:hover {
+      background: rgba(212,168,67,0.2);
+    }
+    .tag-luxury.active {
+      background: #d4a843;
+      color: #0a0a0a;
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== 首页 ==================== -->
+  <div id="home" class="min-h-screen">
+    <!-- 导航 -->
+    <nav class="fixed top-0 left-0 right-0 z-50">
+      <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+        <span class="font-display text-lg tracking-[0.2em] text-gold">易经</span>
+        <button class="text-white/40 hover:text-gold transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <main class="pt-16 pb-24 px-6">
+      <div class="max-w-md mx-auto">
+        <!-- 标题区域 -->
+        <div class="py-20 text-center fade-in">
+          <!-- 八卦符号 -->
+          <div class="mb-10 glow">
+            <svg class="w-28 h-28 mx-auto" viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="48" stroke="url(#goldGradient)" stroke-width="0.5"/>
+              <circle cx="50" cy="50" r="36" stroke="url(#goldGradient)" stroke-width="0.5"/>
+              <circle cx="50" cy="50" r="24" stroke="url(#goldGradient)" stroke-width="0.5"/>
+              <circle cx="50" cy="50" r="12" stroke="url(#goldGradient)" stroke-width="0.5"/>
+              <line x1="50" y1="2" x2="50" y2="98" stroke="url(#goldGradient)" stroke-width="0.3"/>
+              <line x1="2" y1="50" x2="98" y2="50" stroke="url(#goldGradient)" stroke-width="0.3"/>
+              <defs>
+                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#d4a843"/>
+                  <stop offset="50%" stop-color="#e8c878"/>
+                  <stop offset="100%" stop-color="#d4a843"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          
+          <h1 class="font-display text-4xl font-light tracking-[0.15em] mb-4">易经占卜</h1>
+          <p class="text-white/40 font-light tracking-[0.3em] text-sm">周易古占 · 决策辅助</p>
+          
+          <!-- 分割线 -->
+          <div class="divider w-24 mx-auto my-10"></div>
+          
+          <!-- 主要操作 -->
+          <button class="w-full py-4 btn-gold rounded-lg font-medium tracking-widest">
+            开始起卦
+          </button>
+          
+          <!-- 次要信息 -->
+          <p class="mt-8 text-xs text-white/30 tracking-widest">今日已占 3 次</p>
+        </div>
+        
+        <!-- 功能入口 -->
+        <div class="space-y-3 mt-8">
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <span class="text-gold/60 text-lg font-display">/</span>
+                <span class="font-light tracking-wide">历史记录</span>
+              </div>
+              <span class="text-white/30 text-sm">12 条</span>
+            </div>
+          </div>
+          
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <span class="text-gold/60 text-lg font-display">/</span>
+                <span class="font-light tracking-wide">统计分析</span>
+              </div>
+              <span class="text-white/30 text-sm">准确率 78%</span>
+            </div>
+          </div>
+          
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4">
+                <span class="text-gold/60 text-lg font-display">/</span>
+                <span class="font-light tracking-wide">设置</span>
+              </div>
+              <span class="text-white/30 text-sm"></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 待反馈提示 -->
+        <div class="mt-8 glass-card p-5 slide-up" style="animation-delay: 0.3s;">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm text-white/60 tracking-wide">待反馈</span>
+            <span class="text-xs text-gold/60">2 条</span>
+          </div>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-white/80">跟老板谈加薪能成吗</span>
+              <div class="flex gap-2">
+                <button class="btn-ghost px-3 py-1 text-xs rounded-full">准</button>
+                <button class="btn-ghost px-3 py-1 text-xs rounded-full">不准</button>
+                <button class="btn-ghost px-3 py-1 text-xs rounded-full">待定</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- 底部导航 -->
+    <nav class="fixed bottom-0 left-0 right-0 border-t border-white/5">
+      <div class="max-w-md mx-auto flex justify-around py-4">
+        <a class="flex flex-col items-center gap-2 text-gold">
+          <span class="text-lg">/</span>
+          <span class="text-xs tracking-widest">首页</span>
+        </a>
+        <a class="flex flex-col items-center gap-2 text-white/30 hover:text-white/60 transition-colors">
+          <span class="text-lg">/divine</span>
+          <span class="text-xs tracking-widest">起卦</span>
+        </a>
+        <a class="flex flex-col items-center gap-2 text-white/30 hover:text-white/60 transition-colors">
+          <span class="text-lg">/history</span>
+          <span class="text-xs tracking-widest">历史</span>
+        </a>
+        <a class="flex flex-col items-center gap-2 text-white/30 hover:text-white/60 transition-colors">
+          <span class="text-lg">/stats</span>
+          <span class="text-xs tracking-widest">统计</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- ==================== 起卦页面 ==================== -->
+  <div id="divine" class="min-h-screen hidden">
+    <!-- 导航 -->
+    <nav class="fixed top-0 left-0 right-0 z-50">
+      <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-white/40 hover:text-gold transition-colors">
+          ← 返回
+        </button>
+        <span class="font-display text-lg tracking-[0.2em] text-gold">起卦</span>
+        <div class="w-10"></div>
+      </div>
+    </nav>
+    
+    <!-- 进度指示器 -->
+    <div class="fixed top-16 left-0 right-0 z-40">
+      <div class="max-w-md mx-auto px-6 py-6 flex justify-center gap-2">
+        <div class="step-indicator active" data-step="1"></div>
+        <div class="step-indicator" data-step="2"></div>
+        <div class="step-indicator" data-step="3"></div>
+        <div class="step-indicator" data-step="4"></div>
+      </div>
+    </div>
+    
+    <!-- 主内容 -->
+    <main class="pt-32 pb-24 px-6">
+      <div class="max-w-md mx-auto">
+        <!-- 步骤 1: 输入问题 -->
+        <div id="step1" class="space-y-8 fade-in">
+          <div class="text-center">
+            <h2 class="font-display text-2xl font-light tracking-[0.15em] mb-3">你想问什么</h2>
+            <p class="text-sm text-white/40 font-light tracking-wide">心中所想，即为所问</p>
+          </div>
+          
+          <div>
+            <textarea 
+              class="input-luxury w-full h-32 px-5 py-4 resize-none"
+              placeholder="请输入你的问题..."
+            ></textarea>
+            <div class="text-right mt-3">
+              <span class="text-xs text-white/30 font-mono">0/100</span>
+            </div>
+          </div>
+          
+          <div>
+            <p class="text-sm text-white/40 mb-4 tracking-wide">问题分类</p>
+            <div class="flex flex-wrap gap-3">
+              <button class="tag-luxury">工作</button>
+              <button class="tag-luxury">人际</button>
+              <button class="tag-luxury">财务</button>
+              <button class="tag-luxury">健康</button>
+              <button class="tag-luxury">其他</button>
+            </div>
+          </div>
+          
+          <button onclick="nextStep(2)" class="w-full py-4 btn-gold rounded-lg font-medium tracking-widest">
+            下一步
+          </button>
+        </div>
+        
+        <!-- 步骤 2: 占前预判 (可选) -->
+        <div id="step2" class="space-y-8 hidden slide-up">
+          <div class="text-center">
+            <h2 class="font-display text-2xl font-light tracking-[0.15em] mb-3">记录你的判断</h2>
+            <p class="text-sm text-white/40 font-light tracking-wide">全部可选，跳过即可</p>
+          </div>
+          
+          <div>
+            <label class="block text-sm text-white/40 mb-3 tracking-wide">你的预判</label>
+            <input 
+              type="text" 
+              class="input-luxury w-full px-5 py-4"
+              placeholder="你觉得结果会是怎样的？"
+            >
+          </div>
+          
+          <div>
+            <label class="block text-sm text-white/40 mb-4 tracking-wide">信心程度</label>
+            <div class="flex gap-3">
+              <button class="flex-1 py-3 glass-card hover:border-gold/30 transition-colors rounded-lg">1</button>
+              <button class="flex-1 py-3 glass-card hover:border-gold/30 transition-colors rounded-lg">2</button>
+              <button class="flex-1 py-3 glass-card hover:border-gold/30 transition-colors rounded-lg">3</button>
+              <button class="flex-1 py-3 glass-card hover:border-gold/30 transition-colors rounded-lg">4</button>
+              <button class="flex-1 py-3 glass-card hover:border-gold/30 transition-colors rounded-lg">5</button>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-sm text-white/40 mb-3 tracking-wide">原本打算采取的行动</label>
+            <input 
+              type="text" 
+              class="input-luxury w-full px-5 py-4"
+              placeholder="你想怎么做？"
+            >
+          </div>
+          
+          <div class="flex gap-4">
+            <button onclick="nextStep(3)" class="flex-1 py-4 btn-gold rounded-lg font-medium tracking-widest">
+              保存并继续
+            </button>
+            <button onclick="nextStep(3)" class="px-8 py-4 btn-ghost rounded-lg tracking-widest">
+              跳过
+            </button>
+          </div>
+        </div>
+        
+        <!-- 步骤 3: 选择方式 -->
+        <div id="step3" class="space-y-8 hidden slide-up">
+          <div class="text-center">
+            <h2 class="font-display text-2xl font-light tracking-[0.15em] mb-3">选择起卦方式</h2>
+            <p class="text-sm text-white/40 font-light tracking-wide">选择适合你的方式</p>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="glass-card glass-card-hover p-6 cursor-pointer transition-all duration-300">
+              <div class="flex items-center gap-5">
+                <div class="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center">
+                  <span class="text-2xl">🪙</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-medium tracking-wide">虚拟摇卦</h3>
+                  <p class="text-sm text-white/40 mt-1">三枚铜钱，逐爻起卦</p>
+                </div>
+                <div class="w-5 h-5 rounded-full border-2 border-gold"></div>
+              </div>
+            </div>
+            
+            <div class="glass-card glass-card-hover p-6 cursor-pointer transition-all duration-300">
+              <div class="flex items-center gap-5">
+                <div class="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center">
+                  <span class="text-2xl">✍️</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-medium tracking-wide">手动输入</h3>
+                  <p class="text-sm text-white/40 mt-1">已知结果，直接输入</p>
+                </div>
+                <div class="w-5 h-5 rounded-full border border-white/20"></div>
+              </div>
+            </div>
+          </div>
+          
+          <button onclick="nextStep(4)" class="w-full py-4 btn-gold rounded-lg font-medium tracking-widest">
+            开始起卦
+          </button>
+        </div>
+        
+        <!-- 步骤 4: 虚拟摇卦 -->
+        <div id="step4" class="space-y-8 hidden slide-up">
+          <div class="text-center">
+            <h2 class="font-display text-2xl font-light tracking-[0.15em] mb-3">虚拟摇卦</h2>
+            <p class="text-sm text-white/40 font-light tracking-wide">初爻 · 第 1/6 爻</p>
+          </div>
+          
+          <!-- 铜钱区域 -->
+          <div class="flex justify-center gap-8 py-10">
+            <div class="coin" id="coin1"></div>
+            <div class="coin" id="coin2"></div>
+            <div class="coin" id="coin3"></div>
+          </div>
+          
+          <!-- 结果显示 -->
+          <div class="text-center">
+            <p class="text-white/40 font-light mb-6 tracking-wide">点击铜钱投掷</p>
+            <button onclick="flipCoins()" class="px-10 py-3 btn-gold rounded-lg font-medium tracking-widest">
+              投掷
+            </button>
+          </div>
+          
+          <!-- 卦象板 -->
+          <div class="glass-card p-6 mt-8">
+            <p class="text-sm text-white/40 mb-5 tracking-wide">卦象</p>
+            <div class="space-y-3">
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">上爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-20 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">五爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                  <div class="w-1.5 h-0.5"></div>
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">四爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-20 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">三爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                  <div class="w-1.5 h-0.5"></div>
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">二爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-20 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                <span class="text-xs text-white/30 w-10 font-mono">初爻</span>
+                <div class="flex gap-1.5">
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                  <div class="w-1.5 h-0.5"></div>
+                  <div class="w-8 h-0.5 bg-gold/40 rounded"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- ==================== 历史页面 ==================== -->
+  <div id="history" class="min-h-screen hidden">
+    <nav class="fixed top-0 left-0 right-0 z-50">
+      <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-white/40 hover:text-gold transition-colors">
+          ← 返回
+        </button>
+        <span class="font-display text-lg tracking-[0.2em] text-gold">历史</span>
+        <div class="w-10"></div>
+      </div>
+    </nav>
+    
+    <main class="pt-16 pb-24 px-6">
+      <div class="max-w-md mx-auto py-8">
+        <div class="space-y-4">
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-gold/60">工作</span>
+              <span class="text-xs text-white/30 font-mono">2026-06-01</span>
+            </div>
+            <p class="font-light tracking-wide mb-4">跟老板谈加薪能成吗</p>
+            <div class="flex items-center gap-2">
+              <span class="tag-luxury text-xs">乾为天</span>
+              <span class="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">准</span>
+            </div>
+          </div>
+          
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-gold/60">财务</span>
+              <span class="text-xs text-white/30 font-mono">2026-05-30</span>
+            </div>
+            <p class="font-light tracking-wide mb-4">这个项目能顺利上线吗</p>
+            <div class="flex items-center gap-2">
+              <span class="tag-luxury text-xs">地天泰</span>
+              <span class="px-2 py-1 text-xs bg-yellow-500/20 text-yellow-400 rounded-full">待反馈</span>
+            </div>
+          </div>
+          
+          <div class="glass-card glass-card-hover p-5 cursor-pointer transition-all duration-300">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-gold/60">人际</span>
+              <span class="text-xs text-white/30 font-mono">2026-05-28</span>
+            </div>
+            <p class="font-light tracking-wide mb-4">这次面试能通过吗</p>
+            <div class="flex items-center gap-2">
+              <span class="tag-luxury text-xs">水火既济</span>
+              <span class="px-2 py-1 text-xs bg-green-500/20 text-green-400 rounded-full">准</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- ==================== 统计页面 ==================== -->
+  <div id="stats" class="min-h-screen hidden">
+    <nav class="fixed top-0 left-0 right-0 z-50">
+      <div class="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+        <button onclick="showPage('home')" class="text-white/40 hover:text-gold transition-colors">
+          ← 返回
+        </button>
+        <span class="font-display text-lg tracking-[0.2em] text-gold">统计</span>
+        <div class="w-10"></div>
+      </div>
+    </nav>
+    
+    <main class="pt-16 pb-24 px-6">
+      <div class="max-w-md mx-auto py-8">
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <div class="glass-card p-6 text-center">
+            <p class="text-3xl font-display text-gold mb-2">12</p>
+            <p class="text-sm text-white/40 tracking-wide">总次数</p>
+          </div>
+          <div class="glass-card p-6 text-center">
+            <p class="text-3xl font-display text-gold mb-2">78%</p>
+            <p class="text-sm text-white/40 tracking-wide">准确率</p>
+          </div>
+        </div>
+        
+        <div class="glass-card p-6">
+          <h3 class="font-display text-lg tracking-wide mb-6">按分类</h3>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm tracking-wide">工作</span>
+              <span class="text-sm text-white/40 font-mono">8 次 · 82%</span>
+            </div>
+            <div class="divider"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm tracking-wide">人际</span>
+              <span class="text-sm text-white/40 font-mono">3 次 · 75%</span>
+            </div>
+            <div class="divider"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm tracking-wide">财务</span>
+              <span class="text-sm text-white/40 font-mono">1 次 · 50%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // 页面切换
+    function showPage(id) {
+      ['home','divine','history','stats'].forEach(p => document.getElementById(p)?.classList.add('hidden'));
+      document.getElementById(id)?.classList.remove('hidden');
+    }
+    
+    // 步骤切换
+    function nextStep(step) {
+      for (let i = 1; i <= 4; i++) document.getElementById('step'+i)?.classList.add('hidden');
+      document.getElementById('step'+step)?.classList.remove('hidden');
+      
+      // 更新进度点
+      document.querySelectorAll('.step-indicator').forEach((d, i) => {
+        d.classList.remove('active','completed');
+        if (i+1 < step) d.classList.add('completed');
+        if (i+1 === step) d.classList.add('active');
+      });
+    }
+    
+    // 铜钱投掷动画
+    function flipCoins() {
+      ['coin1','coin2','coin3'].forEach(id => {
+        const coin = document.getElementById(id);
+        coin?.classList.add('flipping');
+      });
+      
+      setTimeout(() => {
+        ['coin1','coin2','coin3'].forEach(id => {
+          const coin = document.getElementById(id);
+          coin?.classList.remove('flipping');
+        });
+      }, 1000);
+    }
+    
+    // 标签选择
+    document.querySelectorAll('.tag-luxury').forEach(tag => {
+      tag.addEventListener('click', () => {
+        document.querySelectorAll('.tag-luxury').forEach(t => t.classList.remove('active'));
+        tag.classList.add('active');
+      });
+    });
+    
+    // 信心程度选择
+    document.querySelectorAll('#step2 button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#step2 button').forEach(b => {
+          b.classList.remove('border-gold/50');
+          b.classList.add('border-white/10');
+        });
+        btn.classList.remove('border-white/10');
+        btn.classList.add('border-gold/50');
+      });
+    });
+  </script>
+</body>
+</html>

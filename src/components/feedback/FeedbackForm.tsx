@@ -59,8 +59,8 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
   const isPending = record.feedback.status === 'pending'
 
   return (
-    <div className="bg-white rounded-lg border border-stone-200 p-5 space-y-4 shadow-sm">
-      <h3 className="text-sm font-medium text-ink-light">反馈结果</h3>
+    <div className="glass-card rounded-lg p-5 space-y-4">
+      <h3 className="text-sm font-medium text-white/60">反馈结果</h3>
 
       {!isPending && (
         <p className="text-sm">
@@ -78,42 +78,42 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
             <button onClick={() => submitQuick('unclear')} disabled={submitting} className="flex-1 py-3 bg-stone-500 text-white rounded-lg font-medium hover:bg-stone-600 disabled:opacity-50 transition-all">不清楚</button>
           </>
         ) : (
-          <button onClick={() => submitQuick('pending')} disabled={submitting} className="px-4 py-2 text-sm bg-parchment-dark text-stone-600 rounded-lg hover:bg-stone-300 disabled:opacity-50 transition-colors">撤销反馈</button>
+           <button onClick={() => submitQuick('pending')} disabled={submitting} className="px-4 py-2 text-sm bg-white/10 text-white/50 rounded-lg hover:bg-white/15 disabled:opacity-50 transition-colors">撤销反馈</button>
         )}
       </div>
 
       <div className="flex justify-between text-sm">
-        <button onClick={() => setShowDetail(!showDetail)} className="text-vermillion hover:text-vermillion-dark">
+        <button onClick={() => setShowDetail(!showDetail)} className="text-gold hover:text-gold-light">
           {showDetail ? '收起详情' : (isPending ? '详细记录' : '编辑详情')}
         </button>
         {isPending && (
-          <button onClick={handleRemindLater} disabled={submitting} className="text-stone-500 hover:text-ink-light disabled:opacity-50">稍后提醒</button>
+          <button onClick={handleRemindLater} disabled={submitting} className="text-white/40 hover:text-white/60 disabled:opacity-50">稍后提醒</button>
         )}
       </div>
 
       {showDetail && (
-        <div className="space-y-3 pt-3 border-t border-stone-200">
+        <div className="space-y-3 pt-3 border-t border-white/10">
           <div>
             <label className="block text-xs text-stone-500 mb-1">实际结果</label>
-            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
+            <input type="text" className="input-luxury w-full p-2 text-sm" value={actualResult} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualResult(e.target.value)} placeholder="最终结果是什么？" />
           </div>
           <div>
             <label className="block text-xs text-stone-500 mb-1">满意度 ({satisfaction}/5)</label>
-            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full accent-vermillion" />
+            <input type="range" min="1" max="5" value={satisfaction} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSatisfaction(+e.target.value)} className="w-full accent-gold" />
           </div>
           <div>
             <label className="block text-xs text-stone-500 mb-1">实际耗时（天）</label>
-            <input type="number" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actualDuration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualDuration(+e.target.value)} min="0" />
+            <input type="number" className="input-luxury w-full p-2 text-sm" value={actualDuration} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActualDuration(+e.target.value)} min="0" />
           </div>
           <div>
             <label className="block text-xs text-stone-500 mb-1">实际行动</label>
-            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
+            <input type="text" className="input-luxury w-full p-2 text-sm" value={actionTaken} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setActionTaken(e.target.value)} placeholder="你实际做了什么？" />
           </div>
           <div>
             <label className="block text-xs text-stone-500 mb-1">AI 是否影响了你的决策？</label>
             <div className="flex gap-4">
-              <label className="text-sm text-ink-light"><input type="radio" name="ai" checked={aiInfluenced===true} onChange={() => setAiInfluenced(true)} className="accent-vermillion" /> 是</label>
-              <label className="text-sm text-ink-light"><input type="radio" name="ai" checked={aiInfluenced===false} onChange={() => setAiInfluenced(false)} className="accent-vermillion" /> 否</label>
+            <label className="text-sm text-white/60"><input type="radio" name="ai" checked={aiInfluenced===true} onChange={() => setAiInfluenced(true)} className="accent-gold" /> 是</label>
+              <label className="text-sm text-white/60"><input type="radio" name="ai" checked={aiInfluenced===false} onChange={() => setAiInfluenced(false)} className="accent-gold" /> 否</label>
             </div>
           </div>
 
@@ -124,8 +124,8 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
                 const cf = claimFeedback.find(f => f.claimId === c.id)
                 const status = cf?.status ?? null
                 return (
-                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-stone-100 last:border-0">
-                    <span className="text-xs text-ink-light flex-1">{c.text}</span>
+                  <div key={c.id} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+                    <span className="text-xs text-white/60 flex-1">{c.text}</span>
                     <div className="flex gap-1 shrink-0 ml-2">
                       {(['hit', 'miss', 'unclear'] as const).map(s => (
                         <button key={s}
@@ -133,7 +133,7 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
                             const others = claimFeedback.filter(f => f.claimId !== c.id)
                             setClaimFeedback(status === s ? others : [...others, { claimId: c.id, status: s }])
                           }}
-                          className={`text-xs px-2 py-0.5 rounded transition-colors ${status === s ? (s === 'hit' ? 'bg-green-100 text-green-700' : s === 'miss' ? 'bg-red-100 text-red-700' : 'bg-stone-200 text-stone-600') : 'bg-parchment text-stone-400 hover:bg-parchment-dark'}`}
+                          className={`text-xs px-2 py-0.5 rounded transition-colors ${status === s ? (s === 'hit' ? 'bg-green-500/20 text-green-400' : s === 'miss' ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-white/50') : 'bg-white/5 text-white/30 hover:bg-white/10'}`}
                         >
                           {s === 'hit' ? '✓' : s === 'miss' ? '✗' : '?'}
                         </button>
@@ -147,10 +147,10 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
 
           <div>
             <label className="block text-xs text-stone-500 mb-1">备注</label>
-            <input type="text" className="w-full border border-stone-300 rounded-lg p-2 text-sm bg-white text-ink placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-vermillion/30 focus:border-vermillion" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} placeholder="其他想记录的..." />
+            <input type="text" className="input-luxury w-full p-2 text-sm" value={notes} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)} placeholder="其他想记录的..." />
           </div>
 
-          <button onClick={submitDetail} disabled={submitting} className="w-full py-2.5 bg-vermillion text-white text-sm rounded-lg font-medium hover:bg-vermillion-dark disabled:opacity-50 transition-colors">
+          <button onClick={submitDetail} disabled={submitting} className="w-full py-2.5 btn-gold text-sm rounded-lg disabled:opacity-50">
             {isPending ? '保存反馈详情' : '更新反馈详情'}
           </button>
         </div>

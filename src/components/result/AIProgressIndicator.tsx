@@ -19,16 +19,16 @@ export default function AIProgressIndicator({ progress, error }: AIProgressIndic
   const isError = progress === "error"
 
   return (
-    <div className={`p-4 rounded-lg border ${isError ? "bg-red-50 border-red-200" : "bg-parchment border-bronze/30"}`}>
+    <div className={`p-4 rounded-lg border ${isError ? "bg-red-500/10 border-red-500/20" : "bg-white/5 border-gold/20"}`}>
       <div className="flex items-center gap-3">
         {(progress === "reasoning" || progress === "narrative") && (
-          <div className="w-4 h-4 border-2 border-bronze border-t-transparent rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         )}
-        <span className={`text-sm ${isError ? "text-red-700" : "text-bronze"}`}>
+        <span className={`text-sm ${isError ? "text-red-400" : "text-gold"}`}>
           {PROGRESS_LABELS[progress]}
         </span>
       </div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
     </div>
   )
 }

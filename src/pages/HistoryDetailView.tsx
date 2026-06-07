@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { getRecordById } from '../db/records.js'
+import GlassCard from '../components/ui/GlassCard'
 import Interpretation from '../components/result/Interpretation'
-import type { DivinationRecord } from '../types'
 import FeedbackForm from '../components/feedback/FeedbackForm'
+import type { DivinationRecord } from '../types'
 
 export default function HistoryDetailView() {
   const { id } = useParams<{ id: string }>()
@@ -15,71 +16,107 @@ export default function HistoryDetailView() {
     getRecordById(id).then((r) => {
       setRecord(r)
       setLoading(false)
-    })
+    }).catch(() => setLoading(false))
   }, [id])
 
   if (loading) {
-    return <div className="flex justify-center py-12 text-stone-400">加载中...</div>
+    return (
+      <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center">
+        <p className="text-white/40">加载中...</p>
+      </div>
+    )
   }
 
   if (!record) {
-    return <div className="text-center py-12 text-stone-400">记录未找到</div>
+    return (
+      <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center">
+        <p className="text-white/40">记录未找到</p>
+      </div>
+    )
   }
 
   return (
-    <div className="max-w-lg mx-auto py-6 space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold text-ink">{record.question}</h2>
-        <p className="text-sm text-stone-500 mt-1">
-          {record.category} · {new Date(record.timestamp).toLocaleString('zh-CN')} · {record.method === 'virtual' ? '虚拟摇卦' : '手动输入'}
-        </p>
-      </div>
+    <div className="min-h-screen bg-obsidian text-luxury-50">
+      {/* 导航 */}
+      <nav className="fixed top-0 left-0 right-0 z-50">
+        <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
+          <Link to="/history" className="text-white/40 hover:text-gold transition-colors">
+            ← 返回
+          </Link>
+          <span className="font-display text-lg tracking-[0.2em] text-gold">详情</span>
+          <div className="w-10" />
+        </div>
+      </nav>
 
-      {record.beforeDivination && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 space-y-1 text-sm">
-          <span className="font-medium text-amber-800">占前记录</span>
-          {record.beforeDivination.userExpectation && (
-            <p className="text-amber-700">预判：{record.beforeDivination.userExpectation}</p>
+      {/* 主内容 */}
+      <main className="pt-16 pb-24 px-6">
+        <div className="max-w-md mx-auto space-y-6">
+          {/* 问题信息 */}
+          <GlassCard className="p-6">
+            <h2 className="font-display text-xl tracking-wide mb-2">{record.question}</h2>
+            <div className="flex items-center gap-3 text-sm text-white/40">
+              <span>{record.category}</span>
+              <span className="text-gold/40">·</span>
+              <span>{new Date(record.timestamp).toLocaleString('zh-CN')}</span>
+              <span className="text-gold/40">·</span>
+              <span>{record.method === 'virtual' ? '虚拟摇卦' : '手动输入'}</span>
+            </div>
+          </GlassCard>
+
+          {/* 占前预判 */}
+          {record.beforeDivination && (
+            <GlassCard className="p-5 border-gold/20">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-gold text-sm">占前记录</span>
+              </div>
+              <div className="text-sm text-white/60 space-y-1">
+                {record.beforeDivination.userExpectation && (
+                  <p>预判：{record.beforeDivination.userExpectation}</p>
+                )}
+                {record.beforeDivination.userConfidence && (
+                  <p>信心：{record.beforeDivination.userConfidence}/5</p>
+                )}
+                {record.beforeDivination.intendedAction && (
+                  <p>计划行动：{record.beforeDivination.intendedAction}</p>
+                )}
+              </div>
+            </GlassCard>
           )}
-          {record.beforeDivination.userConfidence && (
-            <p className="text-amber-600">信心：{record.beforeDivination.userConfidence}/5</p>
-          )}
-          {record.beforeDivination.intendedAction && (
-            <p className="text-amber-700">计划行动：{record.beforeDivination.intendedAction}</p>
+
+          {/* 解读结果 */}
+          <Interpretation record={record} />
+
+          {/* 反馈表单 */}
+          <FeedbackForm record={record} onUpdated={(r) => setRecord(r)} />
+
+          {/* 反馈详情 */}
+          {record.feedback.detail && (
+            <GlassCard className="p-5">
+              <h3 className="text-sm text-white/40 mb-3">反馈详情</h3>
+              <div className="text-sm text-white/60 space-y-2">
+                {record.feedback.detail.actualResult && (
+                  <p>实际结果：{record.feedback.detail.actualResult}</p>
+                )}
+                {record.feedback.detail.satisfaction && (
+                  <p>满意度：{record.feedback.detail.satisfaction}/5</p>
+                )}
+                {record.feedback.detail.actualDuration && (
+                  <p>实际耗时：{record.feedback.detail.actualDuration} 天</p>
+                )}
+                {record.feedback.detail.actionTaken && (
+                  <p>实际行动：{record.feedback.detail.actionTaken}</p>
+                )}
+                {record.feedback.detail.notes && (
+                  <p>备注：{record.feedback.detail.notes}</p>
+                )}
+                {record.feedback.detail.aiInfluencedDecision !== undefined && (
+                  <p>AI 是否影响决策：{record.feedback.detail.aiInfluencedDecision ? '是' : '否'}</p>
+                )}
+              </div>
+            </GlassCard>
           )}
         </div>
-      )}
-
-      <Interpretation record={record} />
-
-      <FeedbackForm record={record} onUpdated={(r) => setRecord(r)} />
-
-      {record.feedback.detail && (
-        <div className="bg-white border border-stone-200 rounded-lg p-5 space-y-2 shadow-sm">
-          <h3 className="text-sm font-medium text-ink-light">反馈详情</h3>
-          {record.feedback.detail.actualResult && (
-            <p className="text-sm"><span className="text-stone-500">实际结果：</span><span className="text-ink">{record.feedback.detail.actualResult}</span></p>
-          )}
-          {record.feedback.detail.satisfaction && (
-            <p className="text-sm"><span className="text-stone-500">满意度：</span><span className="text-ink">{record.feedback.detail.satisfaction}/5</span></p>
-          )}
-          {record.feedback.detail.actualDuration && (
-            <p className="text-sm"><span className="text-stone-500">实际耗时：</span><span className="text-ink">{record.feedback.detail.actualDuration} 天</span></p>
-          )}
-          {record.feedback.detail.actionTaken && (
-            <p className="text-sm"><span className="text-stone-500">实际行动：</span><span className="text-ink">{record.feedback.detail.actionTaken}</span></p>
-          )}
-          {record.feedback.detail.notes && (
-            <p className="text-sm"><span className="text-stone-500">备注：</span><span className="text-ink">{record.feedback.detail.notes}</span></p>
-          )}
-          {record.feedback.detail.aiInfluencedDecision !== undefined && (
-            <p className="text-sm">
-              <span className="text-stone-500">AI 是否影响决策：</span>
-              <span className="text-ink">{record.feedback.detail.aiInfluencedDecision ? '是' : '否'}</span>
-            </p>
-          )}
-        </div>
-      )}
+      </main>
     </div>
   )
 }
