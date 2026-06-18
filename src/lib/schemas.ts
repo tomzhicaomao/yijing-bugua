@@ -91,6 +91,7 @@ export const divinationRecordSchema = z.object({
     original: z.number().int().gte(1).lte(64),
     changed: z.number().int().gte(1).lte(64).nullable(),
     changingLines: z.array(z.number().int().gte(1).lte(6)),
+    mutual: z.number().int().gte(1).lte(64).optional(),
   }),
   interpretations: z.array(interpretationResultSchema),
   feedback: feedbackSchema,
