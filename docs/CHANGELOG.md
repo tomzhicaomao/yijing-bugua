@@ -1,5 +1,42 @@
 # 项目变更记录
 
+## 2026-06-18
+
+### ✨ 添加互卦计算、之卦概念、推理重试及 claims 统一
+
+**背景**：用户选取了项目规划中的三个高优先级需求：添加"互卦"计算、添加"之卦"概念、以及改进深度分析的可靠性。
+
+**变更清单**：
+
+| # | 类型 | 文件 | 变更 |
+|---|------|------|------|
+| 1 | ✨ | `src/engine/casting.ts` | 新增 `calculateMutualHexagram()` — 互卦算法（二三四爻为下卦，三四五爻为上卦） |
+| 2 | ✨ | `src/types/index.ts` | `HexagramCalculation` 接口新增 `mutual: number` 字段 |
+| 3 | ✨ | `src/hooks/useDivination.ts` | 记录中写入 `mutual: calc.mutual` |
+| 4 | ✨ | `src/ai/double-call.ts` | `DoubleCallInput` 新增 `hexagramMutual?` 可选字段 |
+| 5 | ✨ | `src/ai/reasoning-call.ts` | `ReasoningInput` 新增 `hexagramMutual?`；默认 `maxRetries=1`（共 2 次尝试） |
+| 6 | ✨ | `src/ai/prompt-builder.ts` | System prompt 增加互卦/之卦指引；User prompt 注入互卦信息 |
+| 7 | ✨ | `src/components/result/Interpretation.tsx` | 结果页显示互卦名称和上下卦；变卦标签改为"变卦（之卦）" |
+| 8 | ✨ | `src/hooks/useAIInterpretation.ts` | 将 `record.hexagram.mutual` 传递给 `runDoubleCall` |
+| 9 | 🐛 | `src/lib/schemas.ts` | `aiReasoningSchema` 和 `interpretationResultSchema` 的 claims 最小值从 3 统一为 5 |
+| 10 | 🐛 | `src/lib/schemas.ts` | `divinationRecordSchema` 新增 `mutual` 可选字段，修复导出/导入时互卦数据丢失 |
+
+**算法说明**：
+- 互卦：取本卦六爻中第 2、3、4 爻组成下卦，第 3、4、5 爻组成上卦，合成新的六爻卦象。反映事物发展的内在因素和隐含条件。
+- 之卦（变卦）：本卦中动爻（老阴→少阳、老阳→少阴）变化后形成的卦象。代表事物发展的方向和最终归宿。
+
+**验证**：TypeScript 编译无错误，Vite 生产构建成功（798ms），Git 推送成功（commit ffb67bb）。
+
+### 🐛 修复 schema 中 mutual 字段缺失
+
+**问题**：`divinationRecordSchema` 中 `hexagram` 对象缺少 `mutual` 字段定义。导致导出记录再导入时，互卦数据被 Zod schema 验证静默丢弃。
+
+**修复**：在 `schemas.ts` 的 `hexagram` 对象中新增 `mutual: z.number().int().gte(1).lte(64).optional()`。
+
+**涉及文件**：`src/lib/schemas.ts`
+
+---
+
 ## 2026-06-06
 
 ### 🐛 Vercel 部署后注册/登录 "Load failed"
