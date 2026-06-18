@@ -23,6 +23,7 @@ interface DoubleCallInput {
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
+  hexagramMutual?: number
 }
 
 export async function runDoubleCall(

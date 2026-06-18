@@ -111,6 +111,7 @@ export interface DivinationRecord {
     original: number
     changed: number | null
     changingLines: number[]
+    mutual?: number
   }
   interpretations: InterpretationResult[]
   feedback: Feedback

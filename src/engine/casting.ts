@@ -56,6 +56,7 @@ export interface HexagramCalculation {
   original: number
   changed: number | null
   changingLines: number[]
+  mutual: number
 }
 
 /**
@@ -66,6 +67,7 @@ export function calculateHexagram(
   lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue],
 ): HexagramCalculation {
   const original = linesToKingWen(lines)
+  const mutual = calculateMutualHexagram(lines)
 
   // Find changing lines (positions 1-6 where value is 6 or 9)
   const changingLines: number[] = []
@@ -88,5 +90,24 @@ export function calculateHexagram(
       ? linesToKingWen(changedLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
       : null
 
-  return { original, changed, changingLines }
+  return { original, changed, changingLines, mutual }
+}
+
+/**
+ * Calculate mutual hexagram (互卦).
+ * Takes lines 2,3,4 as lower trigram and lines 3,4,5 as upper trigram.
+ * Reflects the internal factors of the situation.
+ */
+export function calculateMutualHexagram(
+  lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue],
+): number {
+  // Lower trigram: lines[1], lines[2], lines[3] (二、三、四爻)
+  // Upper trigram: lines[2], lines[3], lines[4] (三、四、五爻)
+  // Combined 6 lines: [lines[1], lines[2], lines[3], lines[2], lines[3], lines[4]]
+  const mutualLines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue] = [
+    lines[1], lines[2], lines[3],
+    lines[2], lines[3], lines[4],
+  ]
+
+  return linesToKingWen(mutualLines)
 }

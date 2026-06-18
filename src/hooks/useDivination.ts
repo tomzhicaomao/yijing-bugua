@@ -112,6 +112,7 @@ export function useDivination() {
         original: calc.original,
         changed: calc.changed,
         changingLines: calc.changingLines,
+        mutual: calc.mutual,
       },
       interpretations: [],
       feedback: {

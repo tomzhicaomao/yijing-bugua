@@ -36,6 +36,7 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
         hexagramOriginal: record.hexagram.original,
         hexagramChanged: record.hexagram.changed,
         changingLines: record.hexagram.changingLines,
+        hexagramMutual: record.hexagram.mutual,
       },
       type,
       {

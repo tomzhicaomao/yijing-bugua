@@ -8,6 +8,7 @@ interface InterpretationProps {
 function RuleEngineResult({ record }: { record: DivinationRecord }) {
   const hexagram = lookupHexagram(record.hexagram.original)
   const changed = record.hexagram.changed ? lookupHexagram(record.hexagram.changed) : null
+  const mutual = record.hexagram.mutual ? lookupHexagram(record.hexagram.mutual) : null
   const lineResult = getLineText(record.hexagram.original, record.hexagram.changingLines)
 
   return (
@@ -21,9 +22,17 @@ function RuleEngineResult({ record }: { record: DivinationRecord }) {
 
         {changed && (
           <div className="flex items-baseline gap-2 text-vermillion">
-            <span className="text-sm">→ 变卦</span>
+            <span className="text-sm">→ 变卦（之卦）</span>
             <span className="text-xl font-bold">{changed.name}</span>
             <span className="text-white/40">{changed.trigramLower}{changed.trigramUpper}</span>
+          </div>
+        )}
+
+        {mutual && (
+          <div className="flex items-baseline gap-2 text-gold/80">
+            <span className="text-sm">互卦</span>
+            <span className="text-xl font-bold">{mutual.name}</span>
+            <span className="text-white/40">{mutual.trigramLower}{mutual.trigramUpper}</span>
           </div>
         )}
 

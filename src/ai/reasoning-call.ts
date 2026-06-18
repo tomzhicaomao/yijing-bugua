@@ -10,6 +10,7 @@ interface ReasoningInput {
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
+  hexagramMutual?: number
 }
 
 export interface ReasoningCallResult {
@@ -21,6 +22,7 @@ export interface ReasoningCallResult {
 export async function callReasoning(
   input: ReasoningInput,
   model: string = DEFAULT_MODEL,
+  maxRetries: number = 1,
 ): Promise<ReasoningCallResult> {
   const systemPrompt = buildReasoningSystemPrompt()
   const userPrompt = buildReasoningUserPrompt({
@@ -28,6 +30,7 @@ export async function callReasoning(
     hexagramOriginal: input.hexagramOriginal,
     hexagramChanged: input.hexagramChanged,
     changingLines: input.changingLines,
+    hexagramMutual: input.hexagramMutual,
   })
 
   const messages: DeepSeekMessage[] = [
@@ -35,57 +38,59 @@ export async function callReasoning(
     { role: "user", content: userPrompt },
   ]
 
-  try {
-    const response = await callDeepSeek({
-      model,
-      messages,
-      temperature: DEFAULT_TEMPERATURE,
-      response_format: { type: "json_object" },
-    })
+  let lastError: string | undefined
 
-    const rawContent = response.choices[0]?.message?.content
-    if (!rawContent) {
-      return { success: false, error: "API 返回空内容" }
-    }
-
-    let parsed: unknown
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      parsed = JSON.parse(rawContent)
-    } catch {
-      return {
-        success: false,
-        error: "AI 返回内容不是有效 JSON",
+      const response = await callDeepSeek({
+        model,
+        messages,
+        temperature: DEFAULT_TEMPERATURE,
+        response_format: { type: "json_object" },
+      })
+
+      const rawContent = response.choices[0]?.message?.content
+      if (!rawContent) {
+        lastError = "API 返回空内容"
+        continue
       }
-    }
 
-    const validated = aiReasoningSchema.safeParse(parsed)
-    if (!validated.success) {
-      return {
-        success: false,
-        error: "AI 推理结果 schema 校验失败：" + JSON.stringify(validated.error?.issues),
+      let parsed: unknown
+      try {
+        parsed = JSON.parse(rawContent)
+      } catch {
+        lastError = "AI 返回内容不是有效 JSON"
+        continue
       }
-    }
 
-    const data = validated.data
-    const interpretation: InterpretationResult = {
-      id: uuidv4(),
-      type: model === DEEP_MODEL ? "deep" : "default",
-      trend: data.trend as Trend,
-      analysis: data.analysis,
-      conditions: data.conditions,
-      timeWindow: data.timeWindow,
-      answer: data.answer,
-      confidence: data.confidence as ConfidenceLevel,
-      model,
-      promptVersion: PROMPT_VERSION,
-      temperature: DEFAULT_TEMPERATURE,
-      rawResponse: rawContent,
-      claims: data.claims,
-    }
+      const validated = aiReasoningSchema.safeParse(parsed)
+      if (!validated.success) {
+        lastError = "AI 推理结果 schema 校验失败：" + JSON.stringify(validated.error?.issues)
+        continue
+      }
 
-    return { success: true, interpretation }
-  } catch (error) {
-    const msg = error instanceof Error ? error.message : String(error)
-    return { success: false, error: msg }
+      const data = validated.data
+      const interpretation: InterpretationResult = {
+        id: uuidv4(),
+        type: model === DEEP_MODEL ? "deep" : "default",
+        trend: data.trend as Trend,
+        analysis: data.analysis,
+        conditions: data.conditions,
+        timeWindow: data.timeWindow,
+        answer: data.answer,
+        confidence: data.confidence as ConfidenceLevel,
+        model,
+        promptVersion: PROMPT_VERSION,
+        temperature: DEFAULT_TEMPERATURE,
+        rawResponse: rawContent,
+        claims: data.claims,
+      }
+
+      return { success: true, interpretation }
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error)
+    }
   }
+
+  return { success: false, error: lastError }
 }

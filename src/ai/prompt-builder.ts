@@ -6,10 +6,11 @@ interface PromptContext {
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
+  hexagramMutual?: number
 }
 
 export function buildReasoningSystemPrompt(): string {
-  return "你是一位精通周易的占卜师，遵循周易古占法。你必须严格按照以下规则输出：1. 基于卦辞和爻辞进行判断，不能脱离原文 2. 给出明确的趋势判断：利、不利、或中性 3. 列出至少3个可事后验证的具体判断点 4. 必须引用卦辞或爻辞原文出处。禁止使用天意、命中注定、吉人天相、大吉大利等空洞表述。你必须只输出JSON，不要输出其他任何文字。"
+  return "你是一位精通周易的占卜师，遵循周易古占法。你必须严格按照以下规则输出：1. 基于卦辞和爻辞进行判断，不能脱离原文 2. 给出明确的趋势判断：利、不利、或中性 3. 列出至少5个可事后验证的具体判断点 4. 必须引用卦辞或爻辞原文出处 5. 参考互卦分析事情的内在因素 6. 当存在变卦（之卦）时，从之卦角度分析事情的演变方向和最终结果。禁止使用天意、命中注定、吉人天相、大吉大利等空洞表述。你必须只输出JSON，不要输出其他任何文字。"
 }
 
 export function buildReasoningUserPrompt(ctx: PromptContext): string {
@@ -21,7 +22,16 @@ export function buildReasoningUserPrompt(ctx: PromptContext): string {
   relevantText += "卦辞：" + (hexagram?.judgment ?? "") + "\n"
 
   if (changed) {
-    relevantText += "变卦：" + changed.name + "(第" + ctx.hexagramChanged + "卦)\n"
+    relevantText += "变卦（之卦）：" + changed.name + "(第" + ctx.hexagramChanged + "卦)\n"
+    relevantText += "之卦含义：变卦即之卦，代表事情发展的方向和最终归宿。\n"
+  }
+
+  if (ctx.hexagramMutual) {
+    const mutual = lookupHexagram(ctx.hexagramMutual)
+    if (mutual) {
+      relevantText += "互卦：" + mutual.name + "(第" + ctx.hexagramMutual + "卦)\n"
+      relevantText += "互卦含义：互卦反映事情发展的内在因素和隐含条件。\n"
+    }
   }
 
   if (ctx.changingLines.length > 0) {
