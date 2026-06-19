@@ -3,6 +3,7 @@ import { runDoubleCall, type AIProgress } from "../ai/double-call.js"
 import type { InterpretationResult, DivinationRecord } from "../types"
 import { updateRecord } from "../db/records.js"
 import { hasApiKey } from "../lib/api-key.js"
+import { useAuth } from "../auth/AuthContext"
 
 interface UseAIInterpretationReturn {
   progress: AIProgress
@@ -15,6 +16,7 @@ interface UseAIInterpretationReturn {
 }
 
 export function useAIInterpretation(): UseAIInterpretationReturn {
+  const { user } = useAuth()
   const [progress, setProgress] = useState<AIProgress>("idle")
   const [error, setError] = useState<string | null>(null)
   const [narrative, setNarrative] = useState<string | null>(null)
@@ -23,6 +25,11 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
   const triggerCall = useCallback(async (record: DivinationRecord, type: "default" | "deep") => {
     if (!hasApiKey()) {
       setError("未配置 API Key")
+      setProgress("error")
+      return
+    }
+    if (!user) {
+      setError("未登录")
       setProgress("error")
       return
     }
@@ -54,11 +61,11 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
         ...record,
         interpretations: [...record.interpretations, result.interpretation],
       }
-      await updateRecord(updated)
+      await updateRecord(updated, user.id)
     } else {
       setError(result.error ?? "AI 调用失败")
     }
-  }, [])
+  }, [user])
 
   return {
     progress,

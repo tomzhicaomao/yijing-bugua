@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllRecords, queryByCategory } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import { CATEGORIES } from '../lib/constants'
 import GlassCard from '../components/ui/GlassCard'
 import Tag from '../components/ui/Tag'
 import type { DivinationRecord, Category } from '../types'
 
 export default function HistoryView() {
+  const { user } = useAuth()
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [filter, setFilter] = useState<Category | '全部'>('全部')
 
   useEffect(() => {
-    const load = filter === '全部' ? getAllRecords() : queryByCategory(filter)
+    if (!user) return
+    const load = filter === '全部' ? getAllRecords(user.id) : queryByCategory(filter, user.id)
     load.then(setRecords)
-  }, [filter])
+  }, [filter, user])
 
   return (
     <div className="min-h-screen bg-obsidian text-luxury-50">

@@ -1,23 +1,26 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllRecords, queryPendingDue } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import GlassCard from '../components/ui/GlassCard'
 import Button from '../components/ui/Button'
 
 export default function HomeView() {
+  const { user } = useAuth()
   const [total, setTotal] = useState(0)
   const [todayCount, setTodayCount] = useState(0)
   const [pending, setPending] = useState(0)
 
   useEffect(() => {
-    getAllRecords().then(r => {
+    if (!user) return
+    getAllRecords(user.id).then(r => {
       setTotal(r.length)
       const today = new Date()
       today.setHours(0, 0, 0, 0)
       setTodayCount(r.filter(rec => new Date(rec.timestamp) >= today).length)
     })
-    queryPendingDue().then(r => setPending(r.length))
-  }, [])
+    queryPendingDue(user.id).then(r => setPending(r.length))
+  }, [user])
 
   return (
     <div className="min-h-screen bg-obsidian text-luxury-50">

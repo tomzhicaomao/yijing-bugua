@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getRecordById } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import GlassCard from '../components/ui/GlassCard'
 import Interpretation from '../components/result/Interpretation'
 import FeedbackForm from '../components/feedback/FeedbackForm'
@@ -8,16 +9,17 @@ import type { DivinationRecord } from '../types'
 
 export default function HistoryDetailView() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
   const [record, setRecord] = useState<DivinationRecord | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!id) return
-    getRecordById(id).then((r) => {
+    if (!id || !user) return
+    getRecordById(id, user.id).then((r) => {
       setRecord(r)
       setLoading(false)
     }).catch(() => setLoading(false))
-  }, [id])
+  }, [id, user])
 
   if (loading) {
     return (

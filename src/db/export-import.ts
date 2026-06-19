@@ -11,8 +11,8 @@ const exportMetaSchema = z.object({
   records: z.array(z.unknown()),
 })
 
-export async function exportToJSON(): Promise<string> {
-  const records = await getAllRecords()
+export async function exportToJSON(userId: string): Promise<string> {
+  const records = await getAllRecords(userId)
   const data: ExportData = {
     app: 'yijing-bugua',
     schemaVersion: SCHEMA_VERSION,
@@ -37,7 +37,7 @@ export interface ImportResult {
   errors: string[]
 }
 
-export async function importFromJSON(jsonString: string): Promise<ImportResult> {
+export async function importFromJSON(jsonString: string, userId: string): Promise<ImportResult> {
   const result: ImportResult = { added: 0, skipped: 0, invalid: 0, errors: [] }
 
   let parsed: unknown
@@ -72,13 +72,13 @@ export async function importFromJSON(jsonString: string): Promise<ImportResult> 
       continue
     }
 
-    const existing = await getRecordById(validated.data.id)
+    const existing = await getRecordById(validated.data.id, userId)
     if (existing) {
       result.skipped++
       continue
     }
 
-    await createRecord(validated.data)
+    await createRecord(validated.data, userId)
     result.added++
   }
 

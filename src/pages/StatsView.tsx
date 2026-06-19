@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllRecords } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import { CATEGORIES } from '../lib/constants'
 import GlassCard from '../components/ui/GlassCard'
 import type { DivinationRecord } from '../types'
 
 export default function StatsView() {
+  const { user } = useAuth()
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    getAllRecords().then(r => { setRecords(r); setLoading(false) })
-  }, [])
+    if (!user) return
+    getAllRecords(user.id).then(r => { setRecords(r); setLoading(false) })
+  }, [user])
 
   if (loading) {
     return (

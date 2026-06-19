@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { updateRecord } from '../../db/records.js'
+import { useAuth } from '../../auth/AuthContext'
 import { remindLater } from '../../lib/feedback-due.js'
 import type { DivinationRecord, FeedbackStatus, ClaimFeedback } from '../../types'
 
@@ -9,6 +10,7 @@ interface FeedbackFormProps {
 }
 
 export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
+  const { user } = useAuth()
   const [showDetail, setShowDetail] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -23,14 +25,16 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
   const allClaims = record.interpretations.flatMap(it => it.claims || [])
 
   const submitQuick = async (status: FeedbackStatus) => {
+    if (!user) return
     setSubmitting(true)
     const updated = { ...record, feedback: { ...record.feedback, status } }
-    await updateRecord(updated)
+    await updateRecord(updated, user.id)
     onUpdated(updated)
     setSubmitting(false)
   }
 
   const submitDetail = async () => {
+    if (!user) return
     setSubmitting(true)
     const detail = {
       actualResult: actualResult || undefined,
@@ -42,16 +46,17 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
       claimFeedback: claimFeedback.length > 0 ? claimFeedback : undefined,
     }
     const updated = { ...record, feedback: { ...record.feedback, detail } }
-    await updateRecord(updated)
+    await updateRecord(updated, user.id)
     onUpdated(updated)
     setShowDetail(false)
     setSubmitting(false)
   }
 
   const handleRemindLater = async () => {
+    if (!user) return
     setSubmitting(true)
     const updated = { ...record, feedback: { ...record.feedback, dueAt: remindLater() } }
-    await updateRecord(updated)
+    await updateRecord(updated, user.id)
     onUpdated(updated)
     setSubmitting(false)
   }

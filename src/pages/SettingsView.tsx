@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
-import { useSync } from '../hooks/useSync'
 import { getApiKey, setApiKey, removeApiKey } from '../lib/api-key'
 import { exportToJSON, exportFilename, importFromJSON } from '../db/export-import.js'
 import { SCHEMA_VERSION, PROMPT_VERSION, DEFAULT_MODEL, DEEP_MODEL } from '../lib/constants.js'
@@ -11,7 +10,6 @@ import Input from '../components/ui/Input'
 
 export default function SettingsView() {
   const { user, signOut } = useAuth()
-  const { syncStatus, lastSyncTime, error: syncError, sync, upload } = useSync()
   const [apiKey, setApiKeyState] = useState(getApiKey() ?? '')
   const [showKey, setShowKey] = useState(false)
   const [importResult, setImportResult] = useState<string | null>(null)
@@ -28,7 +26,8 @@ export default function SettingsView() {
   }
 
   const handleExport = async () => {
-    const json = await exportToJSON()
+    if (!user) return
+    const json = await exportToJSON(user.id)
     const blob = new Blob([json], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -39,6 +38,7 @@ export default function SettingsView() {
   }
 
   const handleImport = async () => {
+    if (!user) return
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = '.json'
@@ -46,7 +46,7 @@ export default function SettingsView() {
       const file = input.files?.[0]
       if (!file) return
       const text = await file.text()
-      const result = await importFromJSON(text)
+      const result = await importFromJSON(text, user.id)
       const parts: string[] = []
       if (result.added > 0) parts.push(`新增 ${result.added} 条`)
       if (result.skipped > 0) parts.push(`跳过 ${result.skipped} 条`)
@@ -86,37 +86,6 @@ export default function SettingsView() {
             </GlassCard>
           )}
 
-          {/* 云端同步 */}
-          <GlassCard className="p-5">
-            <h3 className="text-sm text-white/40 mb-4 tracking-wide">云端同步</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm">
-                    {syncStatus === 'syncing' ? '同步中...' :
-                     syncStatus === 'success' ? '已同步' :
-                     syncStatus === 'error' ? '同步失败' : '未同步'}
-                  </p>
-                  {lastSyncTime && (
-                    <p className="text-xs text-white/30 mt-1">
-                      上次同步: {lastSyncTime.toLocaleString('zh-CN')}
-                    </p>
-                  )}
-                  {syncError && (
-                    <p className="text-xs text-red-400 mt-1">{syncError}</p>
-                  )}
-                </div>
-                <Button onClick={sync} disabled={syncStatus === 'syncing'} className="py-2 px-4 text-sm">
-                  同步
-                </Button>
-              </div>
-              <Button onClick={upload} disabled={syncStatus === 'syncing'} variant="ghost" className="w-full py-2 text-sm">
-                上传本地数据到云端
-              </Button>
-              <p className="text-xs text-white/30">登录时自动同步。上传按钮可将本地数据迁移到云端。</p>
-            </div>
-          </GlassCard>
-
           {/* API Key */}
           <GlassCard className="p-5">
             <h3 className="text-sm text-white/40 mb-4 tracking-wide">DeepSeek API Key</h3>
@@ -140,7 +109,6 @@ export default function SettingsView() {
                 </Button>
               </div>
               {saved && <p className="text-sm text-gold">已保存</p>}
-              <p className="text-xs text-white/30">API Key 登录后会自动同步到云端</p>
             </div>
           </GlassCard>
 

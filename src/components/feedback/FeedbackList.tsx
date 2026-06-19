@@ -1,23 +1,26 @@
 import { useState, useEffect } from "react"
 import { queryPendingDue, updateRecord } from "../../db/records.js"
 import { remindLater } from "../../lib/feedback-due.js"
+import { useAuth } from "../../auth/AuthContext"
 import type { DivinationRecord, FeedbackStatus, FeedbackDetail } from "../../types"
 
 interface FeedbackListProps { onAllDone: () => void }
 
 export default function FeedbackList({ onAllDone }: FeedbackListProps) {
+  const { user } = useAuth()
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    queryPendingDue().then((r) => {
+    if (!user) return
+    queryPendingDue(user.id).then((r) => {
       setRecords(r)
       setLoaded(true)
       if (r.length === 0) onAllDone()
     })
-  }, [onAllDone])
+  }, [onAllDone, user])
 
   const advance = () => {
     const next = currentIdx + 1
@@ -27,16 +30,18 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   }
 
   const handleStatus = async (status: FeedbackStatus): Promise<void> => {
+    if (!user) return
     const record = records[currentIdx]
     if (!record) return
-    await updateRecord({ ...record, feedback: { ...record.feedback, status } })
+    await updateRecord({ ...record, feedback: { ...record.feedback, status } }, user.id)
     advance()
   }
 
   const handleRemind = async (): Promise<void> => {
+    if (!user) return
     const record = records[currentIdx]
     if (!record) return
-    await updateRecord({ ...record, feedback: { ...record.feedback, dueAt: remindLater() } })
+    await updateRecord({ ...record, feedback: { ...record.feedback, dueAt: remindLater() } }, user.id)
     advance()
   }
 
@@ -60,7 +65,7 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
           <button onClick={() => setShowDetail(!showDetail)} className="text-gold hover:text-gold-light">{showDetail ? "收起详情" : "展开详细记录"}</button>
           <button onClick={handleRemind} className="text-white/40 hover:text-white/60">稍后提醒</button>
         </div>
-        {showDetail && <FeedbackDetailForm record={r} onSave={async (detail) => { await updateRecord({ ...r, feedback: { ...r.feedback, detail } }); advance() }} />}
+        {showDetail && <FeedbackDetailForm record={r} onSave={async (detail) => { if (user) { await updateRecord({ ...r, feedback: { ...r.feedback, detail } }, user.id); advance() } }} />}
       </div>
     </div>
   )

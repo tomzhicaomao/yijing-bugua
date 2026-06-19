@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getRecordById } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import { useAIInterpretation } from '../hooks/useAIInterpretation'
 import GlassCard from '../components/ui/GlassCard'
 import Button from '../components/ui/Button'
@@ -11,6 +12,7 @@ import type { DivinationRecord } from '../types'
 
 export default function ResultView() {
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
   const [record, setRecord] = useState<DivinationRecord | null>(null)
   const [loading, setLoading] = useState(true)
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false)
@@ -23,8 +25,8 @@ export default function ResultView() {
   } = useAIInterpretation()
 
   useEffect(() => {
-    if (!id) return
-    getRecordById(id)
+    if (!id || !user) return
+    getRecordById(id, user.id)
       .then((r) => {
         setRecord(r)
         setLoading(false)
@@ -32,7 +34,7 @@ export default function ResultView() {
       .catch(() => {
         setLoading(false)
       })
-  }, [id])
+  }, [id, user])
 
   useEffect(() => {
     if (record && hasKey && record.interpretations.length === 0 && !loading && !hasAutoTriggered) {
@@ -42,10 +44,10 @@ export default function ResultView() {
   }, [record, hasKey, loading, hasAutoTriggered, triggerDefault])
 
   useEffect(() => {
-    if (record && progress === 'done') {
-      getRecordById(record.id).then(setRecord)
+    if (record && progress === 'done' && user) {
+      getRecordById(record.id, user.id).then(setRecord)
     }
-  }, [progress, record?.id])
+  }, [progress, record?.id, user])
 
   if (loading) {
     return (

@@ -6,6 +6,7 @@ import { createRecord } from '../db/records.js'
 import { calculateDefaultDueAt } from '../lib/feedback-due.js'
 import { checkDuplicate } from '../engine/duplicate-check.js'
 import { getAllRecords } from '../db/records.js'
+import { useAuth } from '../auth/AuthContext'
 import { v4 as uuidv4 } from 'uuid'
 import type { DivinationRecord } from '../types'
 
@@ -13,6 +14,7 @@ type Step = 'question' | 'before-divination' | 'method' | 'casting' | 'result'
 
 export function useDivination() {
   const navigate = useNavigate()
+  const { user } = useAuth()
 
   const [step, setStep] = useState<Step>('question')
   const [question, setQuestion] = useState('')
@@ -91,14 +93,14 @@ export function useDivination() {
   }, [currentIndex, lines, castingTimestamp])
 
   const completeCasting = useCallback(async () => {
-    if (!category) return
+    if (!category || !user) return
 
     const validLines = lines.filter((l): l is LineValue => l !== null)
     if (validLines.length !== 6) return
 
     const calc = calculateHexagram(validLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
     // Check for duplicate questions in the last 24 hours
-    const allRecords = await getAllRecords()
+    const allRecords = await getAllRecords(user.id)
     const duplicate = checkDuplicate(question, allRecords, 24) ?? undefined
     const record: DivinationRecord = {
       schemaVersion: 1,
@@ -123,7 +125,7 @@ export function useDivination() {
     }
 
     try {
-      await createRecord(record)
+      await createRecord(record, user.id)
       setSavedRecordId(record.id)
       setStep('result')
       navigate(`/result/${record.id}`)
@@ -133,7 +135,7 @@ export function useDivination() {
       setStep('result')
       navigate(`/result/${record.id}`)
     }
-  }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate])
+  }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate, user])
 
   return {
     step,

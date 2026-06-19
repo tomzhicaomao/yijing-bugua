@@ -1,36 +1,42 @@
 import type { FeedbackDetail } from "../types"
 import { useState, useCallback } from "react"
-import { queryPendingDue, updateRecord } from "../db/records.js"
+import { queryPendingDue, updateRecord, getRecordById } from "../db/records.js"
 import { remindLater } from "../lib/feedback-due.js"
+import { useAuth } from "../auth/AuthContext"
 import type { DivinationRecord, FeedbackStatus } from "../types"
 
 export function useFeedback() {
+  const { user } = useAuth()
   const [pendingRecords, setPendingRecords] = useState<DivinationRecord[]>([])
 
   const refresh = useCallback(async () => {
-    setPendingRecords(await queryPendingDue())
-  }, [])
+    if (!user) return
+    setPendingRecords(await queryPendingDue(user.id))
+  }, [user])
 
   const submitQuick = useCallback(async (id: string, status: FeedbackStatus) => {
-    const r = await (await import("../db/records.js")).getRecordById(id)
+    if (!user) return
+    const r = await getRecordById(id, user.id)
     if (!r) return
-    await updateRecord({ ...r, feedback: { ...r.feedback, status } })
+    await updateRecord({ ...r, feedback: { ...r.feedback, status } }, user.id)
     await refresh()
-  }, [refresh])
+  }, [refresh, user])
 
   const submitRemindLater = useCallback(async (id: string) => {
-    const r = await (await import("../db/records.js")).getRecordById(id)
+    if (!user) return
+    const r = await getRecordById(id, user.id)
     if (!r) return
-    await updateRecord({ ...r, feedback: { ...r.feedback, dueAt: remindLater() } })
+    await updateRecord({ ...r, feedback: { ...r.feedback, dueAt: remindLater() } }, user.id)
     await refresh()
-  }, [refresh])
+  }, [refresh, user])
 
   const submitDetail = useCallback(async (id: string, detail: FeedbackDetail) => {
-    const r = await (await import("../db/records.js")).getRecordById(id)
+    if (!user) return
+    const r = await getRecordById(id, user.id)
     if (!r) return
-    await updateRecord({ ...r, feedback: { ...r.feedback, detail } })
+    await updateRecord({ ...r, feedback: { ...r.feedback, detail } }, user.id)
     await refresh()
-  }, [refresh])
+  }, [refresh, user])
 
   return { pendingRecords, refresh, submitQuick, submitRemindLater, submitDetail }
 }
