@@ -27,14 +27,14 @@ export default function StatsView() {
   if (records.length === 0) {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
-        <nav className="fixed top-0 left-0 right-0 z-50">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
           <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
             <Link to="/" className="text-white/40 hover:text-gold transition-colors">← 返回</Link>
             <span className="font-display text-lg tracking-[0.2em] text-gold">统计</span>
             <div className="w-10" />
           </div>
         </nav>
-        <main className="pt-16 pb-24 px-6">
+        <main className="pt-16 pb-28 px-6">
           <div className="max-w-md mx-auto py-16 text-center">
             <p className="text-white/30">暂无数据，开始你的第一次占卜吧</p>
           </div>
@@ -61,7 +61,7 @@ export default function StatsView() {
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* 导航 */}
-      <nav className="fixed top-0 left-0 right-0 z-50">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="text-white/40 hover:text-gold transition-colors">← 返回</Link>
           <span className="font-display text-lg tracking-[0.2em] text-gold">统计</span>
@@ -70,7 +70,7 @@ export default function StatsView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-24 px-6">
+      <main className="pt-16 pb-28 px-6">
         <div className="max-w-md mx-auto py-8 space-y-6">
           {/* 数据卡片 */}
           <div className="grid grid-cols-2 gap-4">

@@ -50,7 +50,7 @@ export default function DivineView() {
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* Top bar */}
-      <nav className="flex items-center justify-between px-6 h-14 max-w-md mx-auto">
+      <nav className="flex items-center justify-between px-6 h-14 max-w-md mx-auto bg-nothing-bg">
         <Link to="/" className="font-mono text-[11px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">
           ← BACK
         </Link>

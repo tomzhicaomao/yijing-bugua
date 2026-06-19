@@ -63,7 +63,7 @@ export default function SettingsView() {
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* 导航 */}
-      <nav className="fixed top-0 left-0 right-0 z-50">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="text-white/40 hover:text-gold transition-colors">← 返回</Link>
           <span className="font-display text-lg tracking-[0.2em] text-gold">设置</span>
@@ -72,7 +72,7 @@ export default function SettingsView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-24 px-6">
+      <main className="pt-16 pb-28 px-6">
         <div className="max-w-md mx-auto py-8 space-y-6">
           {/* 用户信息 */}
           {user && (

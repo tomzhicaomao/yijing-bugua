@@ -40,7 +40,7 @@ export default function HistoryDetailView() {
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* 导航 */}
-      <nav className="fixed top-0 left-0 right-0 z-50">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/history" className="text-white/40 hover:text-gold transition-colors">
             ← 返回
@@ -51,7 +51,7 @@ export default function HistoryDetailView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-24 px-6">
+      <main className="pt-16 pb-28 px-6">
         <div className="max-w-md mx-auto space-y-6">
           {/* 问题信息 */}
           <GlassCard className="p-6">
