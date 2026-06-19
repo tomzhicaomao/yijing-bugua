@@ -3,14 +3,13 @@ import type { ReactNode } from 'react'
 interface GlassCardProps {
   children: ReactNode
   className?: string
-  hover?: boolean
   onClick?: () => void
 }
 
-export default function GlassCard({ children, className = '', hover = false, onClick }: GlassCardProps) {
+export default function GlassCard({ children, className = '', onClick }: GlassCardProps) {
   return (
     <div
-      className={`glass-card ${hover ? 'glass-card-hover cursor-pointer' : ''} ${className}`}
+      className={`card-nothing ${onClick ? 'cursor-pointer hover:bg-nothing-raised' : ''} ${className}`}
       onClick={onClick}
     >
       {children}

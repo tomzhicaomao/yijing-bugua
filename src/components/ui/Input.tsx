@@ -9,7 +9,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({ className = '', ...pro
   return (
     <input
       ref={ref}
-      className={`input-luxury w-full px-5 py-4 ${className}`}
+      className={`input-nothing ${className}`}
       {...props}
     />
   )

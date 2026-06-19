@@ -18,7 +18,7 @@ export default function StatsView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center">
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
         <p className="text-white/40">加载中...</p>
       </div>
     )
@@ -26,7 +26,7 @@ export default function StatsView() {
 
   if (records.length === 0) {
     return (
-      <div className="min-h-screen bg-obsidian text-luxury-50">
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
         <nav className="fixed top-0 left-0 right-0 z-50">
           <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
             <Link to="/" className="text-white/40 hover:text-gold transition-colors">← 返回</Link>
@@ -59,7 +59,7 @@ export default function StatsView() {
   }).filter(c => c.total > 0).sort((a, b) => b.total - a.total)
 
   return (
-    <div className="min-h-screen bg-obsidian text-luxury-50">
+    <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* 导航 */}
       <nav className="fixed top-0 left-0 right-0 z-50">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">

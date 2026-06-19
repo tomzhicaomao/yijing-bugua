@@ -28,7 +28,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center px-6">
       <div className="w-full max-w-md space-y-8">
         {/* 标题 */}
         <div className="text-center">

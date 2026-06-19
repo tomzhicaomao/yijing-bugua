@@ -1,0 +1,120 @@
+{
+  "app": "yijing-bugua",
+  "schemaVersion": 1,
+  "exportedAt": "2026-06-19T15:52:37.772Z",
+  "records": [
+    {
+      "schemaVersion": 1,
+      "id": "ec5f6ef0-1202-44bf-a922-586d5cc4730d",
+      "timestamp": "2026-06-17T13:08:43.937Z",
+      "question": "周三, 6月 17 26, 15:00 CDT -\nDallas Stadium, Dallas, United States\n英格兰对阵克罗地亚，结合时间和比赛地点，谁会胜利，最终比分是多少？",
+      "category": "财务",
+      "method": "virtual",
+      "beforeDivination": {
+        "userExpectation": "2:1",
+        "userConfidence": 2
+      },
+      "hexagram": {
+        "original": 64,
+        "changed": 54,
+        "changingLines": [1, 6]
+      },
+      "interpretations": [],
+      "feedback": {
+        "dueAt": "2026-06-24T13:08:43.937Z",
+        "status": "inaccurate",
+        "detail": {
+          "actualResult": "4:2",
+          "satisfaction": 1,
+          "aiInfluencedDecision": true
+        }
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "1c4c8fb5-14e1-4ca3-9c79-0b49aa26fc08",
+      "timestamp": "2026-06-15T00:19:15.296Z",
+      "question": "周日, 6月 14 26, 20:00 CST\nEstadio Monterrey, Monterrey, Mexico\n世界杯，瑞典对突尼斯，谁会胜出，最终比分是多少",
+      "category": "其他",
+      "method": "virtual",
+      "hexagram": {
+        "original": 36,
+        "changed": null,
+        "changingLines": []
+      },
+      "interpretations": [],
+      "feedback": {
+        "dueAt": "2026-06-18T00:20:20.833Z",
+        "status": "inaccurate",
+        "detail": {
+          "actualResult": "5:1",
+          "satisfaction": 3,
+          "aiInfluencedDecision": true
+        }
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "8d02e4ac-5d5e-46e5-9705-46af1adcba4a",
+      "timestamp": "2026-06-14T13:16:36.842Z",
+      "question": "周日, 6月 14 26, 15:00 CDT\nDallas Stadium, Dallas, United States。荷兰对阵日本，哪一方会赢？最终比分是多少？",
+      "category": "其他",
+      "method": "virtual",
+      "hexagram": {
+        "original": 60,
+        "changed": 61,
+        "changingLines": [6]
+      },
+      "interpretations": [],
+      "feedback": {
+        "dueAt": "2026-06-21T13:16:36.842Z",
+        "status": "inaccurate",
+        "detail": {
+          "actualResult": "最终2:2",
+          "satisfaction": 2,
+          "aiInfluencedDecision": true
+        }
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "2e58f2e8-e831-4e21-85d0-a3657af3d577",
+      "timestamp": "2026-06-13T14:30:08.002Z",
+      "question": "2026.6.14凌晨3点世界杯，卡塔尔对阵瑞士，哪一方会胜利，最终比分是多少？",
+      "category": "其他",
+      "method": "virtual",
+      "hexagram": {
+        "original": 27,
+        "changed": 19,
+        "changingLines": [2, 6]
+      },
+      "interpretations": [],
+      "feedback": {
+        "dueAt": "2026-06-16T14:37:33.581Z",
+        "status": "inaccurate",
+        "detail": {
+          "actualResult": "1:1",
+          "satisfaction": 1
+        }
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "6858dc59-1af8-418a-8b5b-46bb52d4bc75",
+      "timestamp": "2026-06-06T09:15:35.441Z",
+      "question": "2026年6月8号适合发横财吗",
+      "category": "财务",
+      "method": "virtual",
+      "hexagram": {
+        "original": 39,
+        "changed": 33,
+        "changingLines": [4, 6]
+      },
+      "interpretations": [],
+      "feedback": {
+        "dueAt": "2026-06-16T14:26:04.396Z",
+        "status": "accurate"
+      }
+    }
+  ]
+}

@@ -9,7 +9,7 @@ export default function StepIndicator({ currentStep, totalSteps }: StepIndicator
       {Array.from({ length: totalSteps }).map((_, i) => (
         <div
           key={i + 1}
-          className={`step-indicator ${
+          className={`step-dot ${
             i + 1 < currentStep
               ? 'completed'
               : i + 1 === currentStep

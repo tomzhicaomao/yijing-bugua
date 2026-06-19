@@ -42,7 +42,7 @@ export default function Register() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center px-6">
         <GlassCard className="p-8 text-center">
           <p className="text-gold">注册成功！正在跳转到登录页...</p>
         </GlassCard>
@@ -51,7 +51,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-obsidian text-luxury-50 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center px-6">
       <div className="w-full max-w-md space-y-8">
         {/* 标题 */}
         <div className="text-center">

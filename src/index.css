@@ -1,36 +1,27 @@
+/* Nothing Design — Light Mode
+   Fonts: Space Grotesk (body), Space Mono (labels/data)
+   Load from: https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&family=Doto:wght@400;500;600;700&display=swap
+*/
+
 @import "tailwindcss";
 
 @theme {
-  /* 高端典雅配色 */
-  --color-luxury-50: #faf8f5;
-  --color-luxury-100: #f5f0ea;
-  --color-luxury-200: #e8dfd4;
-  --color-luxury-300: #d4c4b0;
-  --color-luxury-400: #b8a08a;
-  --color-luxury-500: #9c7c64;
-  --color-luxury-600: #8b6914;
-  --color-luxury-700: #6d5210;
-  --color-luxury-800: #4f3b0c;
-  --color-luxury-900: #312508;
-
-  --color-gold: #d4a843;
-  --color-gold-light: #e8c878;
-  --color-gold-dark: #b8922e;
-
-  --color-obsidian: #0a0a0a;
-  --color-charcoal: #1a1a1a;
-  --color-smoke: #2a2a2a;
-
-  /* 保留原有配色 */
-  --color-parchment: #f7f3ee;
-  --color-parchment-dark: #ece6db;
-  --color-ink: #2c1810;
-  --color-ink-light: #5c4a3a;
-  --color-vermillion: #b94234;
-  --color-vermillion-dark: #953028;
-  --color-bronze: #8b6914;
-  --color-bronze-light: #c49a1a;
-  --color-jade: #4a7c59;
+  /* Nothing Design Light Mode Tokens */
+  --color-nothing-bg: #F5F5F5;
+  --color-nothing-surface: #FFFFFF;
+  --color-nothing-raised: #F0F0F0;
+  --color-nothing-border: #E8E8E8;
+  --color-nothing-border-visible: #CCCCCC;
+  --color-nothing-text-disabled: #999999;
+  --color-nothing-text-secondary: #666666;
+  --color-nothing-text-primary: #1A1A1A;
+  --color-nothing-text-display: #000000;
+  --color-nothing-accent: #D71921;
+  --color-nothing-accent-subtle: rgba(215, 25, 33, 0.12);
+  --color-nothing-success: #4A9E5C;
+  --color-nothing-warning: #D4A843;
+  --color-nothing-error: #D71921;
+  --color-nothing-interactive: #007AFF;
 }
 
 :root {
@@ -42,184 +33,208 @@
 
 body {
   margin: 0;
-  background-color: var(--color-obsidian);
-  color: var(--color-luxury-50);
-  font-family: "Noto Serif SC", "Songti SC", serif;
+  background-color: #F5F5F5;
+  color: #1A1A1A;
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 #root {
   min-h-screen: 100svh;
 }
 
-/* 高端典雅字体 */
-.font-display {
-  font-family: "Noto Serif SC", "Songti SC", serif;
-}
-
-.font-body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+/* Font utilities */
+.font-sans {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
 
 .font-mono {
-  font-family: "SF Mono", "Fira Code", monospace;
+  font-family: "Space Mono", "SF Mono", "Fira Code", monospace !important;
+  letter-spacing: 0.02em;
 }
 
-/* 玻璃拟态效果 */
-.glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+.font-label {
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #666666;
 }
 
-/* 高端按钮 */
-.btn-gold {
-  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-dark) 100%);
-  color: var(--color-obsidian);
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(212, 168, 67, 0.3);
-}
-
-.btn-ghost {
-  background: transparent;
-  border: 1px solid rgba(212, 168, 67, 0.3);
-  color: var(--color-gold);
-  transition: all 0.3s ease;
-}
-
-.btn-ghost:hover {
-  background: rgba(212, 168, 67, 0.1);
-  border-color: var(--color-gold);
-}
-
-/* 高端输入框 */
-.input-luxury {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: var(--color-luxury-50);
-  transition: all 0.3s ease;
-}
-
-.input-luxury:focus {
-  outline: none;
-  border-color: var(--color-gold);
-  box-shadow: 0 0 0 3px rgba(212, 168, 67, 0.1);
-}
-
-.input-luxury::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* 高端标签 */
-.tag-luxury {
-  background: rgba(212, 168, 67, 0.1);
-  border: 1px solid rgba(212, 168, 67, 0.2);
-  color: var(--color-gold);
-  border-radius: 100px;
-  padding: 6px 16px;
+/* Buttons */
+.btn-nothing {
+  font-family: "Space Mono", monospace;
   font-size: 13px;
-  transition: all 0.3s ease;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  border-radius: 999px;
+  transition: opacity 0.2s ease-out;
+  cursor: pointer;
 }
 
-.tag-luxury:hover {
-  background: rgba(212, 168, 67, 0.2);
+.btn-nothing-primary {
+  background: #000000;
+  color: #FFFFFF;
 }
 
-.tag-luxury.active {
-  background: rgba(212, 168, 67, 0.25);
-  border-color: var(--color-gold);
-  color: var(--color-gold-light);
+.btn-nothing-primary:hover {
+  opacity: 0.85;
 }
 
-.glass-card-hover {
-  transition: all 0.3s ease;
+.btn-nothing-secondary {
+  background: transparent;
+  border: 1px solid #CCCCCC;
+  color: #1A1A1A;
 }
 
-.glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(212, 168, 67, 0.15);
-  transform: translateY(-1px);
+.btn-nothing-secondary:hover {
+  border-color: #999999;
 }
 
-.step-indicator {
+.btn-nothing-ghost {
+  background: transparent;
+  color: #666666;
+}
+
+.btn-nothing-ghost:hover {
+  color: #1A1A1A;
+}
+
+/* Inputs */
+.input-nothing {
+  border-bottom: 1px solid #CCCCCC;
+  padding: 8px 0;
+  font-family: "Space Mono", monospace;
+  font-size: 16px;
+  color: #1A1A1A;
+  background: transparent;
+  width: 100%;
+  transition: border-color 0.2s ease-out;
+}
+
+.input-nothing:focus {
+  outline: none;
+  border-bottom-color: #1A1A1A;
+}
+
+.input-nothing::placeholder {
+  color: #999999;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+}
+
+/* Tags/Chips */
+.tag-nothing {
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #CCCCCC;
+  color: #666666;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
+}
+
+.tag-nothing:hover {
+  border-color: #666666;
+  color: #1A1A1A;
+}
+
+.tag-nothing.active {
+  border-color: #000000;
+  color: #000000;
+}
+
+/* Cards */
+.card-nothing {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+
+/* Dividers */
+.divider-nothing {
+  height: 1px;
+  background: #E8E8E8;
+  width: 100%;
+}
+
+/* Step indicator */
+.step-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: #CCCCCC;
   transition: all 0.3s ease;
 }
 
-.step-indicator.active {
-  background: var(--color-gold);
-  box-shadow: 0 0 8px rgba(212, 168, 67, 0.4);
+.step-dot.active {
+  background: #000000;
 }
 
-.step-indicator.completed {
-  background: rgba(212, 168, 67, 0.4);
+.step-dot.completed {
+  background: #999999;
 }
 
+/* Coin */
 .coin {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #d4a843 0%, #b8922e 50%, #d4a843 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  background: #FFFFFF;
+  border: 2px solid #CCCCCC;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: var(--color-obsidian);
-  transition: transform 0.3s ease;
-  position: relative;
-}
-
-.coin::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: "Space Mono", monospace;
+  font-size: 20px;
+  color: #1A1A1A;
+  transition: all 0.2s ease-out;
 }
 
 .coin:hover {
-  transform: scale(1.05);
+  border-color: #666666;
 }
 
 .coin.flipping {
-  animation: coin-flip 1s ease-in-out;
+  animation: coin-flip 0.8s ease-out;
 }
 
 @keyframes coin-flip {
-  0% { transform: rotateY(0deg) scale(1); }
-  25% { transform: rotateY(90deg) scale(1.1); }
-  50% { transform: rotateY(180deg) scale(1); }
-  75% { transform: rotateY(270deg) scale(1.1); }
-  100% { transform: rotateY(360deg) scale(1); }
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
 }
 
-/* 分割线 */
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212, 168, 67, 0.3), transparent);
+/* Progress indicator segments */
+.progress-segment {
+  height: 8px;
+  width: 100%;
+  background: #E8E8E8;
 }
 
-/* 滚动条 */
+.progress-segment.filled {
+  background: #1A1A1A;
+}
+
+/* Status colors */
+.text-status-success { color: #4A9E5C; }
+.text-status-warning { color: #D4A843; }
+.text-status-error { color: #D71921; }
+.text-status-neutral { color: #1A1A1A; }
+
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-obsidian);
+  background: #F5F5F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 168, 67, 0.3);
+  background: #CCCCCC;
   border-radius: 2px;
 }

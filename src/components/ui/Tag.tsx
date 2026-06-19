@@ -10,7 +10,7 @@ interface TagProps {
 export default function Tag({ children, active = false, className = '', onClick }: TagProps) {
   return (
     <button
-      className={`tag-luxury ${active ? 'active' : ''} ${className}`}
+      className={`tag-nothing ${active ? 'active' : ''} ${className}`}
       onClick={onClick}
     >
       {children}
