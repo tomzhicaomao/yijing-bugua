@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
-import { getApiKey, setApiKey, removeApiKey } from '../lib/api-key'
+import { getApiKey, setApiKey, removeApiKey, saveApiKeyToCloud, removeApiKeyFromCloud } from '../lib/api-key'
 import { exportToJSON, exportFilename, importFromJSON } from '../db/export-import.js'
 import { SCHEMA_VERSION, PROMPT_VERSION, DEFAULT_MODEL, DEEP_MODEL } from '../lib/constants.js'
 import GlassCard from '../components/ui/GlassCard'
@@ -15,11 +15,14 @@ export default function SettingsView() {
   const [importResult, setImportResult] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
 
-  const handleSaveKey = () => {
+  const handleSaveKey = async () => {
+    if (!user) return
     if (apiKey.trim()) {
       setApiKey(apiKey.trim())
+      await saveApiKeyToCloud(user.id, apiKey.trim())
     } else {
       removeApiKey()
+      await removeApiKeyFromCloud(user.id)
     }
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
@@ -104,7 +107,7 @@ export default function SettingsView() {
               </div>
               <div className="flex gap-2">
                 <Button onClick={handleSaveKey} className="flex-1 py-2 text-sm">保存</Button>
-                <Button variant="ghost" onClick={() => { removeApiKey(); setApiKeyState('') }} className="py-2 px-4 text-sm">
+                <Button variant="ghost" onClick={async () => { if (user) { await removeApiKeyFromCloud(user.id) }; removeApiKey(); setApiKeyState('') }} className="py-2 px-4 text-sm">
                   删除
                 </Button>
               </div>

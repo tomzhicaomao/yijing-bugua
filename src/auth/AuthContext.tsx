@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { loadApiKeyFromCloud, setApiKey } from '../lib/api-key'
 
 interface AuthContextType {
   user: User | null
@@ -24,12 +25,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+      if (session?.user) {
+        loadApiKeyFromCloud(session.user.id).then(cloudKey => {
+          if (cloudKey) setApiKey(cloudKey)
+        })
+      }
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+      if (session?.user) {
+        loadApiKeyFromCloud(session.user.id).then(cloudKey => {
+          if (cloudKey) setApiKey(cloudKey)
+        })
+      }
     })
 
     return () => subscription.unsubscribe()
