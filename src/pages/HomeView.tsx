@@ -35,7 +35,7 @@ export default function HomeView() {
       <main className="px-6 max-w-md mx-auto">
         {/* Hero section */}
         <div className="pt-12 pb-16">
-          <h1 className="text-[64px] leading-[1.05] font-light tracking-[-0.02em] text-nothing-text-display">
+          <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
             占卜
           </h1>
           <div className="mt-6 space-y-1">
