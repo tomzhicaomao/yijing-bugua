@@ -55,7 +55,7 @@ export default function HistoryDetailView() {
         <div className="max-w-md mx-auto space-y-6">
           {/* 问题信息 */}
           <GlassCard className="p-6">
-            <h2 className="text-xl tracking-wide mb-2 text-nothing-text-display">{record.question}</h2>
+            <h2 className="text-[24px] tracking-wide mb-2 text-nothing-text-display">{record.question}</h2>
             <div className="flex items-center gap-3 text-sm text-nothing-text-secondary">
               <span>{record.category}</span>
               <span className="text-nothing-text-disabled">·</span>
@@ -118,7 +118,18 @@ export default function HistoryDetailView() {
             </GlassCard>
           )}
         </div>
-      </main>
-    </div>
-  )
+          <div className="h-24" />
+    </main>
+
+    {/* Bottom nav */}
+    <nav className="fixed bottom-0 left-0 right-0 border-t border-nothing-border bg-nothing-bg">
+      <div className="max-w-md mx-auto flex justify-around py-3">
+        <Link to="/" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">HOME</Link>
+        <Link to="/divine" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">DIVINE</Link>
+        <Link to="/history" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">HISTORY</Link>
+        <Link to="/stats" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">STATS</Link>
+      </div>
+    </nav>
+  </div>
+);
 }
