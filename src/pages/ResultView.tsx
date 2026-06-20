@@ -52,7 +52,7 @@ export default function ResultView() {
   if (loading) {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
-        <p className="text-white/40">加载中...</p>
+        <p className="text-nothing-text-secondary">加载中...</p>
       </div>
     )
   }
@@ -60,7 +60,7 @@ export default function ResultView() {
   if (!record) {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
-        <p className="text-white/40">记录未找到</p>
+        <p className="text-nothing-text-secondary">记录未找到</p>
       </div>
     )
   }
@@ -70,10 +70,10 @@ export default function ResultView() {
       {/* 导航 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="text-white/40 hover:text-gold transition-colors">
+          <Link to="/" className="text-nothing-text-secondary hover:text-nothing-text-primary transition-colors">
             ← 返回
           </Link>
-          <span className="font-display text-lg tracking-[0.2em] text-gold">结果</span>
+          <span className="text-lg tracking-[0.2em] text-nothing-text-display">结果</span>
           <div className="w-10" />
         </div>
       </nav>
@@ -83,19 +83,19 @@ export default function ResultView() {
         <div className="max-w-md mx-auto space-y-6">
           {/* 问题信息 */}
           <GlassCard className="p-6">
-            <h2 className="font-display text-xl tracking-wide mb-2">{record.question}</h2>
-            <p className="text-sm text-white/40">
+            <h2 className="text-xl tracking-wide mb-2 text-nothing-text-display">{record.question}</h2>
+            <p className="text-sm text-nothing-text-secondary">
               {record.category} · {new Date(record.timestamp).toLocaleString('zh-CN')}
             </p>
           </GlassCard>
 
           {/* 占前预判 */}
           {record.beforeDivination && (
-            <GlassCard className="p-5 border-gold/20">
+            <GlassCard className="p-5 border border-nothing-accent-subtle">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-gold text-sm">占前预判</span>
+                <span className="text-nothing-accent text-sm">占前预判</span>
               </div>
-              <div className="text-sm text-white/60 space-y-1">
+              <div className="text-sm text-nothing-text-secondary space-y-1">
                 {record.beforeDivination.userExpectation && (
                   <p>预判：{record.beforeDivination.userExpectation}</p>
                 )}
@@ -119,9 +119,9 @@ export default function ResultView() {
           {!loading && (progress === 'idle' || progress === 'done') && (
             <div className="space-y-3">
               {!hasKey && record.interpretations.length === 0 && (
-                <GlassCard className="p-4 border-gold/20">
-                  <p className="text-sm text-white/60 mb-2">请先在设置中配置 DeepSeek API Key</p>
-                  <Link to="/settings" className="text-gold hover:text-gold-light text-sm transition-colors">
+                <GlassCard className="p-4 border border-nothing-accent-subtle">
+                  <p className="text-sm text-nothing-text-secondary mb-2">请先在设置中配置 DeepSeek API Key</p>
+                  <Link to="/settings" className="text-nothing-accent hover:text-nothing-text-display text-sm transition-colors">
                     前往设置 →
                   </Link>
                 </GlassCard>
@@ -138,7 +138,7 @@ export default function ResultView() {
 
               {hasKey && record.interpretations.length === 0 && aiError && (
                 <GlassCard className="p-4 border-red-500/20">
-                  <p className="text-sm text-red-400 mb-3">{aiError}</p>
+                  <p className="text-sm text-nothing-accent mb-3">{aiError}</p>
                   <div className="flex gap-3">
                     <Button onClick={() => triggerDefault(record)} className="flex-1 py-2 text-sm">
                       重试

@@ -44,7 +44,7 @@ export default function Register() {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center px-6">
         <GlassCard className="p-8 text-center">
-          <p className="text-gold">注册成功！正在跳转到登录页...</p>
+          <p className="text-nothing-accent">注册成功！正在跳转到登录页...</p>
         </GlassCard>
       </div>
     )
@@ -55,11 +55,11 @@ export default function Register() {
       <div className="w-full max-w-md space-y-8">
         {/* 标题 */}
         <div className="text-center">
-          <h1 className="font-display text-3xl font-light tracking-[0.2em] mb-3">注册账号</h1>
-          <div className="divider w-16 mx-auto" />
-          <p className="mt-4 text-sm text-white/40">
+          <h1 className="text-3xl font-light tracking-[0.2em] mb-3 text-nothing-text-display">注册账号</h1>
+          <div className="divider-nothing w-16 mx-auto" />
+          <p className="mt-4 text-sm text-nothing-text-secondary">
             或者{' '}
-            <Link to="/login" className="text-gold hover:text-gold-light transition-colors">
+            <Link to="/login" className="text-nothing-accent hover:text-nothing-text-display transition-colors">
               登录已有账号
             </Link>
           </p>
@@ -69,13 +69,13 @@ export default function Register() {
         <GlassCard className="p-6">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400">
+              <div className="p-3 bg-nothing-accent-subtle border border-nothing-accent rounded-lg text-sm text-nothing-accent">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-sm text-white/40 mb-2 tracking-wide">用户名</label>
+              <label className="block text-sm text-nothing-text-secondary mb-2 tracking-wide">用户名</label>
               <Input
                 type="text"
                 required
@@ -86,7 +86,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-sm text-white/40 mb-2 tracking-wide">密码</label>
+              <label className="block text-sm text-nothing-text-secondary mb-2 tracking-wide">密码</label>
               <Input
                 type="password"
                 required
@@ -97,7 +97,7 @@ export default function Register() {
             </div>
 
             <div>
-              <label className="block text-sm text-white/40 mb-2 tracking-wide">确认密码</label>
+              <label className="block text-sm text-nothing-text-secondary mb-2 tracking-wide">确认密码</label>
               <Input
                 type="password"
                 required

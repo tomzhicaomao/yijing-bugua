@@ -24,7 +24,7 @@ export default function HistoryDetailView() {
   if (loading) {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
-        <p className="text-white/40">加载中...</p>
+        <p className="text-nothing-text-secondary">加载中...</p>
       </div>
     )
   }
@@ -32,7 +32,7 @@ export default function HistoryDetailView() {
   if (!record) {
     return (
       <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
-        <p className="text-white/40">记录未找到</p>
+        <p className="text-nothing-text-secondary">记录未找到</p>
       </div>
     )
   }
@@ -42,10 +42,10 @@ export default function HistoryDetailView() {
       {/* 导航 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/history" className="text-white/40 hover:text-gold transition-colors">
+          <Link to="/history" className="text-nothing-text-secondary hover:text-nothing-text-primary transition-colors">
             ← 返回
           </Link>
-          <span className="font-display text-lg tracking-[0.2em] text-gold">详情</span>
+          <span className="text-lg tracking-[0.2em] text-nothing-text-display">详情</span>
           <div className="w-10" />
         </div>
       </nav>
@@ -55,23 +55,23 @@ export default function HistoryDetailView() {
         <div className="max-w-md mx-auto space-y-6">
           {/* 问题信息 */}
           <GlassCard className="p-6">
-            <h2 className="font-display text-xl tracking-wide mb-2">{record.question}</h2>
-            <div className="flex items-center gap-3 text-sm text-white/40">
+            <h2 className="text-xl tracking-wide mb-2 text-nothing-text-display">{record.question}</h2>
+            <div className="flex items-center gap-3 text-sm text-nothing-text-secondary">
               <span>{record.category}</span>
-              <span className="text-gold/40">·</span>
+              <span className="text-nothing-text-disabled">·</span>
               <span>{new Date(record.timestamp).toLocaleString('zh-CN')}</span>
-              <span className="text-gold/40">·</span>
+              <span className="text-nothing-text-disabled">·</span>
               <span>{record.method === 'virtual' ? '虚拟摇卦' : '手动输入'}</span>
             </div>
           </GlassCard>
 
           {/* 占前预判 */}
           {record.beforeDivination && (
-            <GlassCard className="p-5 border-gold/20">
+            <GlassCard className="p-5 border border-nothing-accent-subtle">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-gold text-sm">占前记录</span>
+                <span className="text-nothing-accent text-sm">占前记录</span>
               </div>
-              <div className="text-sm text-white/60 space-y-1">
+              <div className="text-sm text-nothing-text-secondary space-y-1">
                 {record.beforeDivination.userExpectation && (
                   <p>预判：{record.beforeDivination.userExpectation}</p>
                 )}
@@ -94,8 +94,8 @@ export default function HistoryDetailView() {
           {/* 反馈详情 */}
           {record.feedback.detail && (
             <GlassCard className="p-5">
-              <h3 className="text-sm text-white/40 mb-3">反馈详情</h3>
-              <div className="text-sm text-white/60 space-y-2">
+              <h3 className="text-sm text-nothing-text-secondary mb-3">反馈详情</h3>
+              <div className="text-sm text-nothing-text-secondary space-y-2">
                 {record.feedback.detail.actualResult && (
                   <p>实际结果：{record.feedback.detail.actualResult}</p>
                 )}

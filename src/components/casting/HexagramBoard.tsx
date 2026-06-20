@@ -21,8 +21,8 @@ export default function HexagramBoard({
   label,
 }: HexagramBoardProps) {
   return (
-    <div className="glass-card rounded-lg p-5">
-      {label && <h3 className="text-sm font-medium text-white/40 mb-3">{label}</h3>}
+    <div className="card-nothing">
+      {label && <h3 className="text-sm font-medium text-nothing-text-secondary mb-3">{label}</h3>}
       <div className="space-y-1.5">
         {[...lines].reverse().map((value, i) => {
           const position = 6 - i
@@ -32,17 +32,17 @@ export default function HexagramBoard({
             <div
               key={position}
               className={`flex items-center gap-3 px-3 py-2 rounded transition-colors
-              ${isChanging ? 'bg-vermillion/20 border border-vermillion/40' : 'border border-white/10'}
+              ${isChanging ? 'bg-nothing-accent-subtle border border-nothing-accent' : 'border border-nothing-border'}
                 ${value === null ? 'opacity-30' : ''}`}
             >
-              <span className="text-xs text-white/30 w-8 text-right">
+              <span className="text-xs text-nothing-text-secondary w-8 text-right">
                 {POSITION_NAMES[position - 1]}爻
               </span>
-              <span className="text-lg text-luxury-100 tracking-wider">
+              <span className="text-lg text-nothing-text-primary tracking-wider">
                 {value !== null ? LINE_LABELS[value] : '···'}
               </span>
               {isChanging && (
-                <span className="text-xs text-vermillion font-medium ml-auto">动</span>
+                <span className="text-xs text-nothing-accent font-medium ml-auto">动</span>
               )}
             </div>
           )

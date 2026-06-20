@@ -65,8 +65,8 @@ export default function SettingsView() {
       {/* 导航 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="text-white/40 hover:text-gold transition-colors">← 返回</Link>
-          <span className="font-display text-lg tracking-[0.2em] text-gold">设置</span>
+          <Link to="/" className="text-nothing-text-secondary hover:text-nothing-text-primary transition-colors">← 返回</Link>
+          <span className="text-lg tracking-[0.2em] text-nothing-text-display">设置</span>
           <div className="w-10" />
         </div>
       </nav>
@@ -80,7 +80,7 @@ export default function SettingsView() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium tracking-wide">{user.email?.split('@')[0]}</p>
-                  <p className="text-sm text-white/40">{user.email}</p>
+                  <p className="text-sm text-nothing-text-secondary">{user.email}</p>
                 </div>
                 <Button variant="ghost" onClick={signOut} className="py-2 px-4 text-sm">
                   退出登录
@@ -91,7 +91,7 @@ export default function SettingsView() {
 
           {/* API Key */}
           <GlassCard className="p-5">
-            <h3 className="text-sm text-white/40 mb-4 tracking-wide">DeepSeek API Key</h3>
+            <h3 className="text-sm text-nothing-text-secondary mb-4 tracking-wide">DeepSeek API Key</h3>
             <div className="space-y-4">
               <div className="flex gap-2">
                 <Input
@@ -111,19 +111,19 @@ export default function SettingsView() {
                   删除
                 </Button>
               </div>
-              {saved && <p className="text-sm text-gold">已保存</p>}
+              {saved && <p className="text-sm text-nothing-accent">已保存</p>}
             </div>
           </GlassCard>
 
           {/* 数据备份 */}
           <GlassCard className="p-5">
-            <h3 className="text-sm text-white/40 mb-4 tracking-wide">数据备份</h3>
+            <h3 className="text-sm text-nothing-text-secondary mb-4 tracking-wide">数据备份</h3>
             <div className="flex gap-3">
               <Button onClick={handleExport} className="flex-1 py-2 text-sm">导出数据</Button>
               <Button variant="ghost" onClick={handleImport} className="flex-1 py-2 text-sm">导入数据</Button>
             </div>
             {importResult && (
-              <div className="mt-4 p-3 bg-white/5 rounded-lg text-sm text-white/60">
+              <div className="mt-4 p-3 bg-nothing-raised rounded-lg text-sm text-nothing-text-secondary">
                 {importResult}
               </div>
             )}
@@ -131,8 +131,8 @@ export default function SettingsView() {
 
           {/* 版本信息 */}
           <GlassCard className="p-5">
-            <h3 className="text-sm text-white/40 mb-4 tracking-wide">版本信息</h3>
-            <div className="text-sm text-white/40 space-y-2">
+            <h3 className="text-sm text-nothing-text-secondary mb-4 tracking-wide">版本信息</h3>
+            <div className="text-sm text-nothing-text-secondary space-y-2">
               <p>数据版本: {SCHEMA_VERSION}</p>
               <p>Prompt 版本: {PROMPT_VERSION}</p>
               <p>默认模型: {DEFAULT_MODEL}</p>

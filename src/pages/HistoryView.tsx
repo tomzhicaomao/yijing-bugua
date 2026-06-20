@@ -23,10 +23,10 @@ export default function HistoryView() {
       {/* 导航 */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg border-b border-nothing-border">
         <div className="max-w-md mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="text-white/40 :text-gold transition-colors">
+          <Link to="/" className="text-nothing-text-secondary hover:text-nothing-text-primary transition-colors">
             ← 返回
           </Link>
-          <span className="font-display text-lg tracking-[0.2em] text-gold">历史</span>
+          <span className="text-lg tracking-[0.2em] text-nothing-text-display">历史</span>
           <div className="w-10" />
         </div>
       </nav>
@@ -47,7 +47,7 @@ export default function HistoryView() {
           {/* 记录列表 */}
           {records.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-white/30">暂无记录</p>
+              <p className="text-nothing-text-secondary">暂无记录</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -58,21 +58,21 @@ export default function HistoryView() {
                       <div className="min-w-0 flex-1">
                         <p className="font-light tracking-wide mb-2">{r.question}</p>
                         <div className="flex items-center gap-3">
-                          <span className="text-xs text-white/30">
+                          <span className="text-xs text-nothing-text-secondary">
                             {new Date(r.timestamp).toLocaleDateString('zh-CN')}
                           </span>
-                          <span className="text-xs text-gold/40">·</span>
-                          <span className="text-xs text-white/30">{r.category}</span>
+                          <span className="text-xs text-nothing-text-disabled">·</span>
+                          <span className="text-xs text-nothing-text-secondary">{r.category}</span>
                         </div>
                       </div>
                       <span className={`text-xs px-3 py-1 rounded-full shrink-0 ml-2 ${
                         r.feedback.status === 'accurate'
-                          ? 'bg-green-500/20 text-green-400'
+                          ? 'bg-green-50 text-green-700'
                           : r.feedback.status === 'inaccurate'
-                          ? 'bg-red-500/20 text-red-400'
+                          ? 'bg-red-50 text-red-700'
                           : r.feedback.status === 'unclear'
-                          ? 'bg-white/10 text-white/40'
-                          : 'bg-gold/20 text-gold'
+                          ? 'bg-nothing-raised text-nothing-text-secondary'
+                          : 'bg-nothing-accent-subtle text-nothing-accent'
                       }`}>
                         {r.feedback.status === 'accurate' ? '准' :
                          r.feedback.status === 'inaccurate' ? '不准' :
