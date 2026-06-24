@@ -61,8 +61,8 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
             symbol = "文"
             coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600"
           } else if (phase === "flipping") {
-            symbol = "…"
-            coinClass = "border-gold bg-gold/20 text-bronze animate-pulse scale-110"
+            symbol = "文"
+            coinClass = `border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600 coin-toss-${i}`
           } else if (coins) {
             const isBack = coins[i] === 'back'
             symbol = isBack ? "背" : "字"

@@ -178,6 +178,19 @@ body {
   background: #999999;
 }
 
+/* 3-coin simultaneous toss animation */
+@keyframes coin-toss {
+  0% { transform: perspective(400px) rotateY(0deg) scale(1); }
+  25% { transform: perspective(400px) rotateY(90deg) scale(1.1); }
+  50% { transform: perspective(400px) rotateY(180deg) scale(1.15); }
+  75% { transform: perspective(400px) rotateY(270deg) scale(1.1); }
+  100% { transform: perspective(400px) rotateY(360deg) scale(1); }
+}
+
+.coin-toss-0 { animation: coin-toss 0.6s ease-in-out; }
+.coin-toss-1 { animation: coin-toss 0.6s ease-in-out 0.08s; }
+.coin-toss-2 { animation: coin-toss 0.6s ease-in-out 0.16s; }
+
 /* Progress indicator segments */
 .progress-segment {
   height: 8px;
