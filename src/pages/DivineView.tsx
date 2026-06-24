@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useDivination } from '../hooks/useDivination'
 import GlassCard from '../components/ui/GlassCard'
@@ -6,7 +5,8 @@ import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Tag from '../components/ui/Tag'
 import StepIndicator from '../components/ui/StepIndicator'
-import Coin from '../components/casting/Coin'
+import VirtualCoins from '../components/casting/VirtualCoins'
+import ManualInput from '../components/casting/ManualInput'
 import HexagramBoard from '../components/casting/HexagramBoard'
 import type { Category } from '../types'
 
@@ -27,19 +27,11 @@ export default function DivineView() {
     setLineValue,
     startCasting,
     completeCasting,
+    selectManualBack,
     setQuestion,
     setCategory,
     setMethod,
   } = useDivination()
-
-  const completingRef = useRef(false)
-
-  useEffect(() => {
-    if (step === 'casting' && currentIndex >= 6 && !completingRef.current) {
-      completingRef.current = true
-      completeCasting().finally(() => { completingRef.current = false })
-    }
-  }, [step, currentIndex, completeCasting])
 
   const handleNext = () => {
     if (question.trim() && category) {
@@ -255,15 +247,21 @@ export default function DivineView() {
               </p>
             </div>
 
-            {method === 'virtual' && currentIndex < 6 && (
-              <div className="flex justify-center gap-6 py-8">
-                {[0, 1, 2].map((i) => (
-                  <Coin key={i} onFlip={(backs) => {
-                    const value: 6 | 7 | 8 | 9 = backs === 0 ? 6 : backs === 1 ? 7 : backs === 2 ? 8 : 9
-                    setLineValue(value)
-                  }} />
-                ))}
-              </div>
+            {method === 'virtual' && (
+              <VirtualCoins currentIndex={currentIndex} onCast={setLineValue} />
+            )}
+
+            {method === 'manual' && (
+              <ManualInput
+                lines={lines}
+                currentIndex={currentIndex}
+                onSelectBack={selectManualBack}
+                onComplete={() => {
+                  if (currentIndex >= 6) {
+                    completeCasting()
+                  }
+                }}
+              />
             )}
 
             <GlassCard>

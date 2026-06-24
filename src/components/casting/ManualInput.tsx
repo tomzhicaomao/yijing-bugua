@@ -26,10 +26,10 @@ export default function ManualInput({
   if (isComplete) {
     return (
       <div className="text-center py-6">
-        <p className="text-jade font-medium mb-4">六爻已全部输入</p>
+        <p className="text-nothing-accent font-medium mb-4">六爻已全部输入</p>
         <button
           onClick={onComplete}
-          className="px-8 py-3 bg-vermillion text-white rounded-lg font-medium hover:bg-vermillion-dark shadow-md transition-all"
+          className="px-8 py-3 bg-nothing-accent text-nothing-bg rounded-lg font-medium hover:opacity-80 transition-all"
         >
           完成起卦
         </button>
@@ -40,18 +40,18 @@ export default function ManualInput({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-luxury-50">
+        <h3 className="font-medium text-nothing-text-primary">
           第 {currentIndex + 1} 爻 · {POSITION_NAMES[currentIndex]}
         </h3>
-        <span className="text-sm text-white/40">
+        <span className="text-sm text-nothing-text-disabled">
           {currentIndex}/6 已输入
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-white/10 rounded-full h-2">
+      <div className="w-full bg-nothing-border rounded-full h-2">
         <div
-          className="bg-vermillion h-2 rounded-full transition-all"
+          className="bg-nothing-accent h-2 rounded-full transition-all"
           style={{ width: `${(currentIndex / 6) * 100}%` }}
         />
       </div>
@@ -62,10 +62,10 @@ export default function ManualInput({
           <button
             key={opt.count}
             onClick={() => onSelectBack(opt.count)}
-            className="flex flex-col items-center py-3 px-2 border border-white/10 rounded-lg bg-white/5 hover:border-vermillion/50 hover:bg-white/10 transition-all"
+            className="flex flex-col items-center py-3 px-2 border border-nothing-border rounded-lg bg-nothing-surface hover:border-nothing-accent/50 hover:bg-nothing-raised transition-all"
           >
-            <span className="text-lg font-bold text-luxury-50">{opt.label}</span>
-            <span className="text-xs text-white/40">{opt.desc}</span>
+            <span className="text-lg font-bold text-nothing-text-primary">{opt.label}</span>
+            <span className="text-xs text-nothing-text-disabled">{opt.desc}</span>
           </button>
         ))}
       </div>

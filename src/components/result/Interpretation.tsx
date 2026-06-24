@@ -1,5 +1,6 @@
 import { lookupHexagram, getLineText } from '../../engine/hexagram-lookup.js'
 import type { InterpretationResult as IResult, DivinationRecord } from '../../types'
+import { generateFallbackInterpretation } from '../../ai/fallback-interpretation.js'
 
 interface InterpretationProps {
   record: DivinationRecord
@@ -115,6 +116,43 @@ function AIInterpretation({ interpretation }: { interpretation: IResult }) {
   )
 }
 
+function FallbackInterpretation({ record }: { record: DivinationRecord }) {
+  const fallback = generateFallbackInterpretation(record)
+
+  return (
+    <div className="border border-nothing-border rounded-lg p-5 space-y-4 bg-nothing-surface">
+      <div className="flex items-center gap-2">
+        <span className="text-xs bg-nothing-accent-subtle text-nothing-accent px-2.5 py-0.5 rounded font-medium">
+          白话解读
+        </span>
+        <span className="text-xs text-nothing-text-secondary">内置引擎</span>
+      </div>
+
+      <div>
+        <h4 className="text-sm font-medium text-nothing-text-secondary mb-1">综合解读</h4>
+        <p className="text-nothing-text-primary leading-relaxed">{fallback.summary}</p>
+      </div>
+
+      {fallback.details.length > 0 && (
+        <div>
+          <h4 className="text-sm font-medium text-nothing-text-secondary mb-1">卦象详情</h4>
+          <ul className="space-y-1">
+            {fallback.details.map((d, i) => (
+              <li key={i} className="text-nothing-text-primary text-sm leading-relaxed">{d}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div className="border-t border-nothing-border pt-3">
+        <p className="text-xs text-nothing-text-secondary">
+          提示：在设置页面配置 DeepSeek API Key 后可获得更详细的 AI 深度解读
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function Interpretation({ record }: InterpretationProps) {
   return (
     <div className="space-y-6">
@@ -123,10 +161,7 @@ export default function Interpretation({ record }: InterpretationProps) {
         <AIInterpretation key={interp.id} interpretation={interp} />
       ))}
       {record.interpretations.length === 0 && (
-      <div className="text-center text-nothing-text-secondary py-6">
-          <p>暂无 AI 解读</p>
-          <p className="text-sm mt-1">请先在设置页面配置 DeepSeek API Key</p>
-        </div>
+        <FallbackInterpretation record={record} />
       )}
     </div>
   )

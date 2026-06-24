@@ -178,36 +178,6 @@ body {
   background: #999999;
 }
 
-/* Coin */
-.coin {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  border: 2px solid #CCCCCC;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Space Mono", monospace;
-  font-size: 20px;
-  color: #1A1A1A;
-  transition: all 0.2s ease-out;
-}
-
-.coin:hover {
-  border-color: #666666;
-}
-
-.coin.flipping {
-  animation: coin-flip 0.8s ease-out;
-}
-
-@keyframes coin-flip {
-  0% { transform: rotateY(0deg); }
-  50% { transform: rotateY(180deg); }
-  100% { transform: rotateY(360deg); }
-}
-
 /* Progress indicator segments */
 .progress-segment {
   height: 8px;

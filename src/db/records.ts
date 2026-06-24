@@ -117,6 +117,7 @@ export async function queryPendingDue(userId: string): Promise<DivinationRecord[
     .from('records')
     .select('*')
     .eq('user_id', userId)
+    .not('feedback', 'is', null)
     .eq('feedback->>status', 'pending')
     .lte('feedback->>dueAt', now)
     .order('timestamp', { ascending: false })

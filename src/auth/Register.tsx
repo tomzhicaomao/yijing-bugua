@@ -91,6 +91,7 @@ export default function Register() {
                 type="password"
                 required
                 placeholder="请输入密码（至少6位）"
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -102,6 +103,7 @@ export default function Register() {
                 type="password"
                 required
                 placeholder="请再次输入密码"
+                autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />

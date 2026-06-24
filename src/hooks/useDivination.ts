@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { LineValue, CastingMethod, Category, BeforeDivination } from '../types'
-import { castLine, tossResultToLineValue, calculateHexagram } from '../engine/casting.js'
+import { tossResultToLineValue, calculateHexagram } from '../engine/casting.js'
 import { createRecord } from '../db/records.js'
 import { calculateDefaultDueAt } from '../lib/feedback-due.js'
 import { checkDuplicate } from '../engine/duplicate-check.js'
@@ -57,27 +57,14 @@ export function useDivination() {
     const newLines = [...lines]
     newLines[currentIndex] = value
     setLines(newLines)
-    setCurrentIndex(currentIndex + 1)
-  }, [currentIndex, lines, castingTimestamp])
+    const newIndex = currentIndex + 1
+    setCurrentIndex(newIndex)
 
-  const castNextLine = useCallback(() => {
-    if (currentIndex >= 6) return
-
-    // Record first click timestamp for Phase B
-    if (currentIndex === 0 && !castingTimestamp) {
-      setCastingTimestamp(new Date().toISOString())
+    // 第 6 爻填满后自动触发完成
+    if (newIndex >= 6) {
+      queueMicrotask(() => completeCasting())
     }
-
-    const newLines = [...lines]
-    newLines[currentIndex] = castLine()
-    setLines(newLines)
-    setCurrentIndex(currentIndex + 1)
-
-    // Auto-complete on 6th line
-    if (currentIndex + 1 >= 6) {
-      // Will be handled by DivineView observing currentIndex
-    }
-  }, [currentIndex, lines, castingTimestamp])
+  }, [currentIndex, lines, castingTimestamp, completeCasting])
 
   const selectManualBack = useCallback((backCount: number) => {
     if (currentIndex >= 6) return
@@ -151,7 +138,6 @@ export function useDivination() {
     setBeforeAndContinue,
     setLineValue,
     startCasting,
-    castNextLine,
     selectManualBack,
     completeCasting,
     setStep,

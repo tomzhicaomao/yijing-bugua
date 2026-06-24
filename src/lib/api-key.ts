@@ -43,7 +43,7 @@ export async function loadApiKeyFromCloud(userId: string): Promise<string | null
     .from('user_settings')
     .select('api_key')
     .eq('user_id', userId)
-    .single()
+    .maybeSingle()
   if (error || !data?.api_key) return null
   return data.api_key
 }

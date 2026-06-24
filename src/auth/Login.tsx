@@ -68,6 +68,7 @@ export default function Login() {
                 type="password"
                 required
                 placeholder="请输入密码"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
