@@ -8,6 +8,7 @@ import StepIndicator from '../components/ui/StepIndicator'
 import VirtualCoins from '../components/casting/VirtualCoins'
 import ManualInput from '../components/casting/ManualInput'
 import HexagramBoard from '../components/casting/HexagramBoard'
+import PageTransition from '../components/ui/PageTransition'
 import type { Category } from '../types'
 
 const CATEGORIES: Category[] = ['工作', '人际', '财务', '健康', '其他']
@@ -61,7 +62,7 @@ export default function DivineView() {
       {/* Content */}
       <main className="px-6 pb-28 max-w-md mx-auto">
         {/* Step 1: Question */}
-        {step === 'question' && (
+        <PageTransition isVisible={step === 'question'} direction="right">
           <div className="space-y-8 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
@@ -105,10 +106,10 @@ export default function DivineView() {
               下一步 → NEXT
             </Button>
           </div>
-        )}
+        </PageTransition>
 
         {/* Step 2: Before Divination */}
-        {step === 'before-divination' && (
+        <PageTransition isVisible={step === 'before-divination'} direction="left">
           <div className="space-y-8 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
@@ -171,10 +172,10 @@ export default function DivineView() {
               </Button>
             </div>
           </div>
-        )}
+        </PageTransition>
 
         {/* Step 3: Method Selection */}
-        {step === 'method' && (
+        <PageTransition isVisible={step === 'method'} direction="right">
           <div className="space-y-8 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
@@ -231,10 +232,10 @@ export default function DivineView() {
               开始起卦 → CAST
             </Button>
           </div>
-        )}
+        </PageTransition>
 
         {/* Step 4: Casting */}
-        {step === 'casting' && (
+        <PageTransition isVisible={step === 'casting'} direction="left">
           <div className="space-y-8 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
@@ -271,7 +272,7 @@ export default function DivineView() {
               <HexagramBoard lines={lines} label="本卦" />
             </GlassCard>
           </div>
-        )}
+        </PageTransition>
 
         {/* Bottom spacer */}
         <div className="h-28" />

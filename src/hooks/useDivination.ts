@@ -49,36 +49,6 @@ export function useDivination() {
     setStep('casting')
   }, [])
 
-  const setLineValue = useCallback((value: LineValue) => {
-    if (currentIndex >= 6) return
-    if (currentIndex === 0 && !castingTimestamp) {
-      setCastingTimestamp(new Date().toISOString())
-    }
-    const newLines = [...lines]
-    newLines[currentIndex] = value
-    setLines(newLines)
-    const newIndex = currentIndex + 1
-    setCurrentIndex(newIndex)
-
-    // 第 6 爻填满后自动触发完成
-    if (newIndex >= 6) {
-      queueMicrotask(() => completeCasting())
-    }
-  }, [currentIndex, lines, castingTimestamp, completeCasting])
-
-  const selectManualBack = useCallback((backCount: number) => {
-    if (currentIndex >= 6) return
-
-    if (currentIndex === 0 && !castingTimestamp) {
-      setCastingTimestamp(new Date().toISOString())
-    }
-
-    const newLines = [...lines]
-    newLines[currentIndex] = tossResultToLineValue(backCount)
-    setLines(newLines)
-    setCurrentIndex(currentIndex + 1)
-  }, [currentIndex, lines, castingTimestamp])
-
   const completeCasting = useCallback(async () => {
     if (!category || !user) return
 
@@ -123,6 +93,36 @@ export function useDivination() {
       navigate(`/result/${record.id}`)
     }
   }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate, user])
+
+  const setLineValue = useCallback((value: LineValue) => {
+    if (currentIndex >= 6) return
+    if (currentIndex === 0 && !castingTimestamp) {
+      setCastingTimestamp(new Date().toISOString())
+    }
+    const newLines = [...lines]
+    newLines[currentIndex] = value
+    setLines(newLines)
+    const newIndex = currentIndex + 1
+    setCurrentIndex(newIndex)
+
+    // 第 6 爻填满后自动触发完成
+    if (newIndex >= 6) {
+      queueMicrotask(() => completeCasting())
+    }
+  }, [currentIndex, lines, castingTimestamp, completeCasting])
+
+  const selectManualBack = useCallback((backCount: number) => {
+    if (currentIndex >= 6) return
+
+    if (currentIndex === 0 && !castingTimestamp) {
+      setCastingTimestamp(new Date().toISOString())
+    }
+
+    const newLines = [...lines]
+    newLines[currentIndex] = tossResultToLineValue(backCount)
+    setLines(newLines)
+    setCurrentIndex(currentIndex + 1)
+  }, [currentIndex, lines, castingTimestamp])
 
   return {
     step,

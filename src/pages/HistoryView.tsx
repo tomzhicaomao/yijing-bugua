@@ -1,22 +1,44 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllRecords, queryByCategory } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
 import { CATEGORIES } from '../lib/constants'
 import GlassCard from '../components/ui/GlassCard'
 import Tag from '../components/ui/Tag'
+import { gsap } from '../lib/gsap.js'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import type { DivinationRecord, Category } from '../types'
 
 export default function HistoryView() {
   const { user } = useAuth()
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [filter, setFilter] = useState<Category | '全部'>('全部')
+  const prefersReducedMotion = useReducedMotion()
+  const listRef = useRef<HTMLDivElement>(null)
+  const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
 
   useEffect(() => {
     if (!user) return
     const load = filter === '全部' ? getAllRecords(user.id) : queryByCategory(filter, user.id)
     load.then(setRecords)
   }, [filter, user])
+
+  // Animate list items entrance
+  useEffect(() => {
+    if (records.length === 0 || prefersReducedMotion) return
+    
+    const items = itemRefs.current.filter(Boolean)
+    if (items.length === 0) return
+    
+    gsap.from(items, {
+      opacity: 0,
+      x: -30,
+      duration: 0.4,
+      stagger: 0.05,
+      ease: "power2.out",
+      delay: 0.2,
+    })
+  }, [records, prefersReducedMotion])
 
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
@@ -50,9 +72,14 @@ export default function HistoryView() {
               <p className="text-nothing-text-secondary">暂无记录</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {records.map((r) => (
-                <Link key={r.id} to={`/history/${r.id}`} className="block">
+            <div ref={listRef} className="space-y-4">
+              {records.map((r, i) => (
+                <Link 
+                  key={r.id} 
+                  ref={el => { itemRefs.current[i] = el }}
+                  to={`/history/${r.id}`} 
+                  className="block"
+                >
                   <GlassCard className="p-5">
                     <div className="flex items-start justify-between">
                       <div className="min-w-0 flex-1">

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { queryPendingDue, updateRecord } from "../../db/records.js"
 import { remindLater } from "../../lib/feedback-due.js"
 import { useAuth } from "../../auth/AuthContext"
+import { gsap } from "../../lib/gsap.js"
 import type { DivinationRecord, FeedbackStatus, FeedbackDetail } from "../../types"
 
 interface FeedbackListProps { onAllDone: () => void }
@@ -12,6 +13,8 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [showDetail, setShowDetail] = useState(false)
   const [loaded, setLoaded] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!user) return
@@ -21,6 +24,19 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
       if (r.length === 0) onAllDone()
     })
   }, [onAllDone, user])
+
+  // Animate modal entrance
+  useEffect(() => {
+    if (!modalRef.current || !loaded || records.length === 0) return
+    
+    gsap.from(modalRef.current, {
+      opacity: 0,
+      scale: 0.9,
+      y: 20,
+      duration: 0.4,
+      ease: "back.out(1.7)",
+    })
+  }, [loaded, records.length, currentIdx])
 
   const advance = () => {
     const next = currentIdx + 1
@@ -51,8 +67,8 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   if (!r) return null
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-      <div className="bg-charcoal border border-white/10 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+    <div ref={containerRef} className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+      <div ref={modalRef} className="bg-charcoal border border-white/10 rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
         <h3 className="text-lg font-semibold text-luxury-50">该反馈了</h3>
         <p className="text-white/60">{r.question}</p>
         <p className="text-sm text-white/40">{new Date(r.timestamp).toLocaleDateString("zh-CN")} · {r.category}</p>

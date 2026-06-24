@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react'
+import gsap from 'gsap'
 import type { AIProgress } from "../../ai/double-call.js"
 
 interface AIProgressIndicatorProps {
@@ -14,15 +16,50 @@ const PROGRESS_LABELS: Record<AIProgress, string> = {
 }
 
 export default function AIProgressIndicator({ progress, error }: AIProgressIndicatorProps) {
+  const spinnerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    if (!spinnerRef.current) return
+    
+    // Animate spinner with GSAP
+    const spinnerAnimation = gsap.to(spinnerRef.current, {
+      rotation: 360,
+      duration: 1,
+      repeat: -1,
+      ease: "none",
+    })
+    
+    // Animate container entrance
+    if (containerRef.current) {
+      gsap.from(containerRef.current, {
+        opacity: 0,
+        y: 10,
+        duration: 0.3,
+        ease: "power2.out",
+      })
+    }
+    
+    return () => {
+      spinnerAnimation.kill()
+    }
+  }, [progress])
+  
   if (progress === "idle") return null
 
   const isError = progress === "error"
 
   return (
-    <div className={`p-4 rounded-lg border ${isError ? "bg-nothing-accent-subtle border-nothing-accent" : "bg-nothing-surface border-nothing-border"}`}>
+    <div 
+      ref={containerRef}
+      className={`p-4 rounded-lg border ${isError ? "bg-nothing-accent-subtle border-nothing-accent" : "bg-nothing-surface border-nothing-border"}`}
+    >
       <div className="flex items-center gap-3">
         {(progress === "reasoning" || progress === "narrative") && (
-          <div className="w-4 h-4 border-2 border-nothing-accent border-t-transparent rounded-full animate-spin" />
+          <div 
+            ref={spinnerRef}
+            className="w-4 h-4 border-2 border-nothing-accent border-t-transparent rounded-full"
+          />
         )}
         <span className={`text-sm ${isError ? "text-nothing-accent" : "text-nothing-text-primary"}`}>
           {PROGRESS_LABELS[progress]}

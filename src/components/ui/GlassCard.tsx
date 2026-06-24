@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { forwardRef, type ReactNode } from 'react'
 
 interface GlassCardProps {
   children: ReactNode
@@ -6,13 +6,20 @@ interface GlassCardProps {
   onClick?: () => void
 }
 
-export default function GlassCard({ children, className = '', onClick }: GlassCardProps) {
-  return (
-    <div
-      className={`card-nothing ${onClick ? 'cursor-pointer hover:bg-nothing-raised' : ''} ${className}`}
-      onClick={onClick}
-    >
-      {children}
-    </div>
-  )
-}
+const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
+  ({ children, className = '', onClick }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`card-nothing ${onClick ? 'cursor-pointer hover:bg-nothing-raised' : ''} ${className}`}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    )
+  }
+)
+
+GlassCard.displayName = 'GlassCard'
+
+export default GlassCard

@@ -1,20 +1,77 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllRecords } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
 import { CATEGORIES } from '../lib/constants'
 import GlassCard from '../components/ui/GlassCard'
+import { gsap, ScrollTrigger } from '../lib/gsap.js'
+import { useReducedMotion } from '../hooks/useReducedMotion.js'
 import type { DivinationRecord } from '../types'
 
 export default function StatsView() {
   const { user } = useAuth()
   const [records, setRecords] = useState<DivinationRecord[]>([])
   const [loading, setLoading] = useState(true)
+  const prefersReducedMotion = useReducedMotion()
+  
+  // Refs for animations
+  const statsRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const counterRefs = useRef<(HTMLParagraphElement | null)[]>([])
 
   useEffect(() => {
     if (!user) return
     getAllRecords(user.id).then(r => { setRecords(r); setLoading(false) })
   }, [user])
+
+  // GSAP animations
+  useEffect(() => {
+    if (loading || records.length === 0 || prefersReducedMotion) return
+
+    // Register ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger)
+
+    // Animate stats cards entrance
+    const cards = cardRefs.current.filter(Boolean)
+    if (cards.length > 0) {
+      gsap.from(cards, {
+        opacity: 0,
+        y: 30,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: statsRef.current,
+          start: "top 80%",
+          end: "bottom 20%",
+        }
+      })
+    }
+
+    // Animate counter numbers
+    counterRefs.current.forEach((counter) => {
+      if (!counter) return
+      
+      const finalValue = parseInt(counter.textContent || '0')
+      if (isNaN(finalValue)) return
+      
+      gsap.from(counter, {
+        textContent: 0,
+        duration: 1.5,
+        ease: "power2.out",
+        snap: { textContent: 1 },
+        scrollTrigger: {
+          trigger: counter,
+          start: "top 90%",
+        }
+      })
+    })
+
+    // Cleanup
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    }
+  }, [loading, records, prefersReducedMotion])
 
   if (loading) {
     return (
@@ -82,23 +139,23 @@ export default function StatsView() {
 
       {/* 主内容 */}
       <main className="pt-16 pb-28 px-6">
-        <div className="max-w-md mx-auto py-8 space-y-6">
+        <div ref={statsRef} className="max-w-md mx-auto py-8 space-y-6">
           {/* 数据卡片 */}
           <div className="grid grid-cols-2 gap-4">
-            <GlassCard className="p-5 text-center">
-              <p className="text-3xl text-nothing-text-display mb-2">{total}</p>
+            <GlassCard ref={el => { cardRefs.current[0] = el }} className="p-5 text-center">
+              <p ref={el => { counterRefs.current[0] = el }} className="text-3xl text-nothing-text-display mb-2">{total}</p>
               <p className="text-sm text-nothing-text-secondary tracking-wide">总次数</p>
             </GlassCard>
-            <GlassCard className="p-5 text-center">
-              <p className="text-3xl text-nothing-text-display mb-2">{fedRate}%</p>
+            <GlassCard ref={el => { cardRefs.current[1] = el }} className="p-5 text-center">
+              <p ref={el => { counterRefs.current[1] = el }} className="text-3xl text-nothing-text-display mb-2">{fedRate}%</p>
               <p className="text-sm text-nothing-text-secondary tracking-wide">反馈率</p>
             </GlassCard>
-            <GlassCard className="p-5 text-center">
-              <p className="text-3xl text-nothing-text-display mb-2">{accuracy !== null ? `${accuracy}%` : '—'}</p>
+            <GlassCard ref={el => { cardRefs.current[2] = el }} className="p-5 text-center">
+              <p ref={el => { counterRefs.current[2] = el }} className="text-3xl text-nothing-text-display mb-2">{accuracy !== null ? `${accuracy}%` : '—'}</p>
               <p className="text-sm text-nothing-text-secondary tracking-wide">准确率</p>
             </GlassCard>
-            <GlassCard className="p-5 text-center">
-              <p className="text-3xl text-nothing-text-display mb-2">{base}</p>
+            <GlassCard ref={el => { cardRefs.current[3] = el }} className="p-5 text-center">
+              <p ref={el => { counterRefs.current[3] = el }} className="text-3xl text-nothing-text-display mb-2">{base}</p>
               <p className="text-sm text-nothing-text-secondary tracking-wide">已反馈</p>
             </GlassCard>
           </div>

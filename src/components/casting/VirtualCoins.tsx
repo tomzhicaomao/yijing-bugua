@@ -1,6 +1,8 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { tossCoinsDetailed } from "../../engine/casting.js"
 import type { LineValue } from "../../types"
+import { gsap, useGSAP } from "../../lib/gsap.js"
+import { useReducedMotion } from "../../hooks/useReducedMotion.js"
 
 interface VirtualCoinsProps {
   currentIndex: number
@@ -16,6 +18,21 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
   const [phase, setPhase] = useState<"idle" | "flipping" | "result">("idle")
   const [coins, setCoins] = useState<CoinFace[] | null>(null)
   const [resultValue, setResultValue] = useState<LineValue | null>(null)
+  const prefersReducedMotion = useReducedMotion()
+  
+  // Refs for coin elements
+  const coinRefs = useRef<(HTMLDivElement | null)[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // GSAP context for animations
+  useGSAP(() => {
+    // Initialize coins
+    gsap.set(coinRefs.current, {
+      rotationY: 0,
+      scale: 1,
+      transformPerspective: 400,
+    })
+  }, { scope: containerRef })
 
   const handleToss = useCallback(() => {
     if (currentIndex >= 6 || phase !== "idle") return
@@ -24,13 +41,42 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
     setCoins(null)
     setResultValue(null)
 
-    setTimeout(() => {
-      const { coinResults, lineValue } = tossCoinsDetailed()
-      setCoins(coinResults.map(v => v === 1 ? 'back' as const : 'front' as const))
-      setResultValue(lineValue)
-      setPhase("result")
-    }, 500)
-  }, [currentIndex, phase, onCast])
+    // Create GSAP timeline for coin toss animation
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // After animation completes, show results
+        const { coinResults, lineValue } = tossCoinsDetailed()
+        setCoins(coinResults.map(v => v === 1 ? 'back' as const : 'front' as const))
+        setResultValue(lineValue)
+        setPhase("result")
+      }
+    })
+
+    // Animate each coin with stagger
+    coinRefs.current.forEach((coin, i) => {
+      if (!coin) return
+      
+      tl.to(coin, {
+        rotationY: 360,
+        scale: 1.15,
+        duration: 0.6,
+        ease: "power2.inOut",
+        transformPerspective: 400,
+      }, i * 0.08) // Stagger by 0.08s
+      
+      // Add bounce effect at the end
+      tl.to(coin, {
+        scale: 1,
+        duration: 0.3,
+        ease: "elastic.out(1, 0.3)",
+      }, `-=${0.1}`) // Overlap slightly with previous animation
+    })
+
+    // If reduced motion, skip animation
+    if (prefersReducedMotion) {
+      tl.progress(1) // Jump to end
+    }
+  }, [currentIndex, phase, onCast, prefersReducedMotion])
 
   const confirmResult = useCallback(() => {
     if (resultValue === null) return
@@ -52,7 +98,7 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
       </div>
 
       {/* Three coins */}
-      <div className="flex justify-center gap-8 py-6">
+      <div ref={containerRef} className="flex justify-center gap-8 py-6">
         {[0, 1, 2].map((i) => {
           let symbol: string
           let coinClass: string
@@ -62,7 +108,7 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
             coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600"
           } else if (phase === "flipping") {
             symbol = "文"
-            coinClass = `border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600 coin-toss-${i}`
+            coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600"
           } else if (coins) {
             const isBack = coins[i] === 'back'
             symbol = isBack ? "背" : "字"
@@ -77,7 +123,8 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
           return (
             <div
               key={i}
-              className={"w-18 h-18 w-[4.5rem] h-[4.5rem] rounded-full border-2 flex items-center justify-center text-xl transition-all duration-300 shadow-sm " + coinClass}
+              ref={el => { coinRefs.current[i] = el }}
+              className={"w-18 h-18 w-[4.5rem] h-[4.5rem] rounded-full border-2 flex items-center justify-center text-xl shadow-sm will-change-transform " + coinClass}
               aria-label={phase === "result" ? (coins?.[i] === "back" ? "背" : "字") : "铜钱"}
             >
               {symbol}

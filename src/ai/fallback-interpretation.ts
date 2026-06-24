@@ -1,4 +1,4 @@
-import { lookupHexagram, getLineText } from '../engine/hexagram-lookup.js'
+import { lookupHexagram } from '../engine/hexagram-lookup.js'
 import type { DivinationRecord } from '../types'
 
 export interface FallbackInterpretation {
