@@ -2,15 +2,17 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
-import { loadApiKeyFromCloud, setApiKey } from '../lib/api-key'
+import { loadApiKeyFromCloud, setApiKey, hasApiKey } from '../lib/api-key'
 
 interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
+  hasKey: boolean
   signIn: (username: string, password: string) => Promise<{ error: AuthError | null }>
   signUp: (username: string, password: string) => Promise<{ error: AuthError | null }>
   signOut: () => Promise<void>
+  refreshHasKey: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -19,6 +21,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [hasKey, setHasKey] = useState(() => hasApiKey())
+
+  // Re-check API key from localStorage
+  const refreshHasKey = () => setHasKey(hasApiKey())
+
+  useEffect(() => {
+    // Listen for API key changes (from setApiKey/removeApiKey calls)
+    const onKeyChange = () => setHasKey(hasApiKey())
+    window.addEventListener('api-key-changed', onKeyChange)
+    return () => window.removeEventListener('api-key-changed', onKeyChange)
+  }, [])
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -27,7 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
       if (session?.user) {
         loadApiKeyFromCloud(session.user.id).then(cloudKey => {
-          if (cloudKey) setApiKey(cloudKey)
+          if (cloudKey) {
+            setApiKey(cloudKey) // writes to localStorage + dispatches api-key-changed
+          }
         })
       }
     })
@@ -38,7 +53,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
       if (session?.user) {
         loadApiKeyFromCloud(session.user.id).then(cloudKey => {
-          if (cloudKey) setApiKey(cloudKey)
+          if (cloudKey) {
+            setApiKey(cloudKey) // writes to localStorage + dispatches api-key-changed
+          }
         })
       }
     })
@@ -67,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, hasKey, refreshHasKey, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   )

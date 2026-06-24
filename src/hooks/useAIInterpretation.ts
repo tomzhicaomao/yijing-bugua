@@ -1,8 +1,8 @@
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback } from "react"
 import { runDoubleCall, type AIProgress } from "../ai/double-call.js"
 import type { InterpretationResult, DivinationRecord } from "../types"
 import { updateRecord } from "../db/records.js"
-import { hasApiKey, getApiKey } from "../lib/api-key.js"
+import { hasApiKey } from "../lib/api-key.js"
 import { useAuth } from "../auth/AuthContext"
 
 interface UseAIInterpretationReturn {
@@ -11,38 +11,27 @@ interface UseAIInterpretationReturn {
   narrative: string | null
   interpretation: InterpretationResult | null
   hasKey: boolean
-  triggerDefault: (record: DivinationRecord) => Promise<void>
-  triggerDeep: (record: DivinationRecord) => Promise<void>
+  triggerDefault: (record: DivinationRecord) => Promise<DivinationRecord | null>
+  triggerDeep: (record: DivinationRecord) => Promise<DivinationRecord | null>
 }
 
 export function useAIInterpretation(): UseAIInterpretationReturn {
-  const { user } = useAuth()
+  const { user, hasKey } = useAuth()
   const [progress, setProgress] = useState<AIProgress>("idle")
   const [error, setError] = useState<string | null>(null)
   const [narrative, setNarrative] = useState<string | null>(null)
   const [interpretation, setInterpretation] = useState<InterpretationResult | null>(null)
-  // Reactive API key state — syncs with localStorage changes
-  const [hasKey, setHasKey] = useState(() => hasApiKey())
 
-  useEffect(() => {
-    // Re-check on mount in case localStorage was populated after initial render
-    setHasKey(hasApiKey())
-    // Listen for storage events (fires in other tabs) and custom api-key-changed events
-    const onKeyChange = () => setHasKey(hasApiKey())
-    window.addEventListener("api-key-changed", onKeyChange)
-    return () => window.removeEventListener("api-key-changed", onKeyChange)
-  }, [])
-
-  const triggerCall = useCallback(async (record: DivinationRecord, type: "default" | "deep") => {
+  const triggerCall = useCallback(async (record: DivinationRecord, type: "default" | "deep"): Promise<DivinationRecord | null> => {
     if (!hasApiKey()) {
       setError("未配置 API Key")
       setProgress("error")
-      return
+      return null
     }
     if (!user) {
       setError("未登录")
       setProgress("error")
-      return
+      return null
     }
 
     setProgress("idle")
@@ -67,18 +56,28 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
       if (result.narrative) setNarrative(result.narrative)
       if (result.error) setError(result.error)
 
-      // Update the record in Supabase with the interpretation
-      const updated = {
+      // Build the updated record locally
+      const updated: DivinationRecord = {
         ...record,
         interpretations: [...record.interpretations, result.interpretation],
       }
-      await updateRecord(updated, user.id)
 
-      // Signal "done" only AFTER the DB write has completed
-      // so ResultView's reload effect fetches the updated record
+      // Save to Supabase
+      try {
+        await updateRecord(updated, user.id)
+      } catch (err) {
+        console.error('Failed to save interpretation:', err)
+      }
+
+      // Signal done AFTER the DB write (regardless of success/fail)
       setProgress("done")
+
+      // Return the updated record so the caller can update its state immediately
+      return updated
     } else {
       setError(result.error ?? "AI 调用失败")
+      setProgress("error")
+      return null
     }
   }, [user])
 

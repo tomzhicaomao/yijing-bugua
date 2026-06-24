@@ -24,6 +24,7 @@ export default function ResultView() {
     hasKey,
   } = useAIInterpretation()
 
+  // Fetch record on mount
   useEffect(() => {
     if (!id || !user) return
     getRecordById(id, user.id)
@@ -36,18 +37,28 @@ export default function ResultView() {
       })
   }, [id, user])
 
+  // Auto-trigger AI interpretation when ready
   useEffect(() => {
     if (record && hasKey && record.interpretations.length === 0 && !loading && !hasAutoTriggered) {
       setHasAutoTriggered(true)
-      triggerDefault(record)
+      handleTriggerDefault(record)
     }
-  }, [record, hasKey, loading, hasAutoTriggered, triggerDefault])
+  }, [record, hasKey, loading, hasAutoTriggered])
 
-  useEffect(() => {
-    if (record && progress === 'done' && user) {
-      getRecordById(record.id, user.id).then(setRecord)
+  const handleTriggerDefault = async (r: DivinationRecord) => {
+    setHasAutoTriggered(true)
+    const updated = await triggerDefault(r)
+    if (updated) {
+      setRecord(updated)
     }
-  }, [progress, record?.id, user])
+  }
+
+  const handleTriggerDeep = async (r: DivinationRecord) => {
+    const updated = await triggerDeep(r)
+    if (updated) {
+      setRecord(updated)
+    }
+  }
 
   if (loading) {
     return (
@@ -116,31 +127,34 @@ export default function ResultView() {
           <Interpretation record={record} />
 
           {/* AI 操作区 */}
-          {!loading && (progress === 'idle' || progress === 'done' || progress === 'error') && (
+          {(progress === 'idle' || progress === 'done' || progress === 'error') && (
             <div className="space-y-3">
+              {/* 没有 API Key 且没有 AI 解读 */}
               {!hasKey && record.interpretations.length === 0 && (
                 <GlassCard className="p-4 border border-nothing-accent-subtle">
-                  <p className="text-sm text-nothing-text-secondary mb-2">请先在设置中配置 DeepSeek API Key</p>
+                  <p className="text-sm text-nothing-text-secondary mb-2">获取 AI 深度解读需要配置 DeepSeek API Key</p>
                   <Link to="/settings" className="text-nothing-accent hover:text-nothing-text-display text-sm transition-colors">
                     前往设置 →
                   </Link>
                 </GlassCard>
               )}
 
+              {/* 有 API Key 且没有 AI 解读且无错误 */}
               {hasKey && record.interpretations.length === 0 && !aiError && (
                 <Button
-                  onClick={() => { setHasAutoTriggered(true); triggerDefault(record) }}
+                  onClick={() => handleTriggerDefault(record)}
                   className="w-full py-3"
                 >
                   {hasAutoTriggered ? '重新获取 AI 解读' : '获取 AI 解读'}
                 </Button>
               )}
 
+              {/* 有 API Key 且有错误 */}
               {hasKey && record.interpretations.length === 0 && aiError && (
                 <GlassCard className="p-4 border-red-500/20">
                   <p className="text-sm text-nothing-accent mb-3">{aiError}</p>
                   <div className="flex gap-3">
-                    <Button onClick={() => triggerDefault(record)} className="flex-1 py-2 text-sm">
+                    <Button onClick={() => handleTriggerDefault(record)} className="flex-1 py-2 text-sm">
                       重试
                     </Button>
                     <Link to="/settings" className="flex-1">
@@ -152,10 +166,11 @@ export default function ResultView() {
                 </GlassCard>
               )}
 
+              {/* 已有解读，可以获取深度分析 */}
               {hasKey && record.interpretations.length > 0 && !record.interpretations.some(it => it.type === 'deep') && (
                 <Button
                   variant="ghost"
-                  onClick={() => triggerDeep(record)}
+                  onClick={() => handleTriggerDeep(record)}
                   className="w-full py-3"
                 >
                   深度分析 (deepseek-v4-pro)

@@ -9,7 +9,7 @@ import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 
 export default function SettingsView() {
-  const { user, signOut } = useAuth()
+  const { user, signOut, refreshHasKey } = useAuth()
   const [apiKey, setApiKeyState] = useState(getApiKey() ?? '')
   const [showKey, setShowKey] = useState(false)
 
@@ -31,6 +31,7 @@ export default function SettingsView() {
       removeApiKey()
       await removeApiKeyFromCloud(user.id)
     }
+    refreshHasKey()
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
   }
@@ -114,7 +115,7 @@ export default function SettingsView() {
               </div>
               <div className="flex gap-2">
                 <Button onClick={handleSaveKey} className="flex-1 py-2 text-sm">保存</Button>
-                <Button variant="ghost" onClick={async () => { if (user) { await removeApiKeyFromCloud(user.id) }; removeApiKey(); setApiKeyState('') }} className="py-2 px-4 text-sm">
+                <Button variant="ghost" onClick={async () => { if (user) { await removeApiKeyFromCloud(user.id) }; removeApiKey(); setApiKeyState(''); refreshHasKey() }} className="py-2 px-4 text-sm">
                   删除
                 </Button>
               </div>
