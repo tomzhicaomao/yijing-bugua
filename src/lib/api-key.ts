@@ -8,10 +8,12 @@ export function getApiKey(): string | null {
 
 export function setApiKey(key: string): void {
   localStorage.setItem(API_KEY_STORAGE_KEY, key)
+  window.dispatchEvent(new CustomEvent("api-key-changed"))
 }
 
 export function removeApiKey(): void {
   localStorage.removeItem(API_KEY_STORAGE_KEY)
+  window.dispatchEvent(new CustomEvent("api-key-changed"))
 }
 
 export function hasApiKey(): boolean {

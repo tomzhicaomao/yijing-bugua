@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { getApiKey, setApiKey, removeApiKey, saveApiKeyToCloud, removeApiKeyFromCloud } from '../lib/api-key'
@@ -12,6 +12,13 @@ export default function SettingsView() {
   const { user, signOut } = useAuth()
   const [apiKey, setApiKeyState] = useState(getApiKey() ?? '')
   const [showKey, setShowKey] = useState(false)
+
+  // Sync input with localStorage when cloud key arrives
+  useEffect(() => {
+    const onKeyChange = () => setApiKeyState(getApiKey() ?? '')
+    window.addEventListener("api-key-changed", onKeyChange)
+    return () => window.removeEventListener("api-key-changed", onKeyChange)
+  }, [])
   const [importResult, setImportResult] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
 

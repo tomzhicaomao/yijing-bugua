@@ -53,7 +53,6 @@ export async function runDoubleCall(
   )
 
   if (!narrativeResult.success) {
-    callbacks.onProgress("done")
     return {
       success: true,
       interpretation: reasoningResult.interpretation,
@@ -63,7 +62,6 @@ export async function runDoubleCall(
     }
   }
 
-  callbacks.onProgress("done")
   return {
     success: true,
     interpretation: reasoningResult.interpretation,
