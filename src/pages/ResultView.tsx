@@ -116,7 +116,7 @@ export default function ResultView() {
           <Interpretation record={record} />
 
           {/* AI 操作区 */}
-          {!loading && (progress === 'idle' || progress === 'done') && (
+          {!loading && (progress === 'idle' || progress === 'done' || progress === 'error') && (
             <div className="space-y-3">
               {!hasKey && record.interpretations.length === 0 && (
                 <GlassCard className="p-4 border border-nothing-accent-subtle">
