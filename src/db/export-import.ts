@@ -1,4 +1,4 @@
-import type { ExportData } from '../types'
+import type { ExportData, DivinationRecord } from '../types'
 import { divinationRecordSchema } from '../lib/schemas.js'
 import { createRecord, getAllRecords, getRecordById } from './records.js'
 import { SCHEMA_VERSION } from '../lib/constants.js'
@@ -78,7 +78,7 @@ export async function importFromJSON(jsonString: string, userId: string): Promis
       continue
     }
 
-    await createRecord(validated.data, userId)
+    await createRecord(validated.data as DivinationRecord, userId)
     result.added++
   }
 

@@ -72,6 +72,10 @@ export function useDivination() {
         changed: calc.changed,
         changingLines: calc.changingLines,
         mutual: calc.mutual,
+        cuoGua: calc.cuoGua,
+        zongGua: calc.zongGua,
+        tiYong: calc.tiYong,
+        timeContext: calc.timeContext,
       },
       interpretations: [],
       feedback: {

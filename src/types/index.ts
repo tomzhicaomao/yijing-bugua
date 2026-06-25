@@ -73,6 +73,30 @@ export interface DuplicateInfo {
   relatedRecordIds: string[]
 }
 
+// ========== Phase 1: 五行/干支/体用类型 ==========
+export type Wuxing = '金' | '木' | '水' | '火' | '土'
+export type TianGan = '甲' | '乙' | '丙' | '丁' | '戊' | '己' | '庚' | '辛' | '壬' | '癸'
+export type DiZhi = '子' | '丑' | '寅' | '卯' | '辰' | '巳' | '午' | '未' | '申' | '酉' | '戌' | '亥'
+
+export interface TimeContext {
+  yearPillar: string
+  monthZhi: DiZhi
+  dayPillar: string
+  dayStem: TianGan
+  dayZhi: DiZhi
+  season: '春' | '夏' | '秋' | '冬'
+  monthWuxing: Wuxing
+  wangElements: Wuxing[]
+}
+
+export interface TiYongRelation {
+  tiElement: Wuxing
+  yongElement: Wuxing
+  relation: 'sheng' | 'ke' | 'bihe'
+  direction: 'ti-sheng-yong' | 'yong-sheng-ti' | 'ti-ke-yong' | 'yong-ke-ti' | 'ti-yong-bihe'
+  interpretation: string
+}
+
 // ========== 2.2 HexagramData ==========
 export interface HexagramLineData {
   position: number
@@ -93,6 +117,8 @@ export interface HexagramData {
   trigramLower: string
   judgment: string
   judgmentModern: string
+  /** 彖传原文 */
+  tuan: string
   image: string
   imageModern: string
   lines: HexagramLineData[]
@@ -112,6 +138,14 @@ export interface DivinationRecord {
     changed: number | null
     changingLines: number[]
     mutual?: number
+    /** Phase 1: 错卦编号 */
+    cuoGua?: number
+    /** Phase 1: 综卦编号 */
+    zongGua?: number
+    /** Phase 1: 体用生克关系 */
+    tiYong?: TiYongRelation
+    /** Phase 1: 时间干支上下文 */
+    timeContext?: TimeContext
   }
   interpretations: InterpretationResult[]
   feedback: Feedback

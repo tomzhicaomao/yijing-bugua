@@ -1,0 +1,10 @@
+{
+  "乾": { "gongName": "乾宫", "wuxing": "金", "nazhi": ["子", "寅", "辰", "午", "申", "戌"], "gan": "甲", "isYang": true },
+  "坤": { "gongName": "坤宫", "wuxing": "土", "nazhi": ["未", "巳", "卯", "丑", "亥", "酉"], "gan": "乙", "isYang": false },
+  "震": { "gongName": "震宫", "wuxing": "木", "nazhi": ["子", "寅", "辰", "午", "申", "戌"], "gan": "庚", "isYang": true },
+  "巽": { "gongName": "巽宫", "wuxing": "木", "nazhi": ["丑", "亥", "酉", "未", "巳", "卯"], "gan": "辛", "isYang": false },
+  "坎": { "gongName": "坎宫", "wuxing": "水", "nazhi": ["寅", "辰", "午", "申", "戌", "子"], "gan": "戊", "isYang": true },
+  "离": { "gongName": "离宫", "wuxing": "火", "nazhi": ["卯", "丑", "亥", "酉", "未", "巳"], "gan": "己", "isYang": false },
+  "艮": { "gongName": "艮宫", "wuxing": "土", "nazhi": ["辰", "午", "申", "戌", "子", "寅"], "gan": "丙", "isYang": true },
+  "兑": { "gongName": "兑宫", "wuxing": "金", "nazhi": ["巳", "卯", "丑", "亥", "酉", "未"], "gan": "丁", "isYang": false }
+}

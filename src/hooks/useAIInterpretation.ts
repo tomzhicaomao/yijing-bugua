@@ -40,10 +40,15 @@ export function useAIInterpretation(): UseAIInterpretationReturn {
     const result = await runDoubleCall(
       {
         question: record.question,
+        category: record.category,
         hexagramOriginal: record.hexagram.original,
         hexagramChanged: record.hexagram.changed,
         changingLines: record.hexagram.changingLines,
         hexagramMutual: record.hexagram.mutual,
+        hexagramCuoGua: record.hexagram.cuoGua,
+        hexagramZongGua: record.hexagram.zongGua,
+        tiYong: record.hexagram.tiYong,
+        timeContext: record.hexagram.timeContext,
       },
       type,
       {

@@ -1,82 +1,147 @@
-import { lookupHexagram, getLineText } from "../engine/hexagram-lookup.js"
-import type { InterpretationResult } from "../types"
+import { lookupHexagram } from "../engine/hexagram-lookup.js"
+import type { InterpretationResult, TiYongRelation, TimeContext, Category } from "../types"
+import type { NajiaResult } from "../engine/najia.js"
 
-interface PromptContext {
+export interface PromptContext {
   question: string
+  category?: Category
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
   hexagramMutual?: number
+  // Phase 1: 结构化断卦元数据
+  hexagramCuoGua?: number
+  hexagramZongGua?: number
+  tiYong?: TiYongRelation
+  timeContext?: TimeContext
+  // Phase 2: 纳甲信息
+  najia?: NajiaResult
 }
 
+/**
+ * 六步断卦法 System Prompt
+ */
 export function buildReasoningSystemPrompt(): string {
-  return "你是一位精通周易的占卜师，遵循周易古占法。你必须严格按照以下规则输出：1. 基于卦辞和爻辞进行判断，不能脱离原文 2. 给出明确的趋势判断：利、不利、或中性 3. 列出至少5个可事后验证的具体判断点 4. 必须引用卦辞或爻辞原文出处 5. 参考互卦分析事情的内在因素 6. 当存在变卦（之卦）时，从之卦角度分析事情的演变方向和最终结果。禁止使用天意、命中注定、吉人天相、大吉大利等空洞表述。你必须只输出JSON，不要输出其他任何文字。"
+  return `你是一位精通周易的占断师，遵循"六步断卦法"：
+
+Step 1 — 定体用: 分析上下卦五行，体（我）与用（事）的生克关系
+Step 2 — 看旺衰: 结合月建/日辰，判断爻的五行旺衰
+Step 3 — 查变爻: 分析动爻位置、数量及变化意义
+Step 4 — 参互卦: 互卦看事情的内在因素
+Step 5 — 综错观: 错卦看对立面，综卦看反转视角
+Step 6 — 综合断: 引用卦辞爻辞做明确判断
+
+要求:
+1. 基于卦辞和爻辞原文判断，不脱离原文
+2. 明确趋势：利、不利、或中性
+3. 至少5个可验证的判断点（覆盖五类）
+4. 每个判断点引用原文出处
+5. 综合判断不含混
+
+禁止用语：天意、命中注定、吉人天相、大吉大利
+
+只输出JSON，不要输出其他文字。`
 }
 
 export function buildReasoningUserPrompt(ctx: PromptContext): string {
   const hexagram = lookupHexagram(ctx.hexagramOriginal)
   const changed = ctx.hexagramChanged ? lookupHexagram(ctx.hexagramChanged) : null
-  const lineResult = getLineText(ctx.hexagramOriginal, ctx.changingLines)
+  const cuoGua = ctx.hexagramCuoGua ? lookupHexagram(ctx.hexagramCuoGua) : null
+  const zongGua = ctx.hexagramZongGua ? lookupHexagram(ctx.hexagramZongGua) : null
+  const mutual = ctx.hexagramMutual ? lookupHexagram(ctx.hexagramMutual) : null
 
-  let relevantText = "本卦：" + (hexagram?.name ?? "未知") + "(第" + ctx.hexagramOriginal + "卦)\n"
-  relevantText += "卦辞：" + (hexagram?.judgment ?? "") + "\n"
+  const parts: string[] = ['【卦象数据】']
 
-  if (changed) {
-    relevantText += "变卦（之卦）：" + changed.name + "(第" + ctx.hexagramChanged + "卦)\n"
-    relevantText += "之卦含义：变卦即之卦，代表事情发展的方向和最终归宿。\n"
-  }
+  if (hexagram) {
+    parts.push(`- 本卦: ${hexagram.name}（第${ctx.hexagramOriginal}卦）· ${hexagram.trigramUpper}上 ${hexagram.trigramLower}下`)
+    parts.push(`- 卦辞: ${hexagram.judgment}`)
+    parts.push(`- 卦辞白话: ${hexagram.judgmentModern}`)
+    parts.push(`- 象辞: ${hexagram.image}`)
+    if (hexagram.imageModern) parts.push(`- 象辞白话: ${hexagram.imageModern}`)
 
-  if (ctx.hexagramMutual) {
-    const mutual = lookupHexagram(ctx.hexagramMutual)
-    if (mutual) {
-      relevantText += "互卦：" + mutual.name + "(第" + ctx.hexagramMutual + "卦)\n"
-      relevantText += "互卦含义：互卦反映事情发展的内在因素和隐含条件。\n"
+    if (ctx.tiYong) {
+      parts.push(`- 体用: 体${ctx.tiYong.tiElement} 用${ctx.tiYong.yongElement}（${ctx.tiYong.interpretation}）`)
+    }
+    if (ctx.timeContext) {
+      parts.push(`- 月建: ${ctx.timeContext.monthZhi}月 · 日辰: ${ctx.timeContext.dayPillar} · 五行旺: ${ctx.timeContext.monthWuxing}`)
     }
   }
 
-  if (ctx.changingLines.length > 0) {
-    relevantText += "动爻：第" + ctx.changingLines.join("、") + "爻\n"
+  if (changed) parts.push(`- 变卦: ${changed.name}（第${ctx.hexagramChanged}卦）· 代表发展方向`)
+  if (mutual) parts.push(`- 互卦: ${mutual.name}（第${ctx.hexagramMutual}卦）· 反映内在因素`)
+  if (cuoGua) parts.push(`- 错卦: ${cuoGua.name}（第${ctx.hexagramCuoGua}卦）· 反映对立面/隐情`)
+  if (zongGua) parts.push(`- 综卦: ${zongGua.name}（第${ctx.hexagramZongGua}卦）· 反映不同视角/反转`)
+  if (ctx.changingLines.length > 0) parts.push(`- 动爻: 第${ctx.changingLines.join('、')}爻`)
+
+  // 纳甲信息 (Phase 2)
+  if (ctx.najia && ctx.timeContext) {
+    parts.push('', '【纳甲信息】')
+    const n = ctx.najia
+    parts.push(`- 卦宫: ${n.gongName} · 属${n.gongWuxing}`)
+    if (n.shiYao) parts.push(`- 世爻: ${lineDesc(n.shiYao)}`)
+    if (n.yingYao) parts.push(`- 应爻: ${lineDesc(n.yingYao)}`)
+    if (n.yongShen) {
+      parts.push(`- 用神: ${lineDesc(n.yongShen)} · ${n.yongShenStatus}`)
+    }
+    parts.push('', '各爻详情:')
+    for (const line of n.lines) {
+      const markers: string[] = []
+      if (line.isShiYao) markers.push('世爻')
+      if (line.isYingYao) markers.push('应爻')
+      if (line.isYongShen) markers.push('用神')
+      const suffix = markers.length > 0 ? ` ← ${markers.join('/')}` : ''
+      parts.push(`  ${lineDesc(line)} (${line.wangShuai})${suffix}`)
+    }
   }
 
-  if (lineResult.type === "lines" && Array.isArray(lineResult.text)) {
-    ctx.changingLines.forEach((pos) => {
-      const line = hexagram?.lines.find(l => l.position === pos)
+  parts.push('', '【原文引用】')
+  if (hexagram) {
+    parts.push(`- 本卦卦辞: "${hexagram.judgment}"`)
+    parts.push(`- 卦辞白话: "${hexagram.judgmentModern}"`)
+
+    for (const pos of ctx.changingLines) {
+      const line = hexagram.lines.find(l => l.position === pos)
       if (line) {
-        relevantText += "爻辞(" + line.name + ")：" + line.text + "\n"
+        parts.push(`- ${line.name}爻辞: "${line.text}"`)
+        parts.push(`- ${line.name}白话: "${line.modern}"`)
+        if (line.smallImage) parts.push(`- ${line.name}小象: "${line.smallImage}"`)
       }
-    })
+    }
+
+    if (ctx.changingLines.length === 0 && hexagram.tuan) {
+      parts.push(`- 彖传: "${hexagram.tuan}"`)
+    }
   }
 
-  if (lineResult.allMoving) {
-    relevantText += "(六爻皆动，本卦与变卦并重)\n"
-  }
+  parts.push('', '【用户问题】')
+  parts.push(`类别: ${ctx.category ?? '其他'} · 问题: "${ctx.question}"`)
 
-  return `请根据以下卦象信息，对用户的占问进行推理分析：
-
-【用户问题】
-${ctx.question}
-
-【卦象信息】
-${relevantText}
-
-请输出如下格式的JSON：
-{
-  "trend": "利" | "不利" | "中性",
-  "analysis": "基于卦象的分析文字",
-  "conditions": ["条件1", "条件2", "条件3"],
-  "timeWindow": "时间窗口描述",
-  "answer": "综合判断结论",
-  "confidence": "高" | "中" | "低",
+  parts.push('', '请按六步断卦法分析，输出JSON：')
+  parts.push(`{
+  "trend": "利|不利|中性",
+  "analysis": "六步分析，引用卦辞/爻辞原文",
+  "conditions": ["条件1（含出处）", "条件2"],
+  "timeWindow": "明确到周或月的时间窗口",
+  "answer": "综合判断",
+  "confidence": "高|中|低",
   "claims": [
-    {"id": "trend-1", "type": "trend", "text": "趋势判断"},
-    {"id": "condition-1", "type": "condition", "text": "条件判断"},
-    {"id": "timeWindow-1", "type": "timeWindow", "text": "时间判断"},
-    {"id": "advice-1", "type": "advice", "text": "行动建议"},
-    {"id": "answer-1", "type": "answer", "text": "结论"}
+    {"id":"trend-1","type":"trend","text":"含原文引用"},
+    {"id":"condition-1","type":"condition","text":"条件"},
+    {"id":"timeWindow-1","type":"timeWindow","text":"时间"},
+    {"id":"advice-1","type":"advice","text":"建议"},
+    {"id":"answer-1","type":"answer","text":"结论"}
   ]
+}`)
+
+  parts.push('')
+  parts.push('要求：claims至少5条覆盖5类，每条例证引用原文。')
+
+  return parts.join('\n')
 }
 
-要求：claims 至少5条，覆盖5种类型。每个claim具体可验证。综合判断明确不含混。引用卦辞或爻辞原文。`
+/** 纳甲行格式化辅助 */
+function lineDesc(line: import("../engine/najia.js").NajiaLine): string {
+  return `${line.ganzhi} ${line.liuQin}`
 }
 
 export function buildNarrativeSystemPrompt(): string {

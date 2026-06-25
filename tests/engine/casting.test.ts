@@ -48,6 +48,38 @@ describe('castLine probability distribution', () => {
 })
 
 // ===== 3.3 Hexagram calculation tests =====
+// ===== Phase 1: New hexagram fields =====
+describe('calculateHexagram — Phase 1 fields', () => {
+  it('includes cuoGua, zongGua, tiYong, timeContext', () => {
+    const lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue] =
+      [7, 7, 7, 7, 7, 7]
+    const result = calculateHexagram(lines)
+    expect(result.cuoGua).toBeTypeOf('number')
+    expect(result.zongGua).toBeTypeOf('number')
+    expect(result.tiYong).toBeDefined()
+    expect(result.tiYong.tiElement).toBe('金')
+    expect(result.tiYong.yongElement).toBe('金')
+    expect(result.timeContext).toBeDefined()
+    expect(result.timeContext.yearPillar).toBeTypeOf('string')
+    expect(result.timeContext.season).toMatch(/^(春|夏|秋|冬)$/)
+  })
+
+  it('乾(1) cuoGua=坤(2), zongGua=乾(1)', () => {
+    const lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue] =
+      [7, 7, 7, 7, 7, 7]
+    const result = calculateHexagram(lines)
+    expect(result.cuoGua).toBe(2)
+    expect(result.zongGua).toBe(1)
+  })
+
+  it('既济(63) cuoGua=未济(64)', () => {
+    const lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue] =
+      [9, 8, 9, 8, 9, 8]
+    const result = calculateHexagram(lines)
+    expect(result.cuoGua).toBe(64)
+  })
+})
+
 describe('calculateHexagram', () => {
   it('all 7 (少阳) → 乾为天 #1, no changing lines', () => {
     const lines: [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue] =

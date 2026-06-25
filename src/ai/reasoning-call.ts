@@ -2,15 +2,24 @@ import { callDeepSeek, type DeepSeekMessage } from "./deepseek-client.js"
 import { DEFAULT_MODEL, DEEP_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from "../lib/constants.js"
 import { aiReasoningSchema } from "../lib/schemas.js"
 import { buildReasoningSystemPrompt, buildReasoningUserPrompt } from "./prompt-builder.js"
-import type { InterpretationResult, Trend, ConfidenceLevel } from "../types"
+import type { InterpretationResult, Trend, ConfidenceLevel, TiYongRelation, TimeContext, Category } from "../types"
+import type { NajiaResult } from "../engine/najia.js"
 import { v4 as uuidv4 } from "uuid"
 
-interface ReasoningInput {
+export interface ReasoningInput {
   question: string
+  category?: Category
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
   hexagramMutual?: number
+  // Phase 1: 结构化断卦
+  hexagramCuoGua?: number
+  hexagramZongGua?: number
+  tiYong?: TiYongRelation
+  timeContext?: TimeContext
+  // Phase 2: 纳甲
+  najia?: NajiaResult
 }
 
 export interface ReasoningCallResult {
@@ -27,10 +36,16 @@ export async function callReasoning(
   const systemPrompt = buildReasoningSystemPrompt()
   const userPrompt = buildReasoningUserPrompt({
     question: input.question,
+    category: input.category,
     hexagramOriginal: input.hexagramOriginal,
     hexagramChanged: input.hexagramChanged,
     changingLines: input.changingLines,
     hexagramMutual: input.hexagramMutual,
+    hexagramCuoGua: input.hexagramCuoGua,
+    hexagramZongGua: input.hexagramZongGua,
+    tiYong: input.tiYong,
+    timeContext: input.timeContext,
+    najia: input.najia,
   })
 
   const messages: DeepSeekMessage[] = [

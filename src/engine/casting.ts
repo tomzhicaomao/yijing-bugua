@@ -1,5 +1,8 @@
-import type { LineValue } from '../types'
+import type { LineValue, TiYongRelation, TimeContext } from '../types'
 import { linesToKingWen } from './hexagram-mapping.js'
+import { calculateTiYong } from './trigram-wuxing.js'
+import { calculateCuoGua, calculateZongGua } from './hexagram-transforms.js'
+import { getTimeContext } from './calendar.js'
 
 /**
  * Convert a coin toss result (number of backs facing up) to a LineValue.
@@ -57,6 +60,11 @@ export interface HexagramCalculation {
   changed: number | null
   changingLines: number[]
   mutual: number
+  // Phase 1: 结构化断卦元数据
+  cuoGua: number
+  zongGua: number
+  tiYong: TiYongRelation
+  timeContext: TimeContext
 }
 
 /**
@@ -90,7 +98,13 @@ export function calculateHexagram(
       ? linesToKingWen(changedLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
       : null
 
-  return { original, changed, changingLines, mutual }
+  // Phase 1: 自动计算错卦/综卦/体用/时间
+  const cuoGua = calculateCuoGua(lines)
+  const zongGua = calculateZongGua(lines)
+  const tiYong = calculateTiYong(lines)
+  const timeContext = getTimeContext()
+
+  return { original, changed, changingLines, mutual, cuoGua, zongGua, tiYong, timeContext }
 }
 
 /**

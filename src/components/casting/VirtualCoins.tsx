@@ -3,6 +3,7 @@ import { tossCoinsDetailed } from "../../engine/casting.js"
 import type { LineValue } from "../../types"
 import { gsap, useGSAP } from "../../lib/gsap.js"
 import { useReducedMotion } from "../../hooks/useReducedMotion.js"
+import { playToss, playAllLands, playConfirm, vibrateToss, vibrateConfirm } from "../../lib/audio.js"
 
 interface VirtualCoinsProps {
   currentIndex: number
@@ -41,10 +42,12 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
     setCoins(null)
     setResultValue(null)
 
-    // Create GSAP timeline for coin toss animation
+    playToss()
+    vibrateToss()
+
     const tl = gsap.timeline({
       onComplete: () => {
-        // After animation completes, show results
+        playAllLands()
         const { coinResults, lineValue } = tossCoinsDetailed()
         setCoins(coinResults.map(v => v === 1 ? 'back' as const : 'front' as const))
         setResultValue(lineValue)
@@ -52,34 +55,19 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
       }
     })
 
-    // Animate each coin with stagger
     coinRefs.current.forEach((coin, i) => {
       if (!coin) return
-      
-      tl.to(coin, {
-        rotationY: 360,
-        scale: 1.15,
-        duration: 0.6,
-        ease: "power2.inOut",
-        transformPerspective: 400,
-      }, i * 0.08) // Stagger by 0.08s
-      
-      // Add bounce effect at the end
-      tl.to(coin, {
-        scale: 1,
-        duration: 0.3,
-        ease: "elastic.out(1, 0.3)",
-      }, `-=${0.1}`) // Overlap slightly with previous animation
+      tl.to(coin, { rotationY: 360, scale: 1.15, duration: 0.6, ease: "power2.inOut", transformPerspective: 400 }, i * 0.08)
+      tl.to(coin, { scale: 1, duration: 0.3, ease: "elastic.out(1, 0.3)" }, "-=0.1")
     })
 
-    // If reduced motion, skip animation
-    if (prefersReducedMotion) {
-      tl.progress(1) // Jump to end
-    }
+    if (prefersReducedMotion) tl.progress(1)
   }, [currentIndex, phase, onCast, prefersReducedMotion])
 
   const confirmResult = useCallback(() => {
     if (resultValue === null) return
+    playConfirm()
+    vibrateConfirm()
     onCast(resultValue)
     setPhase("idle")
     setCoins(null)

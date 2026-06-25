@@ -1,7 +1,8 @@
 import { callReasoning } from "./reasoning-call.js"
 import { callNarrative } from "./narrative-call.js"
 import { DEFAULT_MODEL, DEEP_MODEL } from "../lib/constants.js"
-import type { InterpretationResult } from "../types"
+import type { InterpretationResult, TiYongRelation, TimeContext, Category } from "../types"
+import type { NajiaResult } from "../engine/najia.js"
 import { hasApiKey } from "../lib/api-key.js"
 
 export type AIProgress = "idle" | "reasoning" | "narrative" | "done" | "error"
@@ -18,12 +19,20 @@ export interface DoubleCallCallbacks {
   onProgress: (progress: AIProgress) => void
 }
 
-interface DoubleCallInput {
+export interface DoubleCallInput {
   question: string
+  category?: Category
   hexagramOriginal: number
   hexagramChanged: number | null
   changingLines: number[]
   hexagramMutual?: number
+  // Phase 1: 结构化断卦元数据
+  hexagramCuoGua?: number
+  hexagramZongGua?: number
+  tiYong?: TiYongRelation
+  timeContext?: TimeContext
+  // Phase 2: 纳甲数据
+  najia?: NajiaResult
 }
 
 export async function runDoubleCall(
