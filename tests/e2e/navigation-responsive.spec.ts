@@ -16,12 +16,13 @@ test.describe('导航测试', () => {
     }
   })
 
-  test('底部导航栏有 4 个链接', async ({ page }) => {
+  test('底部导航栏有 4 个导航项', async ({ page }) => {
     await page.goto('/')
     await page.waitForTimeout(500)
     const nav = page.locator('nav.fixed.bottom-0')
-    const links = nav.locator('a')
-    await expect(links).toHaveCount(4)
+    // HOME is a span (active page), others are links — total 4 items
+    const items = nav.locator('a, span.font-mono')
+    await expect(items).toHaveCount(4)
   })
 
   test('HOME 链接导航到首页', async ({ page }) => {
