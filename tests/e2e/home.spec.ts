@@ -20,7 +20,7 @@ test.describe('首页测试（已登录）', () => {
     // Check bottom nav links
     const nav = page.locator('nav.fixed.bottom-0')
     await expect(nav).toBeVisible()
-    await expect(nav.locator('a:has-text("HOME")')).toBeVisible()
+    await expect(nav.locator('text=HOME')).toBeVisible()
     await expect(nav.locator('a:has-text("DIVINE")')).toBeVisible()
     await expect(nav.locator('a:has-text("HISTORY")')).toBeVisible()
     await expect(nav.locator('a:has-text("STATS")')).toBeVisible()

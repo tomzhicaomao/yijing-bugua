@@ -50,12 +50,12 @@ test.describe('历史记录页面测试', () => {
     await page.waitForTimeout(500)
 
     // Should show filter tags
-    await expect(page.locator('text=全部')).toBeVisible()
-    await expect(page.locator('text=工作')).toBeVisible()
-    await expect(page.locator('text=人际')).toBeVisible()
-    await expect(page.locator('text=财务')).toBeVisible()
-    await expect(page.locator('text=健康')).toBeVisible()
-    await expect(page.locator('text=其他')).toBeVisible()
+    await expect(page.locator('text=全部').first()).toBeVisible()
+    await expect(page.locator('text=工作').first()).toBeVisible()
+    await expect(page.locator('text=人际').first()).toBeVisible()
+    await expect(page.locator('text=财务').first()).toBeVisible()
+    await expect(page.locator('text=健康').first()).toBeVisible()
+    await expect(page.locator('text=其他').first()).toBeVisible()
   })
 
   test('记录显示反馈状态标签', async ({ page }) => {
@@ -68,10 +68,10 @@ test.describe('历史记录页面测试', () => {
     await page.goto('/history')
     await page.waitForTimeout(1000)
 
-    // Should show status badges
-    await expect(page.locator('text=待反馈')).toBeVisible()
-    await expect(page.locator('text=准').first()).toBeVisible()
-    await expect(page.locator('text=不准')).toBeVisible()
+    // Should show status badges (use .first() to avoid strict mode)
+    await expect(page.locator('span:has-text("待反馈")').first()).toBeVisible()
+    await expect(page.locator('span:has-text("准")').first()).toBeVisible()
+    await expect(page.locator('span:has-text("不准")').first()).toBeVisible()
   })
 
   test('记录显示日期和分类', async ({ page }) => {
