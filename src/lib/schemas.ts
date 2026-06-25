@@ -26,7 +26,7 @@ export const interpretationResultSchema = z.object({
   promptVersion: z.string(),
   temperature: z.number().optional(),
   rawResponse: z.string().optional(),
-  claims: z.array(claimSchema).min(5),
+  claims: z.array(claimSchema).min(1),
 })
 
 // ========== AI reasoning output (first call JSON) ==========
@@ -37,7 +37,7 @@ export const aiReasoningSchema = z.object({
   timeWindow: z.string(),
   answer: z.string(),
   confidence: confidenceSchema,
-  claims: z.array(claimSchema).min(5),
+  claims: z.array(claimSchema).min(1),
 })
 
 // ========== Feedback ==========

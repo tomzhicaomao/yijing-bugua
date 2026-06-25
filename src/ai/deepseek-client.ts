@@ -1,6 +1,10 @@
 import { getApiKey } from '../lib/api-key.js'
 
-const DEEPSEEK_BASE = 'https://api.deepseek.com/chat/completions'
+// 开发环境使用 Vite 代理，生产环境使用 Vercel serverless function
+const isDev = import.meta.env.DEV
+const DEEPSEEK_BASE = isDev
+  ? '/api/deepseek/chat/completions'
+  : '/api/deepseek'
 
 export interface DeepSeekMessage {
   role: 'system' | 'user' | 'assistant'

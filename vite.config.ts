@@ -11,4 +11,13 @@ export default defineConfig({
     setupFiles: ["./src/test-setup.ts"],
     include: ["tests/**/*.test.ts", "tests/**/*.test.tsx"],
   },
+  server: {
+    proxy: {
+      '/api/deepseek': {
+        target: 'https://api.deepseek.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/deepseek/, ''),
+      },
+    },
+  },
 })

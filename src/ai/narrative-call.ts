@@ -13,7 +13,7 @@ export async function callNarrative(
   question: string,
   reasoning: InterpretationResult,
   model: string = DEFAULT_MODEL,
-  maxRetries: number = 1,
+  maxRetries: number = 3,
 ): Promise<NarrativeCallResult> {
   const systemPrompt = buildNarrativeSystemPrompt()
   const userPrompt = buildNarrativeUserPrompt(question, reasoning)

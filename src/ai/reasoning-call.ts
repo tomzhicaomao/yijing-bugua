@@ -31,7 +31,7 @@ export interface ReasoningCallResult {
 export async function callReasoning(
   input: ReasoningInput,
   model: string = DEFAULT_MODEL,
-  maxRetries: number = 1,
+  maxRetries: number = 3,
 ): Promise<ReasoningCallResult> {
   const systemPrompt = buildReasoningSystemPrompt()
   const userPrompt = buildReasoningUserPrompt({
