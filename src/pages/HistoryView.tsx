@@ -54,7 +54,7 @@ export default function HistoryView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-28 px-6">
+      <main className="pt-16 pb-20 px-6">
         <div className="max-w-md mx-auto py-8 space-y-6">
           {/* 筛选标签 */}
           <div className="flex gap-3 flex-wrap">
@@ -112,7 +112,7 @@ export default function HistoryView() {
             </div>
           )}
         </div>
-          <div className="h-24" />
+          <div className="h-16" />
     </main>
 
     {/* Bottom nav */}

@@ -91,11 +91,11 @@ export default function StatsView() {
             <div className="w-10" />
           </div>
         </nav>
-        <main className="pt-16 pb-28 px-6">
+        <main className="pt-16 pb-20 px-6">
           <div className="max-w-md mx-auto py-16 text-center">
             <p className="text-nothing-text-secondary">暂无数据，开始你的第一次占卜吧</p>
           </div>
-          <div className="h-24" />
+          <div className="h-16" />
     </main>
 
     {/* Bottom nav */}
@@ -138,7 +138,7 @@ export default function StatsView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-28 px-6">
+      <main className="pt-16 pb-20 px-6">
         <div ref={statsRef} className="max-w-md mx-auto py-8 space-y-6">
           {/* 数据卡片 */}
           <div className="grid grid-cols-2 gap-4">

@@ -34,7 +34,7 @@ export default function HomeView() {
       {/* Main */}
       <main className="px-6 max-w-md mx-auto">
         {/* Hero section */}
-        <div className="pt-12 pb-16">
+        <div className="pt-8 pb-8">
           <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
             占卜
           </h1>
@@ -49,7 +49,7 @@ export default function HomeView() {
         </div>
 
         {/* CTA */}
-        <div className="mb-12">
+        <div className="mb-8">
           <Link to="/divine">
             <Button variant="primary" className="w-full">
               开始起卦
@@ -94,7 +94,7 @@ export default function HomeView() {
         )}
 
         {/* Bottom spacer for fixed nav */}
-        <div className="h-24" />
+        <div className="h-20" />
       </main>
 
       {/* Bottom nav */}

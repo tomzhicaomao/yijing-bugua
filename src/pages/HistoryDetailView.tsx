@@ -51,7 +51,7 @@ export default function HistoryDetailView() {
       </nav>
 
       {/* 主内容 */}
-      <main className="pt-16 pb-28 px-6">
+      <main className="pt-16 pb-20 px-6">
         <div className="max-w-md mx-auto space-y-6">
           {/* 问题信息 */}
           <GlassCard className="p-6">
@@ -118,7 +118,7 @@ export default function HistoryDetailView() {
             </GlassCard>
           )}
         </div>
-          <div className="h-24" />
+          <div className="h-16" />
     </main>
 
     {/* Bottom nav */}

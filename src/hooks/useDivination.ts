@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { LineValue, CastingMethod, Category, BeforeDivination } from '../types'
 import { tossResultToLineValue, calculateHexagram } from '../engine/casting.js'
@@ -98,6 +98,9 @@ export function useDivination() {
     }
   }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate, user])
 
+  // 当 6 爻全部填满时自动触发完成（用 useEffect 避免闭包过期）
+  const [shouldComplete, setShouldComplete] = useState(false)
+  
   const setLineValue = useCallback((value: LineValue) => {
     if (currentIndex >= 6) return
     if (currentIndex === 0 && !castingTimestamp) {
@@ -109,11 +112,11 @@ export function useDivination() {
     const newIndex = currentIndex + 1
     setCurrentIndex(newIndex)
 
-    // 第 6 爻填满后自动触发完成
+    // 标记需要完成，让 useEffect 处理
     if (newIndex >= 6) {
-      queueMicrotask(() => completeCasting())
+      setShouldComplete(true)
     }
-  }, [currentIndex, lines, castingTimestamp, completeCasting])
+  }, [currentIndex, lines, castingTimestamp])
 
   const selectManualBack = useCallback((backCount: number) => {
     if (currentIndex >= 6) return
@@ -127,6 +130,19 @@ export function useDivination() {
     setLines(newLines)
     setCurrentIndex(currentIndex + 1)
   }, [currentIndex, lines, castingTimestamp])
+
+  // useEffect: 当 shouldComplete 为 true 时触发 completeCasting
+  // 此时 lines 已经是最新值，避免闭包过期
+  const effectRan = useRef(false)
+  useEffect(() => {
+    if (shouldComplete && !effectRan.current) {
+      effectRan.current = true
+      setShouldComplete(false)
+      completeCasting().finally(() => {
+        effectRan.current = false
+      })
+    }
+  }, [shouldComplete, completeCasting])
 
   return {
     step,

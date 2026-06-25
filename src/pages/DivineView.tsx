@@ -60,7 +60,7 @@ export default function DivineView() {
       </div>
 
       {/* Content */}
-      <main className="px-6 pb-28 max-w-md mx-auto">
+      <main className="px-6 pb-20 max-w-md mx-auto">
         {/* Step 1: Question */}
         <PageTransition isVisible={step === 'question'} direction="right">
           <div className="space-y-8 pt-4">
@@ -236,7 +236,7 @@ export default function DivineView() {
 
         {/* Step 4: Casting */}
         <PageTransition isVisible={step === 'casting'} direction="left">
-          <div className="space-y-8 pt-4">
+          <div className="space-y-4 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
                 {method === 'virtual' ? '虚拟摇卦' : '手动输入'}
@@ -275,7 +275,7 @@ export default function DivineView() {
         </PageTransition>
 
         {/* Bottom spacer */}
-        <div className="h-28" />
+        <div className="h-20" />
       </main>
 
       {/* Bottom nav */}

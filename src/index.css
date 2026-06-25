@@ -22,6 +22,19 @@
   --color-nothing-warning: #D4A843;
   --color-nothing-error: #D71921;
   --color-nothing-interactive: #007AFF;
+
+  /* Legacy color tokens used in components */
+  --color-ink: #1A1A1A;
+  --color-ink-light: #444444;
+  --color-bronze: #8B6914;
+  --color-bronze-light: #A67C1A;
+  --color-vermillion: #D71921;
+  --color-vermillion-dark: #B01418;
+  --color-gold: #C5A028;
+  --color-gold-light: #D4B038;
+  --color-charcoal: #1A1A1A;
+  --color-jade: #2D7A3A;
+  --color-luxury-50: #FAFAFA;
 }
 
 :root {
@@ -208,4 +221,34 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #CCCCCC;
   border-radius: 2px;
+}
+
+/* Legacy utility classes */
+.input-luxury {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #FAFAFA;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.input-luxury:focus {
+  outline: none;
+  border-color: #C5A028;
+}
+
+.btn-gold {
+  background: #C5A028;
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-gold:hover {
+  background: #D4B038;
 }
