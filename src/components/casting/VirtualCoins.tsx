@@ -122,22 +122,20 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
           })}
         </div>
 
-        {/* Result display — always reserve space to prevent layout shift */}
-        <div className={`rounded-lg p-4 border shadow-sm mx-4 transition-opacity duration-300 ${
+        {/* Result display — always same height to prevent any layout shift */}
+        <div className={`rounded-lg p-4 border shadow-sm mx-4 transition-opacity duration-300 min-h-[3.5rem] flex items-center justify-center ${
           phase === "result" && resultValue !== null
             ? 'bg-white border-stone-200 visible opacity-100'
             : 'border-transparent invisible opacity-0'
         }`}>
-          {resultValue !== null && (
-            <div className="space-y-3">
-              <p className="text-ink">
-                <span className="font-medium">{backCount} 背 {3 - backCount} 字</span>
-                <span className="mx-2 text-stone-400">→</span>
-                <span className="font-bold text-lg text-bronze">{resultValue}</span>
-                <span className="text-sm ml-2 text-stone-500">{LINE_NAMES[resultValue]}</span>
-              </p>
-            </div>
-          )}
+          {resultValue !== null ? (
+            <p className="text-ink">
+              <span className="font-medium">{backCount} 背 {3 - backCount} 字</span>
+              <span className="mx-2 text-stone-400">→</span>
+              <span className="font-bold text-lg text-bronze">{resultValue}</span>
+              <span className="text-sm ml-2 text-stone-500">{LINE_NAMES[resultValue]}</span>
+            </p>
+          ) : <span className="text-ink">&nbsp;</span>}
         </div>
 
         <p className="text-sm text-stone-400">
