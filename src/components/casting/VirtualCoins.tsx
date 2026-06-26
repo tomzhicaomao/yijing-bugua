@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { tossCoinsDetailed } from "../../engine/casting.js"
 import type { LineValue } from "../../types"
 import { gsap, useGSAP } from "../../lib/gsap.js"
 import { useReducedMotion } from "../../hooks/useReducedMotion.js"
-import { playToss, playAllLands, playConfirm, vibrateToss, vibrateConfirm } from "../../lib/audio.js"
+import { playToss, playAllLands, vibrateToss } from "../../lib/audio.js"
 
 interface VirtualCoinsProps {
   currentIndex: number
@@ -16,18 +16,34 @@ const LINE_NAMES: Record<LineValue, string> = { 6: '老阴 ⚋×', 7: '少阳 �
 type CoinFace = 'front' | 'back'
 
 export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps) {
-  const [phase, setPhase] = useState<"idle" | "flipping" | "result">("idle")
+  const [flipping, setFlipping] = useState(false)
   const [coins, setCoins] = useState<CoinFace[] | null>(null)
   const [resultValue, setResultValue] = useState<LineValue | null>(null)
   const prefersReducedMotion = useReducedMotion()
-  
+
   // Refs for coin elements
   const coinRefs = useRef<(HTMLDivElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
-  
+  const mountedRef = useRef(true)
+  const tossTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+      if (tossTimerRef.current) clearTimeout(tossTimerRef.current)
+    }
+  }, [])
+
+  // Reset state when advancing to next line
+  useEffect(() => {
+    setFlipping(false)
+    setCoins(null)
+    setResultValue(null)
+  }, [currentIndex])
+
   // GSAP context for animations
   useGSAP(() => {
-    // Initialize coins
     gsap.set(coinRefs.current, {
       rotationY: 0,
       scale: 1,
@@ -36,9 +52,9 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
   }, { scope: containerRef })
 
   const handleToss = useCallback(() => {
-    if (currentIndex >= 6 || phase !== "idle") return
+    if (currentIndex >= 6 || flipping) return
 
-    setPhase("flipping")
+    setFlipping(true)
     setCoins(null)
     setResultValue(null)
 
@@ -47,11 +63,18 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
 
     const tl = gsap.timeline({
       onComplete: () => {
+        if (!mountedRef.current) return
         playAllLands()
         const { coinResults, lineValue } = tossCoinsDetailed()
         setCoins(coinResults.map(v => v === 1 ? 'back' as const : 'front' as const))
         setResultValue(lineValue)
-        setPhase("result")
+
+        // Auto-confirm after brief display
+        tossTimerRef.current = setTimeout(() => {
+          if (!mountedRef.current) return
+          onCast(lineValue)
+          // State will be reset by the currentIndex change effect
+        }, 600)
       }
     })
 
@@ -62,22 +85,14 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
     })
 
     if (prefersReducedMotion) tl.progress(1)
-  }, [currentIndex, phase, onCast, prefersReducedMotion])
-
-  const confirmResult = useCallback(() => {
-    if (resultValue === null) return
-    playConfirm()
-    vibrateConfirm()
-    onCast(resultValue)
-    setPhase("idle")
-    setCoins(null)
-    setResultValue(null)
-  }, [resultValue, onCast])
+  }, [currentIndex, flipping, onCast, prefersReducedMotion])
 
   if (currentIndex >= 6) return null
 
   const backCount = coins?.filter(c => c === 'back').length ?? 0
   const lineLabel = POSITION_NAMES[currentIndex] ?? ''
+
+  const idle = !flipping && !resultValue
 
   return (
     <div className="text-center">
@@ -86,16 +101,16 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
           {lineLabel} · 第 {currentIndex + 1}/6 爻
         </div>
 
-        {/* Three coins */}
+        {/* Three coins — click to toss */}
         <div ref={containerRef} className="flex justify-center gap-8 py-6">
           {[0, 1, 2].map((i) => {
             let symbol: string
             let coinClass: string
 
-            if (phase === "idle") {
+            if (idle) {
               symbol = "文"
-              coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600"
-            } else if (phase === "flipping") {
+              coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600 cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            } else if (flipping) {
               symbol = "文"
               coinClass = "border-stone-400 bg-gradient-to-b from-stone-200 to-stone-300 text-stone-600"
             } else if (coins) {
@@ -113,8 +128,11 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
               <div
                 key={i}
                 ref={el => { coinRefs.current[i] = el }}
-                className={"w-18 h-18 w-[4.5rem] h-[4.5rem] rounded-full border-2 flex items-center justify-center text-xl shadow-sm will-change-transform " + coinClass}
-                aria-label={phase === "result" ? (coins?.[i] === "back" ? "背" : "字") : "铜钱"}
+                className={"w-[4.5rem] h-[4.5rem] rounded-full border-2 flex items-center justify-center text-xl shadow-sm will-change-transform " + coinClass}
+                onClick={idle ? handleToss : undefined}
+                role="button"
+                tabIndex={idle ? 0 : undefined}
+                aria-label={resultValue ? (coins?.[i] === "back" ? "背" : "字") : "点击掷铜钱"}
               >
                 {symbol}
               </div>
@@ -122,9 +140,9 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
           })}
         </div>
 
-        {/* Result display — always same height to prevent any layout shift */}
+        {/* Result display — same height always */}
         <div className={`rounded-lg p-4 border shadow-sm mx-4 transition-opacity duration-300 min-h-[3.5rem] flex items-center justify-center ${
-          phase === "result" && resultValue !== null
+          resultValue !== null
             ? 'bg-white border-stone-200 visible opacity-100'
             : 'border-transparent invisible opacity-0'
         }`}>
@@ -139,37 +157,10 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
         </div>
 
         <p className="text-sm text-stone-400">
-          {phase === "idle" && (currentIndex === 0 ? "点击下方按钮掷出三枚铜钱" : `已完成 ${currentIndex}/6 爻`)}
-          {phase === "flipping" && "铜钱落地中..."}
-          {phase === "result" && "查看结果后点击确认"}
+          {idle && (currentIndex === 0 ? "点击任意铜钱掷出" : `已完成 ${currentIndex}/6 爻，继续点击铜钱`)}
+          {flipping && "铜钱落地中..."}
+          {resultValue && !flipping && "结果已记录，准备下一爻..."}
         </p>
-      </div>
-
-      {/* Fixed action button — always visible above bottom nav */}
-      <div className="fixed bottom-16 left-0 right-0 z-40 px-6 pb-3">
-        <div className="max-w-md mx-auto">
-          {phase === "idle" && (
-            <button
-              onClick={handleToss}
-              className="w-full px-10 py-3.5 bg-bronze text-white rounded-lg font-medium text-lg hover:bg-bronze-light shadow-lg hover:shadow-xl active:scale-95 transition-all"
-            >
-              {currentIndex === 0 ? "掷铜钱" : "再掷一次"}
-            </button>
-          )}
-          {phase === "result" && (
-            <button
-              onClick={confirmResult}
-              className="w-full px-8 py-3.5 bg-vermillion text-white rounded-lg font-medium text-lg hover:bg-vermillion-dark transition-colors shadow-lg active:scale-95 transition-all"
-            >
-              确认此爻
-            </button>
-          )}
-          {phase === "flipping" && (
-            <div className="w-full px-10 py-3.5 bg-stone-300 text-stone-500 rounded-lg font-medium text-lg text-center">
-              投掷中...
-            </div>
-          )}
-        </div>
       </div>
     </div>
   )

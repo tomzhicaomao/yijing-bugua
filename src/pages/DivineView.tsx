@@ -274,8 +274,6 @@ export default function DivineView() {
           </div>
         </PageTransition>
 
-        {/* Bottom spacer for fixed button */}
-        <div className="h-4" />
       </main>
 
     </div>
