@@ -67,8 +67,8 @@ export default function HexagramBoard({
 
   return (
     <div ref={containerRef} className="card-nothing">
-      {label && <h3 className="text-sm font-medium text-nothing-text-secondary mb-3">{label}</h3>}
-      <div className="space-y-1.5">
+      {label && <h3 className="text-xs font-medium text-nothing-text-secondary mb-2">{label}</h3>}
+      <div className="space-y-1 max-h-[35vh] overflow-y-auto overscroll-contain">
         {[...lines].reverse().map((value, i) => {
           const position = 6 - i
           const isChanging = value !== null && changingLinePositions.includes(position)
@@ -78,23 +78,23 @@ export default function HexagramBoard({
             <div
               key={position}
               ref={el => { lineRefs.current[i] = el }}
-              className={`flex items-center gap-3 px-3 py-2 rounded will-change-transform
+              className={`flex items-center gap-2 px-2 py-1.5 rounded will-change-transform
                 ${isChanging ? 'bg-nothing-accent-subtle border border-nothing-accent' : 'border border-nothing-border'}
                 ${!isRevealed ? 'opacity-20' : ''}`}
             >
-              <span className="text-xs text-nothing-text-secondary w-8 text-right">
+              <span className="text-xs text-nothing-text-secondary w-7 text-right shrink-0">
                 {POSITION_NAMES[position - 1]}爻
               </span>
-              <span className="text-lg text-nothing-text-primary tracking-wider min-w-[6ch]">
+              <span className="text-sm text-nothing-text-primary tracking-wider min-w-[6ch]">
                 {value !== null ? LINE_LABELS[value] : '·····'}
               </span>
-              {isChanging && <span className="text-xs text-nothing-accent font-medium ml-auto">动</span>}
+              {isChanging && <span className="text-xs text-nothing-accent font-medium ml-auto shrink-0">动</span>}
             </div>
           )
         })}
       </div>
       {hexagramName && (
-        <div ref={nameRef} className="mt-4 text-center text-nothing-accent text-sm tracking-widest">
+        <div ref={nameRef} className="mt-2 text-center text-nothing-accent text-xs tracking-widest">
           {hexagramName}
         </div>
       )}

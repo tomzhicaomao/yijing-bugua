@@ -236,7 +236,7 @@ export default function DivineView() {
 
         {/* Step 4: Casting */}
         <PageTransition isVisible={step === 'casting'} direction="left">
-          <div className="space-y-4 pt-4">
+          <div className="space-y-3 pt-3">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
                 {method === 'virtual' ? '虚拟摇卦' : '手动输入'}
