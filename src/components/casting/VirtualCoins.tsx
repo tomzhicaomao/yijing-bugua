@@ -142,7 +142,7 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
       </div>
 
       {/* Fixed action button - always visible above bottom nav */}
-      <div className="fixed bottom-16 left-0 right-0 z-40 px-6 pb-3">
+      <div className="relative z-40 px-0 pb-3">
         <div className="max-w-md mx-auto">
           {phase === "idle" && (
             <button

@@ -167,7 +167,7 @@ export default function DivineView() {
               <Button onClick={() => setBeforeAndContinue(beforeDivination)} className="flex-1">
                 保存并继续
               </Button>
-              <Button variant="ghost" onClick={() => setBeforeAndContinue(beforeDivination)}>
+              <Button variant="ghost" onClick={() => setBeforeAndContinue(beforeDivination)} className="flex-1">
                 跳过
               </Button>
             </div>
@@ -278,15 +278,6 @@ export default function DivineView() {
         <div className="h-20" />
       </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 border-t border-nothing-border bg-nothing-bg">
-        <div className="max-w-md mx-auto flex justify-around py-3">
-          <Link to="/" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">HOME</Link>
-          <Link to="/divine" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">DIVINE</Link>
-          <Link to="/history" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">HISTORY</Link>
-          <Link to="/stats" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">STATS</Link>
-        </div>
-      </nav>
     </div>
   )
 }

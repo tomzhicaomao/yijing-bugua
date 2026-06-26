@@ -97,21 +97,6 @@ export default function HomeView() {
         <div className="h-20" />
       </main>
 
-      {/* Bottom nav */}
-      <nav className="fixed bottom-0 left-0 right-0 border-t border-nothing-border bg-nothing-bg">
-        <div className="max-w-md mx-auto flex justify-around py-3">
-          <span className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-display">[ HOME ]</span>
-          <Link to="/divine" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">
-            DIVINE
-          </Link>
-          <Link to="/history" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">
-            HISTORY
-          </Link>
-          <Link to="/stats" className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled hover:text-nothing-text-primary transition-colors">
-            STATS
-          </Link>
-        </div>
-      </nav>
     </div>
   )
 }

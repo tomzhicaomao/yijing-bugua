@@ -78,7 +78,7 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
       <div className="flex gap-2">
         {isPending ? (
           <>
-            <button onClick={() => submitQuick('accurate')} disabled={submitting} className="flex-1 py-3 bg-green-700 text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-all">准</button>
+            <button onClick={() => submitQuick('accurate')} disabled={submitting} className="flex-1 py-3 bg-nothing-success text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-all">准</button>
             <button onClick={() => submitQuick('inaccurate')} disabled={submitting} className="flex-1 py-3 bg-nothing-accent text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-all">不准</button>
             <button onClick={() => submitQuick('unclear')} disabled={submitting} className="flex-1 py-3 bg-nothing-text-secondary text-white rounded-lg font-medium hover:opacity-90 disabled:opacity-50 transition-all">不清楚</button>
           </>
