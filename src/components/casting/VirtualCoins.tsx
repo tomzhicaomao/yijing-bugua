@@ -122,17 +122,23 @@ export default function VirtualCoins({ currentIndex, onCast }: VirtualCoinsProps
           })}
         </div>
 
-        {/* Result display */}
-        {phase === "result" && resultValue !== null && (
-          <div className="space-y-3 bg-white rounded-lg p-4 border border-stone-200 shadow-sm mx-4">
-            <p className="text-ink">
-              <span className="font-medium">{backCount} 背 {3 - backCount} 字</span>
-              <span className="mx-2 text-stone-400">→</span>
-              <span className="font-bold text-lg text-bronze">{resultValue}</span>
-              <span className="text-sm ml-2 text-stone-500">{LINE_NAMES[resultValue]}</span>
-            </p>
-          </div>
-        )}
+        {/* Result display — always reserve space to prevent layout shift */}
+        <div className={`rounded-lg p-4 border shadow-sm mx-4 transition-opacity duration-300 ${
+          phase === "result" && resultValue !== null
+            ? 'bg-white border-stone-200 visible opacity-100'
+            : 'border-transparent invisible opacity-0'
+        }`}>
+          {resultValue !== null && (
+            <div className="space-y-3">
+              <p className="text-ink">
+                <span className="font-medium">{backCount} 背 {3 - backCount} 字</span>
+                <span className="mx-2 text-stone-400">→</span>
+                <span className="font-bold text-lg text-bronze">{resultValue}</span>
+                <span className="text-sm ml-2 text-stone-500">{LINE_NAMES[resultValue]}</span>
+              </p>
+            </div>
+          )}
+        </div>
 
         <p className="text-sm text-stone-400">
           {phase === "idle" && (currentIndex === 0 ? "点击下方按钮掷出三枚铜钱" : `已完成 ${currentIndex}/6 爻`)}
