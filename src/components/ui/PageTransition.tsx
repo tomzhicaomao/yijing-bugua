@@ -28,12 +28,14 @@ export default function PageTransition({
     timelineRef.current?.kill()
 
     if (isVisible) {
+      // Show element before entrance animation
+      containerRef.current.style.display = 'block'
+
       // Entrance animation
       const tl = gsap.timeline({
         onComplete: onEnter,
       })
 
-      // Set initial state based on direction
       const fromVars: gsap.TweenVars = {
         opacity: 0,
         duration: 0,
@@ -65,14 +67,17 @@ export default function PageTransition({
 
       timelineRef.current = tl
     } else {
-      // Exit animation
+      // Exit animation, then hide
       const tl = gsap.timeline({
-        onComplete: onExit,
+        onComplete: () => {
+          if (containerRef.current) containerRef.current.style.display = 'none'
+          onExit?.()
+        },
       })
 
       const toVars: gsap.TweenVars = {
         opacity: 0,
-        duration: duration * 0.7, // Exit faster
+        duration: duration * 0.7,
         ease: 'power2.in',
       }
 
@@ -96,7 +101,6 @@ export default function PageTransition({
       timelineRef.current = tl
     }
 
-    // Cleanup
     return () => {
       timelineRef.current?.kill()
     }
@@ -105,7 +109,7 @@ export default function PageTransition({
   return (
     <div
       ref={containerRef}
-      style={{ opacity: isVisible ? 1 : 0 }}
+      style={{ display: 'none' }}
     >
       {children}
     </div>
