@@ -236,7 +236,7 @@ export default function DivineView() {
 
         {/* Step 4: Casting */}
         <PageTransition isVisible={step === 'casting'} direction="left">
-          <div className="space-y-4 pt-4 pb-32">
+          <div className="space-y-4 pt-4">
             <div>
               <h1 className="text-[24px] leading-[1.1] font-light tracking-[-0.02em] text-nothing-text-display">
                 {method === 'virtual' ? '虚拟摇卦' : '手动输入'}
@@ -274,8 +274,8 @@ export default function DivineView() {
           </div>
         </PageTransition>
 
-        {/* Bottom spacer */}
-        <div className="h-20" />
+        {/* Bottom spacer for fixed button */}
+        <div className="h-4" />
       </main>
 
     </div>
