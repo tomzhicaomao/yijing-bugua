@@ -1,5 +1,115 @@
 # 项目变更记录
 
+## 2026-06-19
+
+### ✨ 大六壬完整集成（5个Phase · 58个文件 · 11091行新增）
+
+**背景**：将中国传统占卜术"大六壬"（古代三式之一）完整集成到现有易经占卜项目中。从基础常量到引擎层、AI解读、UI组件、路由集成、安全加固，全栈实现。
+
+**总览**：
+
+| Phase | 内容 | 新增文件 | 测试用例 |
+|-------|------|:---:|:---:|
+| Phase 0 | 基础补齐（常量矩阵、神煞数据） | 4 | 38 |
+| Phase A | 引擎层（四课、三传、九宗门、天将、遁干、神煞） | 19 | 81 |
+| Phase B | AI + 数据层（Prompt、AI调用、Fallback、Hook） | 4 | — |
+| Phase C | UI + 集成（8组件、2页面、路由、导航） | 10 | — |
+| Phase D | 交付与加固（Migration、安全、优化） | 3 | — |
+| **合计** | | **~50** | **81** |
+
+---
+
+#### Phase 0：基础补齐
+
+| # | 文件 | 说明 |
+|---|------|------|
+| 1 | `src/engine/liuren/constants.ts` | 编译时常量矩阵：KE_MATRIX（五行相克）、SHENG_MATRIX（五行相生）、CHONG_MAP（地支六冲）、XING_MAP（地支相刑）、HE_MAP（地支六合）、HAI_MAP（地支六害）、SAN_HE（三合局）、RI_MA_MAP（驿马）、GAN_HE（天干五合）、GAN_HE_WUXING（合化五行）、GAN_YINYANG（天干阴阳）+ 14个辅助函数 |
+| 2 | `src/data/liuren/shensha-rules.json` | 30个神煞起法规则（年/月/日/时维度），含天乙贵人、驿马、天德、月德、桃花、华盖、劫煞、空亡等 |
+| 3 | `src/data/liuren/dizhi-wuxing.json` | 地支五行关系全集：六冲、三刑、六合、三合、六害、驿马、天干五合、寄宫 |
+| 4 | `tests/engine/liuren/constants.test.ts` | 38个测试用例，覆盖所有常量表正确性、对称性、辅助函数 |
+
+#### Phase A：引擎层
+
+| # | 文件 | 说明 |
+|---|------|------|
+| 1 | `src/engine/liuren/types.ts` | 核心类型系统：Branch/Gan/WuXing/LiuQin/GeJu/KeRelation + 所有常量表 + getShengKe()（已存在，未修改） |
+| 2 | `src/engine/liuren/tiandi-pan.ts` | 天地盘构建：buildTianDiPan（月将+占时→天盘旋转）、getTianPanZhi（已存在，未修改） |
+| 3 | `src/engine/liuren/jieqi.ts` | 节气/月将计算：天文公式±1天精度（已存在，未修改） |
+| 4 | `src/engine/liuren/sike.ts` | 四课生成：日干寄宫→上神×4 + 生克关系标注（上克下↓/下贼上↑/比和=） |
+| 5 | `src/engine/liuren/sanchuan.ts` | 三传级联调度器：按序尝试①→②→...→⑨ + 中末传推导 |
+| 6 | `src/engine/liuren/jiuzongmen/zeke.ts` | ①贼克法：下贼上优先→上克下次选→元首/重审格局 |
+| 7 | `src/engine/liuren/jiuzongmen/biyong.ts` | ②比用法：阳干取阳支、阴干取阴支→知一格局 |
+| 8 | `src/engine/liuren/jiuzongmen/shehai.ts` | ③涉害法：涉害深度计算（最复杂）、深度相同取先出现者→涉害格局 |
+| 9 | `src/engine/liuren/jiuzongmen/yaoke.ts` | ④遥克法：日干遥克上神/上神遥克日干→遥克格局 |
+| 10 | `src/engine/liuren/jiuzongmen/maoxing.ts` | ⑤昴星法：阳日/阴日分路径、酉金昴星→昴星格局 |
+| 11 | `src/engine/liuren/jiuzongmen/bieze.ts` | ⑥别责法：三课相同检测、阳日合神/阴日三合→别责格局 |
+| 12 | `src/engine/liuren/jiuzongmen/bazhuan.ts` | ⑦八专法：干支同位检测、顺数三/逆数三→八专格局 |
+| 13 | `src/engine/liuren/jiuzongmen/fuyin.ts` | ⑧伏吟法：刑神链、自刑处理、日马兜底→伏吟格局 |
+| 14 | `src/engine/liuren/jiuzongmen/fanyin.ts` | ⑨返吟法：克日干取初传、无克取驿马（兜底法）→返吟格局 |
+| 15 | `src/engine/liuren/tianjiang.ts` | 十二天将排布：昼夜贵人查表、顺逆判断、十二将序列布将 |
+| 16 | `src/engine/liuren/dungan.ts` | 五子元遁推时干 + 三传天干 + 六亲断（父母/兄弟/妻财/官鬼/子孙） |
+| 17 | `src/engine/liuren/shensha.ts` | 神煞收集器：从JSON规则文件读取，支持gan_branch_lookup/ri_zhi_lookup/month_branch_lookup/year_branch_chong/fixed_branch/jiazi_cycle_null等6种规则类型 |
+| 18 | `src/engine/liuren/tai-sui-check.ts` | 太岁校验：检查四课三传中是否有太岁 |
+| 19 | `src/engine/liuren/shensha-conflict.ts` | 神煞矛盾检测：同地支吉凶并见 |
+| 20 | `src/engine/liuren/jieqi-boundary.ts` | 节气边界检测：占时接近节气交接±1天时提醒 |
+| 21 | `src/engine/liuren/kongwang-detect.ts` | 空亡检测：日干支所在旬中空亡的两个地支，检查四课三传 |
+| 22 | `src/engine/liuren/warnings.ts` | 防误判主入口：综合太岁/神煞矛盾/空亡/节气边界校验 |
+| 23 | `src/engine/liuren/index.ts` | 主入口：完整起课流程（13步） + 所有子模块导出 |
+| 24 | `tests/engine/liuren/sike.test.ts` | 四课测试：8个用例（生克判定、四课完整性、寄宫正确性） |
+| 25 | `tests/engine/liuren/liuren-all.test.ts` | 综合测试：34个用例（九宗门、天将、遁干、六亲、神煞、防误判、集成） |
+
+#### Phase B：AI + 数据层
+
+| # | 文件 | 说明 |
+|---|------|------|
+| 1 | `src/ai/liuren-prompt-builder.ts` | 六步断课法Prompt构建器：格式化四课/三传/神煞/天地盘为可读文本，System Prompt含断课原则+JSON输出格式 |
+| 2 | `src/ai/liuren-call.ts` | AI调用：复用DeepSeek管道，3次重试，JSON响应解析（支持```json```包裹），容错处理 |
+| 3 | `src/ai/liuren-fallback.ts` | 离线Fallback解读：基于规则的基础解读（格局吉凶推断、神煞分析、应期推断），AI不可用时自动启用 |
+| 4 | `src/hooks/useLiuren.ts` | React Hook：完整起课+AI解读+保存记录流程，含频率限制、输入校验、重复问题检测 |
+| 5 | `src/types/index.ts` | 类型扩展：新增 `LiurenPanData` 接口，`DivinationRecord.method` 扩展 `liuren-zhengshi`/`liuren-huoshi`，新增 `liurenPan?`/`interpretation?` 字段 |
+| 6 | `src/lib/constants.ts` | 新增 `FEATURE_LIUREN_ENABLED` 功能开关（默认开启，`VITE_FEATURE_LIUREN_ENABLED=false` 关闭） |
+| 7 | `src/db/records.ts` | 数据层扩展：`toSupabaseRow`/`fromSupabaseRow` 支持 `liuren_pan`/`interpretation` JSONB字段，新增 `queryByMethod()` |
+
+#### Phase C：UI + 集成
+
+| # | 文件 | 说明 |
+|---|------|------|
+| 1 | `src/components/liuren/SiKeTable.tsx` | 四课表格：四组上下神 + 生克关系符号（↓/↑/=）+ 颜色编码 |
+| 2 | `src/components/liuren/SanChuanTimeline.tsx` | 三传时间线：水平三列（初传/中传/末传）+ 天将、六亲、遁干 |
+| 3 | `src/components/liuren/GeJuCard.tsx` | 格局卡片：格局名称 + 吉凶标签 + 描述 + 课式元信息 |
+| 4 | `src/components/liuren/ShenShaGrid.tsx` | 神煞网格：按吉/凶/中性分类 + 彩色圆点标记 |
+| 5 | `src/components/liuren/WarningStrip.tsx` | 防误判警告条：橙色主题 + ⚠️图标 |
+| 6 | `src/components/liuren/LiurenPanTable.tsx` | 天地盘表格：天盘/地盘各12格 |
+| 7 | `src/components/liuren/TianJiangBadge.tsx` | 天将徽章：12天将各有独立颜色编码 |
+| 8 | `src/components/liuren/ShiZhiPicker.tsx` | 时辰选择器：下拉选单，12时辰 + "自动（当前时辰）"选项 |
+| 9 | `src/pages/LiurenView.tsx` | 起课页面：问题输入 + 分类选择 + 时辰选择 + 起课结果展示 + AI解读（含Skeleton加载态）+ 保存记录 |
+| 10 | `src/pages/LiurenResultView.tsx` | 结果详情页：课式完整展示（格局/四课/三传/警告/AI解读） |
+| 11 | `src/App.tsx` | 路由集成：`/liuren` + `/:id` 路由，React.lazy代码分割 + Suspense + 功能开关包裹 |
+| 12 | `src/components/layout/AppShell.tsx` | 底部导航 4→5 项：HOME · DIVINE · **六壬** · HISTORY · STATS |
+| 13 | `src/pages/HomeView.tsx` | 首页新增六壬入口卡片："大六壬 · LIU REN" |
+
+#### Phase D：交付与加固
+
+| # | 文件 | 说明 |
+|---|------|------|
+| 1 | `supabase/migrations/..._add_liuren_fields.sql` | Migration：`ALTER TABLE records ADD COLUMN liuren_pan JSONB, interpretation JSONB` + GIN索引 |
+| 2 | `supabase/migrations/..._rollback.sql` | 回滚脚本：DROP COLUMN + DROP INDEX |
+| 3 | `src/lib/security.ts` | 安全模块：`validateQuestion`（1-200字/XSS检测）、`validateDateRange`（1900-2100）、`sanitizeForPrompt`（Prompt注入防护）、`checkRateLimit`（前端频率限制，2秒间隔） |
+| 4 | `.env.example` | 新增 `VITE_FEATURE_LIUREN_ENABLED` 功能开关文档 |
+
+**验证**：
+- TypeScript 编译：✅ 无错误
+- 单元测试：✅ 81/81 通过（constants 38 + sike 9 + liuren-all 34）
+- Vite 生产构建：✅ 成功（LiurenView 43KB gzip / LiurenResultView 1.6KB gzip 独立分片）
+- Git 推送：✅ commit `9847bf4`
+
+**功能入口**：
+- 底部导航栏 → "六壬" tab
+- 首页 → "大六壬 · LIU REN" 入口卡片
+- 直接访问 `/liuren`
+
+---
+
 ## 2026-06-18
 
 ### ✨ 添加互卦计算、之卦概念、推理重试及 claims 统一
