@@ -1,4 +1,5 @@
 import { useLocation, Link, Outlet } from 'react-router-dom'
+import { FEATURE_LIUREN_ENABLED } from '../../lib/constants'
 
 export default function AppShell() {
   const { pathname } = useLocation()
@@ -16,6 +17,11 @@ export default function AppShell() {
           <Link to="/divine" className={`font-mono text-[10px] tracking-[0.1em] transition-colors ${pathname === '/divine' ? 'text-nothing-text-display' : 'text-nothing-text-disabled hover:text-nothing-text-primary'}`}>
             DIVINE
           </Link>
+          {FEATURE_LIUREN_ENABLED && (
+            <Link to="/liuren" className={`font-mono text-[10px] tracking-[0.1em] transition-colors ${pathname.startsWith('/liuren') ? 'text-nothing-text-display' : 'text-nothing-text-disabled hover:text-nothing-text-primary'}`}>
+              六壬
+            </Link>
+          )}
           <Link to="/history" className={`font-mono text-[10px] tracking-[0.1em] transition-colors ${pathname.startsWith('/history') ? 'text-nothing-text-display' : 'text-nothing-text-disabled hover:text-nothing-text-primary'}`}>
             HISTORY
           </Link>

@@ -124,6 +124,21 @@ export interface HexagramData {
   lines: HexagramLineData[]
 }
 
+// ========== Phase 4: 大六壬类型 ==========
+/** 大六壬课式 JSONB（引擎层完整数据） */
+export interface LiurenPanData {
+  dateTime: string;
+  solarTerm: string;
+  yueJiang: string;
+  shiZhi: string;
+  dayGanZhi: string;
+  isDaytime: boolean;
+  geJu: string;
+  siKe: Array<{ upperGod: string; lowerGod: string; relation: string }>;
+  sanChuan: Array<{ branch: string; tianJiang: string; liuQin: string; dunGan: string }>;
+  warnings: string[];
+}
+
 // ========== 2.5 DivinationRecord ==========
 export interface DivinationRecord {
   schemaVersion: 1
@@ -131,7 +146,7 @@ export interface DivinationRecord {
   timestamp: string
   question: string
   category: Category
-  method: CastingMethod
+  method: CastingMethod | 'liuren-zhengshi' | 'liuren-huoshi'
   beforeDivination?: BeforeDivination
   hexagram: {
     original: number
@@ -150,6 +165,10 @@ export interface DivinationRecord {
   interpretations: InterpretationResult[]
   feedback: Feedback
   duplicate?: DuplicateInfo
+  /** 大六壬完整课式（JSONB） */
+  liurenPan?: LiurenPanData
+  /** AI 解读结果 */
+  interpretation?: InterpretationResult
 }
 
 // ========== Export format ==========

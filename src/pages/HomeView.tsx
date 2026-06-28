@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { getAllRecords, queryPendingDue } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
 import Button from '../components/ui/Button'
+import { FEATURE_LIUREN_ENABLED } from '../lib/constants'
 
 export default function HomeView() {
   const { user } = useAuth()
@@ -56,6 +57,26 @@ export default function HomeView() {
             </Button>
           </Link>
         </div>
+
+        {/* 六壬入口 */}
+        {FEATURE_LIUREN_ENABLED && (
+          <div className="mb-8">
+            <Link to="/liuren">
+              <div className="border border-nothing-border rounded-md p-4 hover:border-nothing-text-disabled transition-colors group">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-mono text-sm text-nothing-text-display tracking-wider">大六壬</span>
+                    <span className="ml-2 font-mono text-[10px] text-nothing-text-disabled">LIU REN</span>
+                  </div>
+                  <span className="font-mono text-xs text-nothing-text-disabled group-hover:text-nothing-text-secondary transition-colors">→</span>
+                </div>
+                <p className="mt-2 font-mono text-[11px] text-nothing-text-disabled leading-relaxed">
+                  古代三式之一 · 以日干支起课 · 占事决策
+                </p>
+              </div>
+            </Link>
+          </div>
+        )}
 
         {/* Navigation links */}
         <div className="divide-y divide-nothing-border">

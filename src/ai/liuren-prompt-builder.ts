@@ -1,0 +1,147 @@
+/**
+ * 大六壬 AI Prompt 构建器
+ *
+ * 构建结构化的 System/User Prompt 用于 AI 解读
+ * 采用六步断课法
+ */
+
+import type { LiurenPan, Branch, Gan } from '../engine/liuren/types.js';
+
+/**
+ * 格式化四课为可读文本
+ */
+function formatSiKe(pan: LiurenPan): string {
+  const names = ['一课', '二课', '三课', '四课'];
+  return pan.siKe.map((item, idx) => {
+    const relationSymbol = item.relation === '上克下' ? '↓' : item.relation === '下贼上' ? '↑' : '=';
+    return `${names[idx]}：${item.upperGod}（上）${relationSymbol} ${item.lowerGod}（下）`;
+  }).join('\n');
+}
+
+/**
+ * 格式化三传为可读文本
+ */
+function formatSanChuan(pan: LiurenPan): string {
+  const names = ['初传（事始）', '中传（事中）', '末传（事终）'];
+  return pan.sanChuan.map((item, idx) => {
+    return `${names[idx]}：${item.branch} | 天将：${item.tianJiang} | 六亲：${item.liuQin} | 遁干：${item.dunGan}`;
+  }).join('\n');
+}
+
+/**
+ * 格式化神煞为可读文本
+ */
+function formatShenSha(pan: LiurenPan): string {
+  if (pan.shenSha.length === 0) return '无神煞';
+
+  const ji = pan.shenSha.filter(s => s.category === '吉');
+  const xiong = pan.shenSha.filter(s => s.category === '凶');
+  const zhong = pan.shenSha.filter(s => s.category === '中性');
+
+  const parts: string[] = [];
+  if (ji.length > 0) parts.push(`吉神：${ji.map(s => `${s.name}(${s.branch})`).join('、')}`);
+  if (xiong.length > 0) parts.push(`凶神：${xiong.map(s => `${s.name}(${s.branch})`).join('、')}`);
+  if (zhong.length > 0) parts.push(`中性：${zhong.map(s => `${s.name}(${s.branch})`).join('、')}`);
+
+  return parts.join('\n');
+}
+
+/**
+ * 格式化天地盘为可读文本
+ */
+function formatTianDiPan(pan: LiurenPan): string {
+  const di = pan.tianDiPan.diPan.join(' ');
+  const tian = pan.tianDiPan.tianPan.join(' ');
+  return `地盘：${di}\n天盘：${tian}`;
+}
+
+/**
+ * 构建 System Prompt
+ */
+export function buildLiurenSystemPrompt(): string {
+  return `你是一位精通大六壬的资深占卜师，拥有数十年的断课经验。
+
+## 你的任务
+根据提供的大六壬课式信息，为用户的问题提供专业、深入、但易懂的解读。
+
+## 断课原则
+1. **六步断课法**：
+   - 第一步：看格局（课体吉凶大势）
+   - 第二步：看四课（事态现状与矛盾）
+   - 第三步：看三传（事态发展脉络）
+   - 第四步：看天将（人事关系与贵人）
+   - 第五步：看神煞（特殊事件标记）
+   - 第六步：综合判断（给出结论与建议）
+
+2. **注意事项**：
+   - 以课式数据为准，不凭空臆断
+   - 吉凶兼述，不一味吉言
+   - 给出具体可操作的建议
+   - 如有空亡、神煞矛盾，需特别说明
+   - 如有防误判警告，务必提醒用户
+
+## 输出格式
+请用 JSON 格式返回，结构如下：
+{
+  "trend": "利" | "不利" | "中性",
+  "analysis": "详细的六步断课分析...",
+  "conditions": ["条件1", "条件2"],
+  "timeWindow": "应期判断",
+  "answer": "针对问题的直接回答",
+  "confidence": "高" | "中" | "低",
+  "claims": [
+    {"id": "claim-1", "type": "trend", "text": "趋势判断"},
+    {"id": "claim-2", "type": "condition", "text": "条件判断"},
+    {"id": "claim-3", "type": "timeWindow", "text": "应期判断"},
+    {"id": "claim-4", "type": "advice", "text": "建议"}
+  ]
+}`;
+}
+
+/**
+ * 构建 User Prompt
+ */
+export function buildLiurenUserPrompt(
+  pan: LiurenPan,
+  question: string,
+): string {
+  const parts: string[] = [];
+
+  parts.push(`## 用户问题\n${question}\n`);
+
+  parts.push(`## 课式信息`);
+  parts.push(`日干支：${pan.dayGanZhi}`);
+  parts.push(`节气：${pan.solarTerm}`);
+  parts.push(`月将：${pan.yueJiang}`);
+  parts.push(`占时：${pan.shiZhi}（${pan.isDaytime ? '昼' : '夜'}占）`);
+  parts.push(`格局：${pan.geJu}\n`);
+
+  parts.push(`## 天地盘`);
+  parts.push(formatTianDiPan(pan) + '\n');
+
+  parts.push(`## 四课`);
+  parts.push(formatSiKe(pan) + '\n');
+
+  parts.push(`## 三传`);
+  parts.push(formatSanChuan(pan) + '\n');
+
+  parts.push(`## 天将`);
+  parts.push(`贵人在${pan.tianJiang.guiRenBranch}，${pan.tianJiang.direction}布\n`);
+
+  parts.push(`## 遁干`);
+  parts.push(`时干：${pan.dunGan.shiGan}`);
+  parts.push(`三传天干：${pan.dunGan.sanChuanGan.join(' ')}\n`);
+
+  parts.push(`## 神煞`);
+  parts.push(formatShenSha(pan) + '\n');
+
+  if (pan.warnings.length > 0) {
+    parts.push(`## ⚠️ 系统警告`);
+    pan.warnings.forEach(w => parts.push(`- ${w}`));
+    parts.push('');
+  }
+
+  parts.push(`请按照六步断课法，对以上课式进行专业解读。`);
+
+  return parts.join('\n');
+}

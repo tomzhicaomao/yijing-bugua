@@ -17,6 +17,8 @@ function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
     interpretations: record.interpretations,
     feedback: record.feedback,
     duplicate: record.duplicate ?? null,
+    liuren_pan: record.liurenPan ?? null,
+    interpretation: record.interpretation ?? null,
   }
 }
 
@@ -36,6 +38,8 @@ function fromSupabaseRow(row: Record<string, unknown>): DivinationRecord {
     interpretations: (row.interpretations as DivinationRecord['interpretations']) ?? [],
     feedback: row.feedback as DivinationRecord['feedback'],
     duplicate: row.duplicate as DivinationRecord['duplicate'],
+    liurenPan: row.liuren_pan as DivinationRecord['liurenPan'] ?? undefined,
+    interpretation: row.interpretation as DivinationRecord['interpretation'] ?? undefined,
   }
 }
 
@@ -162,4 +166,18 @@ export async function clearAll(userId: string): Promise<void> {
   if (error) {
     throw new Error(`Failed to clear records: ${error.message}`)
   }
+}
+
+export async function queryByMethod(method: string, userId: string): Promise<DivinationRecord[]> {
+  checkSupabase()
+  const { data, error } = await supabase
+    .from('records')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('method', method)
+    .order('timestamp', { ascending: false })
+  if (error) {
+    throw new Error(`Failed to query records: ${error.message}`)
+  }
+  return (data || []).map(row => fromSupabaseRow(row as Record<string, unknown>))
 }

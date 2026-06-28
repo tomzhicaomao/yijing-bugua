@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, lazy, Suspense } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import ProtectedRoute from './auth/ProtectedRoute'
 import AppShell from './components/layout/AppShell'
@@ -11,6 +11,22 @@ import StatsView from './pages/StatsView'
 import SettingsView from './pages/SettingsView'
 import Login from './auth/Login'
 import Register from './auth/Register'
+import { FEATURE_LIUREN_ENABLED } from './lib/constants'
+
+// 六壬模块 - 懒加载
+const LiurenView = lazy(() => import('./pages/LiurenView'))
+const LiurenResultView = lazy(() => import('./pages/LiurenResultView'))
+
+function PageSkeleton() {
+  return (
+    <div className="min-h-screen bg-nothing-bg flex items-center justify-center">
+      <div className="space-y-2 w-48">
+        <div className="h-4 bg-nothing-bg-secondary rounded animate-pulse" />
+        <div className="h-4 bg-nothing-bg-secondary rounded animate-pulse w-3/4" />
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -30,6 +46,22 @@ export default function App() {
             <Route path="/history/:id" element={<HistoryDetailView />} />
             <Route path="/stats" element={<StatsView />} />
             <Route path="/settings" element={<SettingsView />} />
+
+            {/* 六壬路由 */}
+            {FEATURE_LIUREN_ENABLED && (
+              <>
+                <Route path="/liuren" element={
+                  <Suspense fallback={<PageSkeleton />}>
+                    <ProtectedRoute><LiurenView /></ProtectedRoute>
+                  </Suspense>
+                } />
+                <Route path="/liuren/:id" element={
+                  <Suspense fallback={<PageSkeleton />}>
+                    <ProtectedRoute><LiurenResultView /></ProtectedRoute>
+                  </Suspense>
+                } />
+              </>
+            )}
           </Route>
         </Routes>
       </AuthProvider>

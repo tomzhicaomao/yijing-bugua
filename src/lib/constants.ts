@@ -20,3 +20,7 @@ export const CATEGORIES: Category[] = ['工作', '人际', '财务', '健康', '
 
 export const APP_NAME = '易经占卜'
 export const EXPORT_FILENAME_PREFIX = 'yijing-export'
+
+// ========== 大六壬功能开关 ==========
+export const FEATURE_LIUREN_ENABLED =
+  import.meta.env.VITE_FEATURE_LIUREN_ENABLED !== 'false'; // 默认开启
