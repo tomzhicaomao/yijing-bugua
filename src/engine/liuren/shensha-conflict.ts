@@ -52,7 +52,7 @@ export function detectShenShaConflict(
         branch,
         jiShens: group.ji,
         xiongShens: group.xiong,
-        message: `${branch}位吉凶并见：${group.ji.join('、')}（吉）与${group.xiong.join('、')}（凶）矛盾`,
+        message: `${branch}位吉凶并见：${group.ji.join('、')}（吉）与${group.xiong.join('、')}（凶）冲突 — 好坏交织，别只看一面，需综合判断`,
       });
     }
   });

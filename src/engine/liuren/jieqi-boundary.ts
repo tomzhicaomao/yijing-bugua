@@ -35,9 +35,9 @@ export function checkJieqiBoundary(
   let warning = '';
   if (isNear) {
     if (diffDays < 0.5) {
-      warning = `⚠️ 占时正处于「${solarTerm}」节气交接点附近（不足半天），月将可能正在更替，起课结果仅供参考`;
+      warning = `占时正处于「${solarTerm}」节气交接点附近 — 月将可能正在更替，此时起课不一定准，建议换个时辰再占一次`;
     } else {
-      warning = `⚠️ 占时接近「${solarTerm}」节气边界（约${Math.round(diffDays * 24)}小时内），月将更替中，建议复核`;
+      warning = `占时接近「${solarTerm}」节气边界（约${Math.round(diffDays * 24)}小时内）— 月将更替中，结果仅供参考`;
     }
   }
 

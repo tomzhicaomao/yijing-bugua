@@ -33,7 +33,7 @@ export function checkTaiSui(
   pan.siKe.forEach((item, idx) => {
     if (item.upperGod === yearZhi || item.lowerGod === yearZhi) {
       hasTaiSui = true;
-      warnings.push(`第${idx + 1}课见太岁（${yearZhi}），主年内之事`);
+      warnings.push(`第${idx + 1}课见太岁（${yearZhi}）— 此事与今年运势密切相关，年内会出结果`);
     }
   });
 
@@ -42,7 +42,7 @@ export function checkTaiSui(
     const names = ['初传', '中传', '末传'];
     if (item.branch === yearZhi) {
       hasTaiSui = true;
-      warnings.push(`${names[idx]}见太岁（${yearZhi}），主年内之事`);
+      warnings.push(`${names[idx]}见太岁（${yearZhi}）— 事情发展受今年大运影响，宜顺势而为`);
     }
   });
 

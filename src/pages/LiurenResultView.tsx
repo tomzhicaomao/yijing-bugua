@@ -143,11 +143,22 @@ export default function LiurenResultView() {
 
             {/* 警告 */}
             {pan.warnings && pan.warnings.length > 0 && (
-              <div className="mb-4 border border-orange-500/30 rounded-md p-3">
-                <div className="font-mono text-[10px] text-orange-400 mb-1.5">⚠️ 系统警告</div>
-                {pan.warnings.map((w: string, idx: number) => (
-                  <div key={idx} className="font-mono text-[10px] text-orange-300 mb-0.5">• {w}</div>
-                ))}
+              <div className="mb-4 border border-orange-500/30 rounded-md overflow-hidden">
+                <div className="px-4 py-2 bg-orange-500/10 border-b border-orange-500/30">
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-400 text-sm">⚠️</span>
+                    <span className="font-mono text-xs tracking-[0.1em] text-orange-400">注意事项</span>
+                  </div>
+                  <p className="mt-1 font-mono text-[10px] text-orange-300/70">以下提示不影响起课结果，解读时留意即可</p>
+                </div>
+                <div className="p-3 space-y-2">
+                  {pan.warnings.map((w: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-2">
+                      <span className="text-orange-400 text-[10px] mt-1 shrink-0">▸</span>
+                      <span className="font-mono text-[11px] text-orange-200 leading-relaxed">{w}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </>

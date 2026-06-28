@@ -80,10 +80,10 @@ export function detectKongWang(
 
   // 生成警告
   if (inSiKe.length > 0) {
-    warnings.push(`四课中见空亡（${null1}、${null2}）：${inSiKe.map(i => `第${i.index + 1}课${i.position}神`).join('、')}`);
+    warnings.push(`四课见空亡（${null1}、${null2}）：${inSiKe.map(i => `第${i.index + 1}课${i.position}神`).join('、')} — 空亡主"虚"，相关事情可能落空或难以落实`);
   }
   if (inSanChuan.length > 0) {
-    warnings.push(`三传中见空亡：${inSanChuan.map(i => i.name).join('、')}，事多不成`);
+    warnings.push(`三传见空亡：${inSanChuan.map(i => i.name).join('、')} — 事情发展过程中容易出现变数，结果不太牢靠`);
   }
 
   return {

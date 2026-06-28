@@ -151,7 +151,7 @@ export function calculateLiuren(params: LiurenParams): LiurenPan {
 
   // 节气边界
   if (isNearBoundary) {
-    warnings.push(`⚠️ 占时接近节气边界，月将可能不准`);
+    warnings.push(`占时接近节气边界 — 月将可能正在更替，结果仅供参考，建议换个时辰再占`);
   }
 
   // 13. 构建完整课式
