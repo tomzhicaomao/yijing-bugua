@@ -21,11 +21,8 @@ export default function LiurenView() {
     aiProgress,
     error,
     duplicateWarning,
-    savedRecordId,
     submitQuestion,
-    saveRecord,
     reset,
-    goToResult,
   } = useLiuren();
 
   const [question, setQuestion] = useState('');
@@ -48,13 +45,6 @@ export default function LiurenView() {
       await submitQuestion(question.trim(), category, shiZhi || undefined);
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleSave = async () => {
-    const id = await saveRecord();
-    if (id) {
-      goToResult(id);
     }
   };
 
@@ -219,20 +209,18 @@ export default function LiurenView() {
 
           {/* 操作按钮 */}
           <div className="space-y-3">
-            {!savedRecordId && (
+            <div className="text-center py-2">
+              <div className="inline-block w-5 h-5 border-2 border-nothing-text-display border-t-transparent rounded-full animate-spin" />
+              <p className="mt-2 font-mono text-[10px] text-nothing-text-disabled">正在保存…</p>
+            </div>
+            {error && (
               <button
-                onClick={handleSave}
-                className="w-full py-3 bg-nothing-text-display text-nothing-bg font-mono text-sm tracking-[0.1em] rounded-md hover:opacity-90 transition-opacity"
+                onClick={reset}
+                className="w-full py-3 border border-nothing-border text-nothing-text-secondary font-mono text-sm tracking-[0.1em] rounded-md hover:border-nothing-text-disabled transition-colors"
               >
-                保存记录
+                重新起课
               </button>
             )}
-            <button
-              onClick={reset}
-              className="w-full py-3 border border-nothing-border text-nothing-text-secondary font-mono text-sm tracking-[0.1em] rounded-md hover:border-nothing-text-disabled transition-colors"
-            >
-              重新起课
-            </button>
           </div>
         </main>
       </div>

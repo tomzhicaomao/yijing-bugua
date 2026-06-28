@@ -163,7 +163,48 @@ export function useLiuren() {
     }
 
     setStep('result');
+
+    // 自动保存并跳转
+    await autoSaveAndNavigate(panData, q);
   }, []);
+
+  /**
+   * 自动保存并跳转到结果页
+   */
+  const autoSaveAndNavigate = useCallback(async (panData: LiurenPan, q: string) => {
+    if (!user) return;
+
+    const record: DivinationRecord = {
+      schemaVersion: 1,
+      id: uuidv4(),
+      timestamp: panData.dateTime,
+      question: q,
+      category,
+      method: 'virtual',
+      hexagram: {
+        original: 0,
+        changed: null,
+        changingLines: [],
+      },
+      interpretations: interpretation ? [interpretation] : [],
+      feedback: {
+        dueAt: null,
+        status: 'pending',
+      },
+      liurenPan: panData,
+      duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
+    };
+
+    try {
+      await createRecord(record, user.id);
+      setSavedRecordId(record.id);
+      // 自动跳转到结果详情页
+      navigate(`/liuren/${record.id}`);
+    } catch (err) {
+      // 保存失败不阻断用户，留在当前页看结果
+      setError(err instanceof Error ? err.message : '保存失败，但结果仍可查看');
+    }
+  }, [user, category, interpretation, duplicateWarning, navigate]);
 
   /**
    * 保存记录
