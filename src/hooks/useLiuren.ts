@@ -138,40 +138,47 @@ export function useLiuren() {
     aiCancelled.current = false;
     setAiProgress('reasoning');
 
+    let resultInterpretation: InterpretationResult | null = null;
+
     try {
       const result = await callLiurenInterpretation(panData, q);
 
       if (aiCancelled.current) return;
 
       if (result.success && result.interpretation) {
+        resultInterpretation = result.interpretation;
         setInterpretation(result.interpretation);
         setAiProgress('done');
       } else {
-        // AI 失败 → Fallback
         setAiProgress('error');
         const fallback = generateLiurenFallback(panData, q);
+        resultInterpretation = fallback;
         setInterpretation(fallback);
         setAiProgress('done');
       }
     } catch {
       if (aiCancelled.current) return;
-      // 异常 → Fallback
       setAiProgress('error');
       const fallback = generateLiurenFallback(panData, q);
+      resultInterpretation = fallback;
       setInterpretation(fallback);
       setAiProgress('done');
     }
 
     setStep('result');
 
-    // 自动保存并跳转
-    await autoSaveAndNavigate(panData, q);
+    // 自动保存并跳转（后台执行，不阻塞 UI）
+    autoSaveAndNavigate(panData, q, resultInterpretation);
   }, []);
 
   /**
-   * 自动保存并跳转到结果页
+   * 自动保存并跳转到结果页（后台执行）
    */
-  const autoSaveAndNavigate = useCallback(async (panData: LiurenPan, q: string) => {
+  const autoSaveAndNavigate = useCallback(async (
+    panData: LiurenPan,
+    q: string,
+    interp: InterpretationResult | null,
+  ) => {
     if (!user) return;
 
     const record: DivinationRecord = {
@@ -186,7 +193,7 @@ export function useLiuren() {
         changed: null,
         changingLines: [],
       },
-      interpretations: interpretation ? [interpretation] : [],
+      interpretations: interp ? [interp] : [],
       feedback: {
         dueAt: null,
         status: 'pending',
@@ -198,13 +205,11 @@ export function useLiuren() {
     try {
       await createRecord(record, user.id);
       setSavedRecordId(record.id);
-      // 自动跳转到结果详情页
       navigate(`/liuren/${record.id}`);
     } catch (err) {
-      // 保存失败不阻断用户，留在当前页看结果
       setError(err instanceof Error ? err.message : '保存失败，但结果仍可查看');
     }
-  }, [user, category, interpretation, duplicateWarning, navigate]);
+  }, [user, category, duplicateWarning, navigate]);
 
   /**
    * 保存记录

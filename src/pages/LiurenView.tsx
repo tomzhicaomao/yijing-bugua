@@ -210,17 +210,9 @@ export default function LiurenView() {
           {/* 操作按钮 */}
           <div className="space-y-3">
             <div className="text-center py-2">
-              <div className="inline-block w-5 h-5 border-2 border-nothing-text-display border-t-transparent rounded-full animate-spin" />
-              <p className="mt-2 font-mono text-[10px] text-nothing-text-disabled">正在保存…</p>
+              <div className="inline-block w-4 h-4 border-2 border-nothing-text-display border-t-transparent rounded-full animate-spin" />
+              <p className="mt-2 font-mono text-[10px] text-nothing-text-disabled">正在保存记录…</p>
             </div>
-            {error && (
-              <button
-                onClick={reset}
-                className="w-full py-3 border border-nothing-border text-nothing-text-secondary font-mono text-sm tracking-[0.1em] rounded-md hover:border-nothing-text-disabled transition-colors"
-              >
-                重新起课
-              </button>
-            )}
           </div>
         </main>
       </div>
