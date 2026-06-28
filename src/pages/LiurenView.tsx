@@ -31,6 +31,7 @@ export default function LiurenView() {
   const [question, setQuestion] = useState('');
   const [category, setCategory] = useState<Category>('其他');
   const [shiZhi, setShiZhi] = useState<LiurenBranch | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   if (!FEATURE_LIUREN_ENABLED) {
     return (
@@ -41,8 +42,13 @@ export default function LiurenView() {
   }
 
   const handleSubmit = async () => {
-    if (!question.trim()) return;
-    await submitQuestion(question.trim(), category, shiZhi || undefined);
+    if (!question.trim() || submitting) return;
+    setSubmitting(true);
+    try {
+      await submitQuestion(question.trim(), category, shiZhi || undefined);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleSave = async () => {
@@ -312,12 +318,34 @@ export default function LiurenView() {
         {/* 提交按钮 */}
         <button
           onClick={handleSubmit}
-          disabled={!question.trim()}
-          className="w-full py-3 bg-nothing-text-display text-nothing-bg font-mono text-sm tracking-[0.1em] rounded-md hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed"
+          disabled={!question.trim() || submitting}
+          className="w-full py-3 bg-nothing-text-display text-nothing-bg font-mono text-sm tracking-[0.1em] rounded-md hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
-          起课
+          {submitting ? (
+            <>
+              <span className="inline-block w-4 h-4 border-2 border-nothing-bg border-t-transparent rounded-full animate-spin" />
+              <span>起课中…</span>
+            </>
+          ) : (
+            '起课'
+          )}
         </button>
       </main>
+
+      {/* 起课中遮罩 */}
+      {submitting && (
+        <div className="fixed inset-0 z-[100] bg-nothing-bg/80 backdrop-blur-sm flex flex-col items-center justify-center gap-6">
+          <div className="relative w-16 h-16">
+            <div className="absolute inset-0 border-2 border-nothing-text-display/20 rounded-full" />
+            <div className="absolute inset-0 border-2 border-transparent border-t-nothing-text-display rounded-full animate-spin" />
+            <div className="absolute inset-2 border-2 border-transparent border-b-nothing-text-secondary rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }} />
+          </div>
+          <div className="text-center">
+            <p className="font-mono text-sm text-nothing-text-display tracking-wider">起课中</p>
+            <p className="font-mono text-[10px] text-nothing-text-disabled mt-1">推算天地盘 · 四课 · 三传</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
