@@ -22,7 +22,7 @@ import { deriveZhongMoChuan } from '../sanchuan.js';
  */
 export function zeke(
   siKe: [SiKeItem, SiKeItem, SiKeItem, SiKeItem],
-  dayGan: Gan,
+  _dayGan: Gan,
   tianDiPan: TianDiPan,
 ): SanChuanResult | null {
   // 收集所有下贼上

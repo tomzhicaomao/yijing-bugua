@@ -13,9 +13,8 @@
  */
 
 import type { Branch, Gan, LiurenPan, LiurenParams } from './types.js';
-import { GAN_JI_GONG } from './types.js';
 import { buildTianDiPan } from './tiandi-pan.js';
-import { getCurrentZhongQi, getYueJiang, getSolarTerm, isNearSolarTermBoundary } from './jieqi.js';
+import { getYueJiang, getSolarTerm, isNearSolarTermBoundary } from './jieqi.js';
 import { buildSiKe } from './sike.js';
 import { calculateSanChuan } from './sanchuan.js';
 import { layoutTianJiang } from './tianjiang.js';
@@ -24,7 +23,6 @@ import { collectShenSha } from './shensha.js';
 import { checkTaiSui } from './tai-sui-check.js';
 import { detectShenShaConflict } from './shensha-conflict.js';
 import { detectKongWang } from './kongwang-detect.js';
-import { checkJieqiBoundary } from './jieqi-boundary.js';
 
 // 天干地支序列
 const GAN_ORDER: Gan[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
@@ -85,7 +83,7 @@ export function calcShiGanZhi(date: Date, dayGan: Gan): [Gan, Branch] {
  * @returns 完整课式
  */
 export function calculateLiuren(params: LiurenParams): LiurenPan {
-  const { date, shiZhi: customShiZhi, question } = params;
+  const { date, shiZhi: customShiZhi } = params;
 
   // 1. 推算日干支
   const [dayGan, dayZhi] = calcDayGanZhi(date);
@@ -101,7 +99,6 @@ export function calculateLiuren(params: LiurenParams): LiurenPan {
     : calcShiGanZhi(date, dayGan);
 
   // 4. 获取节气和月将
-  const zhongQi = getCurrentZhongQi(date);
   const yueJiang = getYueJiang(date);
   const solarTerm = getSolarTerm(date);
   const isNearBoundary = isNearSolarTermBoundary(date);

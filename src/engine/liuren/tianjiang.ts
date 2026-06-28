@@ -16,13 +16,10 @@ import {
   TIAN_JIANG_SHUN,
   TIAN_JIANG_NI,
   BRANCH_INDEX,
-  ALL_BRANCHES,
 } from './types.js';
 
 /** 顺布起始地支序列 */
 const SHUN_START: Branch[] = ['亥', '子', '丑', '寅', '卯', '辰'];
-/** 逆布起始地支序列 */
-const NI_START: Branch[] = ['巳', '午', '未', '申', '酉', '戌'];
 
 /**
  * 判断昼夜

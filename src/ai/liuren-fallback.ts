@@ -144,7 +144,7 @@ function inferTimeWindow(pan: LiurenPan): string {
 /**
  * 构建回答
  */
-function buildAnswer(pan: LiurenPan, question: string): string {
+function buildAnswer(pan: LiurenPan, _question: string): string {
   const trend = inferTrend(pan);
   const prefix = trend === '利' ? '此课偏吉' : trend === '不利' ? '此课偏凶' : '此课吉凶参半';
 

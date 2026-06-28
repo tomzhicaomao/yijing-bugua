@@ -9,7 +9,7 @@
  * 末传 = 中传本身在地盘所乘之神
  */
 
-import type { Branch, Gan, SiKeItem, TianDiPan, SanChuanResult, GeJu } from './types.js';
+import type { Branch, Gan, SiKeItem, TianDiPan, SanChuanResult } from './types.js';
 import { zeke } from './jiuzongmen/zeke.js';
 import { biyong } from './jiuzongmen/biyong.js';
 import { shehai } from './jiuzongmen/shehai.js';

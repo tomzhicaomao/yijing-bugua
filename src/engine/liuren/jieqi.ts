@@ -5,8 +5,7 @@
  * 月将 = 该月中气对应的地支
  */
 
-import type { Branch, Gan } from './types.js';
-import { ALL_BRANCHES, BRANCH_INDEX } from './types.js';
+import type { Branch } from './types.js';
 
 // ========== 节气名称 ==========
 
@@ -18,28 +17,7 @@ export const SOLAR_TERM_NAMES: string[] = [
   '寒露', '霜降', '立冬', '小雪', '大雪', '冬至',
 ];
 
-/**
- * 中气 → 月将地支映射
- * 中气（偶数索引节气：雨水、春分、谷雨、小满、夏至、大暑、处暑、秋分、霜降、小雪、冬至、大寒）
- */
-const ZHONGQI_TO_YUEJIANG: Record<string, Branch> = {
-  '雨水': '亥', '春分': '戌', '谷雨': '酉', '小满': '申',
-  '夏至': '未', '大暑': '午', '处暑': '巳', '秋分': '辰',
-  '霜降': '卯', '小雪': '寅', '冬至': '丑', '大寒': '子',
-};
-
 // ========== 天文计算 ==========
-
-/**
- * 太阳黄经 → 节气索引（0-23，对应 SOLAR_TERM_NAMES）
- * 小寒=285°, 大寒=300°, 立春=315°, 雨水=330°, 惊蛰=345°, 春分=0°,
- * 清明=15°, 谷雨=30°, 立夏=45°, 小满=60°, 芒种=75°, 夏至=90°, ...
- */
-function longitudeToTermIndex(longitude: number): number {
-  // 春分点为 0°，对应索引 5
-  const adjusted = ((longitude - 285) % 360 + 360) % 360;
-  return Math.floor(adjusted / 15);
-}
 
 /**
  * 计算指定年份的指定节气近似儒略日（JD）
@@ -55,9 +33,6 @@ function calcSolarTermJD(year: number, termIndex: number): number {
   const baseJD = 2451550.09765;
   // 回归年长度
   const tropicalYear = 365.242222;
-  // 节气间隔 15°
-  const termStep = 15.0;
-
   // 2000 年各节气的近似值（小寒为第 0 个）
   // 2000 年小寒约在 1 月 6 日，JD ≈ 2451549.5 + 6 = 2451555.5
   // 更精确地，各节气在 2000 年的偏差值
@@ -104,14 +79,6 @@ function calcSolarTermJD(year: number, termIndex: number): number {
   jd += century * 0.08;
 
   return jd;
-}
-
-/**
- * JD → Date
- */
-function JDToDate(jd: number): Date {
-  const unixTime = (jd - 2440587.5) * 86400000;
-  return new Date(unixTime);
 }
 
 /**

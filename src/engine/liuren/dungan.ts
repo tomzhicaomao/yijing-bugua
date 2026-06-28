@@ -74,19 +74,6 @@ for (let i = 0; i < 60; i++) {
  * @returns 该地支所属天干
  */
 export function calcDunGan(dayGan: Gan, dayZhi: Branch, branch: Branch): Gan {
-  // 找到日干支在六十甲子中的位置
-  const dayGanZhi = dayGan + dayZhi;
-  const dayIdx = JIAZI_60.indexOf(dayGanZhi);
-
-  // 找到该旬的甲日
-  const xunStart = dayIdx - GAN_INDEX[dayGan];
-
-  // 计算目标地支在该旬中的天干
-  const branchIdx = jiaziZhiOrder.indexOf(branch);
-  const ganIdx = (branchIdx - xunStart % 12 + 12) % 12;
-  // 确保在旬内
-  const dunGanIdx = (xunStart + (branchIdx - xunStart % 12 + 12) % 12) % 60;
-
   // 简化计算：直接用旬首
   // 旬首 = 日干 - (日支索引 - 子索引) 的修正
   // 实际上旬首天干 = 日干在天干中的位置 - 日支在该旬中的偏移
@@ -97,25 +84,6 @@ export function calcDunGan(dayGan: Gan, dayZhi: Branch, branch: Branch): Gan {
   const targetOffset = (jiaziZhiOrder.indexOf(branch) - jiaziZhiOrder.indexOf('子') + 12) % 12;
   return ALL_GANS[(GAN_INDEX[xunGan] + targetOffset) % 10];
 }
-
-// ========== 六亲 ==========
-
-/**
- * 六亲关系表
- *
- * 生我者为父母
- * 我生者为子孙
- * 克我者为官鬼
- * 我克者为妻财
- * 同我者为兄弟
- */
-const LIU_QIN_MAP: Record<string, LiuQin> = {
-  'sheng': '父母',  // 生我
-  'ke': '官鬼',      // 克我
-  'wo_sheng': '子孙', // 我生
-  'wo_ke': '妻财',    // 我克
-  'bihe': '兄弟',    // 同我
-};
 
 /**
  * 计算六亲关系

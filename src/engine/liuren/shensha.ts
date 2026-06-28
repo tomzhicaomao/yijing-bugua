@@ -8,7 +8,7 @@
 import type { Branch, Gan, ShenShaItem, ShenShaCategory } from './types.js';
 import { GAN_JI_GONG } from './types.js';
 import shenshaRules from '../../data/liuren/shensha-rules.json' with { type: 'json' };
-import { RI_MA_MAP, HE_MAP, GAN_HE, CHONG_MAP } from './constants.js';
+import { CHONG_MAP } from './constants.js';
 
 /** 神煞规则条目 */
 interface ShenShaRule {

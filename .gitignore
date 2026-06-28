@@ -7,3 +7,4 @@ test-results/
 *.tsbuildinfo
 *.bak
 __pycache__/
+.vercel

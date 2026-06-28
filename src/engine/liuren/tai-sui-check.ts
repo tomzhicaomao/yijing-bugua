@@ -4,7 +4,7 @@
  * 检查课式中是否有太岁相关的影响
  */
 
-import type { Branch, Gan, LiurenPan } from './types.js';
+import type { Branch, LiurenPan } from './types.js';
 
 /**
  * 太岁校验结果

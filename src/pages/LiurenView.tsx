@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLiuren } from '../hooks/useLiuren';
 import { FEATURE_LIUREN_ENABLED } from '../lib/constants';
 import ShiZhiPicker from '../components/liuren/ShiZhiPicker';
-import type { Branch, Category } from '../types';
+import type { Category } from '../types';
 import type { Branch as LiurenBranch } from '../engine/liuren/types';
 
 const CATEGORIES: Category[] = ['工作', '人际', '财务', '健康', '其他'];

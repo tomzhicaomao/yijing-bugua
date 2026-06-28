@@ -18,8 +18,6 @@ const RELATION_SYMBOLS: Record<string, { symbol: string; color: string }> = {
 
 const SiKeTable: React.FC<SiKeTableProps> = ({ siKe, dayGanZhi }) => {
   const names = ['一课', '二课', '三课', '四课'];
-  const dayGan = dayGanZhi.charAt(0);
-  const dayZhi = dayGanZhi.charAt(1);
 
   return (
     <div className="border border-nothing-border rounded-md overflow-hidden">

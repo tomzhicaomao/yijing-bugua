@@ -4,9 +4,8 @@
  * 复用现有 AI 管道，为大六壬定制 Prompt
  */
 
-import { callDeepSeek, type DeepSeekMessage } from './deepseek-client.js';
-import { DEFAULT_MODEL, DEEP_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from '../lib/constants.js';
-import { aiReasoningSchema } from '../lib/schemas.js';
+import { callDeepSeek, DeepSeekError, type DeepSeekRequest } from './deepseek-client.js';
+import { DEFAULT_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from '../lib/constants.js';
 import { buildLiurenSystemPrompt, buildLiurenUserPrompt } from './liuren-prompt-builder.js';
 import type { LiurenPan } from '../engine/liuren/types.js';
 import type { InterpretationResult } from '../types';
@@ -20,12 +19,6 @@ export interface LiurenCallResult {
 
 /**
  * 调用 AI 解读大六壬课式
- *
- * @param pan 完整课式
- * @param question 用户问题
- * @param model 模型名称
- * @param maxRetries 最大重试次数
- * @returns 解读结果
  */
 export async function callLiurenInterpretation(
   pan: LiurenPan,
@@ -36,24 +29,30 @@ export async function callLiurenInterpretation(
   const systemPrompt = buildLiurenSystemPrompt();
   const userPrompt = buildLiurenUserPrompt(pan, question);
 
-  const messages: DeepSeekMessage[] = [
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: userPrompt },
-  ];
-
   let lastError: string | undefined;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const result = await callDeepSeek(messages, model, DEFAULT_TEMPERATURE);
+      const req: DeepSeekRequest = {
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: DEFAULT_TEMPERATURE,
+        response_format: { type: 'json_object' },
+      };
 
-      if (!result.success || !result.content) {
-        lastError = result.error || 'AI 调用失败';
+      const response = await callDeepSeek(req);
+      const content = response.choices?.[0]?.message?.content;
+
+      if (!content) {
+        lastError = 'AI 返回空内容';
         continue;
       }
 
       // 解析 JSON 响应
-      const parsed = parseAIResponse(result.content);
+      const parsed = parseAIResponse(content);
       if (!parsed) {
         lastError = 'AI 响应格式不符合预期';
         continue;
@@ -73,12 +72,16 @@ export async function callLiurenInterpretation(
           model,
           promptVersion: PROMPT_VERSION,
           temperature: DEFAULT_TEMPERATURE,
-          rawResponse: result.content,
+          rawResponse: content,
           claims: parsed.claims,
         },
       };
     } catch (err) {
-      lastError = err instanceof Error ? err.message : '未知错误';
+      if (err instanceof DeepSeekError) {
+        lastError = err.message;
+      } else {
+        lastError = err instanceof Error ? err.message : '未知错误';
+      }
     }
   }
 
@@ -101,22 +104,17 @@ function parseAIResponse(content: string): {
   claims: InterpretationResult['claims'];
 } | null {
   try {
-    // 尝试提取 JSON（可能被包裹在 ```json ``` 中）
     let jsonStr = content.trim();
     const jsonMatch = jsonStr.match(/```json\s*([\s\S]*?)```/);
     if (jsonMatch) {
       jsonStr = jsonMatch[1].trim();
     }
-    // 也可能直接是 JSON
     if (jsonStr.startsWith('{')) {
       const parsed = JSON.parse(jsonStr);
-
-      // 验证必要字段
       if (!parsed.trend || !parsed.analysis || !parsed.answer) {
         return null;
       }
 
-      // 确保 claims 有至少一个
       const claims = Array.isArray(parsed.claims) && parsed.claims.length > 0
         ? parsed.claims
         : [{ id: 'claim-1', type: 'answer', text: parsed.answer }];

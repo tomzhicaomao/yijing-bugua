@@ -8,7 +8,7 @@
  *   若仍有多个符合 → 返回 null（进入涉害法）
  */
 
-import type { Branch, Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
+import type { Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
 import { deriveZhongMoChuan } from '../sanchuan.js';
 import { getZekeCandidates } from './zeke.js';
 import { isYangGan, isYangBranch } from '../constants.js';

@@ -5,7 +5,7 @@
  * 空亡 = 日干支所在旬中缺少的两个地支
  */
 
-import type { Branch, Gan, SiKeItem, SanChuanItem, ShenShaItem } from './types.js';
+import type { Branch, Gan, SiKeItem, SanChuanItem } from './types.js';
 
 /**
  * 空亡检测结果

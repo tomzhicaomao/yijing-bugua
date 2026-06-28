@@ -17,7 +17,7 @@
  */
 
 import type { Branch, Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
-import { GAN_JI_GONG } from '../types.js';
+
 import { getTianPanZhi } from '../tiandi-pan.js';
 import { isYangGan } from '../constants.js';
 import { analyzeSiKe } from '../sike.js';

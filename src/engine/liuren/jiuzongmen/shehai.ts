@@ -52,7 +52,7 @@ export function calculateShehaiDepth(candidateBranch: Branch): number {
  */
 export function shehai(
   siKe: [SiKeItem, SiKeItem, SiKeItem, SiKeItem],
-  dayGan: Gan,
+  _dayGan: Gan,
   tianDiPan: TianDiPan,
 ): SanChuanResult | null {
   // 获取贼克法的候选

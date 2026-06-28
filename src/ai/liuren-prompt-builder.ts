@@ -5,7 +5,7 @@
  * 采用六步断课法
  */
 
-import type { LiurenPan, Branch, Gan } from '../engine/liuren/types.js';
+import type { LiurenPan } from '../engine/liuren/types.js';
 
 /**
  * 格式化四课为可读文本

@@ -10,8 +10,7 @@
  */
 
 import type { Branch, Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
-import { GAN_JI_GONG, BRANCH_INDEX, ALL_BRANCHES } from '../types.js';
-import { getTianPanZhi } from '../tiandi-pan.js';
+import { GAN_JI_GONG } from '../types.js';
 import { isYangGan, nextBranch, prevBranch } from '../constants.js';
 
 /**
@@ -21,7 +20,7 @@ export function bazhuan(
   siKe: [SiKeItem, SiKeItem, SiKeItem, SiKeItem],
   dayGan: Gan,
   dayZhi: Branch,
-  tianDiPan: TianDiPan,
+  _tianDiPan: TianDiPan,
 ): SanChuanResult | null {
   // 前提：干支同位 — 日干寄宫 == 日支
   const jiGong = GAN_JI_GONG[dayGan];

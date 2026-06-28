@@ -16,7 +16,7 @@
 
 import type { Branch, Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
 import { isYangGan, XING_MAP, RI_MA_MAP } from '../constants.js';
-import { analyzeSiKe } from '../sike.js';
+
 
 /**
  * 判断是否伏吟（天地盘相同）
