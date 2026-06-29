@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getRecordById } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
@@ -15,7 +15,8 @@ export default function ResultView() {
   const { user } = useAuth()
   const [record, setRecord] = useState<DivinationRecord | null>(null)
   const [loading, setLoading] = useState(true)
-  const [hasAutoTriggered, setHasAutoTriggered] = useState(false)
+  const hasAutoTriggered = useRef(false)
+  const [hasAutoTriggeredDisplay, setHasAutoTriggeredDisplay] = useState(false)
   const {
     progress,
     error: aiError,
@@ -23,6 +24,22 @@ export default function ResultView() {
     triggerDeep,
     hasKey,
   } = useAIInterpretation()
+
+  const handleTriggerDefault = useCallback(async (r: DivinationRecord) => {
+    hasAutoTriggered.current = true
+    setHasAutoTriggeredDisplay(true)
+    const updated = await triggerDefault(r)
+    if (updated) {
+      setRecord(updated)
+    }
+  }, [triggerDefault])
+
+  const handleTriggerDeep = useCallback(async (r: DivinationRecord) => {
+    const updated = await triggerDeep(r)
+    if (updated) {
+      setRecord(updated)
+    }
+  }, [triggerDeep])
 
   // Fetch record on mount
   useEffect(() => {
@@ -39,26 +56,10 @@ export default function ResultView() {
 
   // Auto-trigger AI interpretation when ready
   useEffect(() => {
-    if (record && hasKey && record.interpretations.length === 0 && !loading && !hasAutoTriggered) {
-      setHasAutoTriggered(true)
+    if (record && hasKey && record.interpretations.length === 0 && !loading && !hasAutoTriggered.current) {
       handleTriggerDefault(record)
     }
-  }, [record, hasKey, loading, hasAutoTriggered])
-
-  const handleTriggerDefault = async (r: DivinationRecord) => {
-    setHasAutoTriggered(true)
-    const updated = await triggerDefault(r)
-    if (updated) {
-      setRecord(updated)
-    }
-  }
-
-  const handleTriggerDeep = async (r: DivinationRecord) => {
-    const updated = await triggerDeep(r)
-    if (updated) {
-      setRecord(updated)
-    }
-  }
+  }, [record, hasKey, loading, handleTriggerDefault])
 
   if (loading) {
     return (
@@ -145,7 +146,7 @@ export default function ResultView() {
                   onClick={() => handleTriggerDefault(record)}
                   className="w-full py-3"
                 >
-                  {hasAutoTriggered ? '重新获取 AI 解读' : '获取 AI 解读'}
+                  {hasAutoTriggeredDisplay ? '重新获取 AI 解读' : '获取 AI 解读'}
                 </Button>
               )}
 

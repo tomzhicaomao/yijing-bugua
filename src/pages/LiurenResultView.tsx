@@ -20,7 +20,6 @@ export default function LiurenResultView() {
   useEffect(() => {
     if (!id || !user) return;
 
-    setLoading(true);
     getRecordById(id, user.id)
       .then(r => {
         if (r) {

@@ -5,11 +5,12 @@ import { useState, useEffect } from 'react'
  * @returns boolean indicating if user prefers reduced motion
  */
 export function useReducedMotion(): boolean {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
+    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    setPrefersReducedMotion(mediaQuery.matches)
 
     const handler = (event: MediaQueryListEvent) => {
       setPrefersReducedMotion(event.matches)
@@ -42,14 +43,14 @@ export function useAnimationDuration(
  * @param fallbackFn - Optional function for reduced motion fallback
  * @returns animation function that respects user preference
  */
-export function useAccessibleAnimation<T extends (...args: any[]) => any>(
+export function useAccessibleAnimation<T extends (...args: unknown[]) => unknown>(
   animationFn: T,
   fallbackFn?: () => void
 ): T {
   const prefersReducedMotion = useReducedMotion()
   
   if (prefersReducedMotion) {
-    return ((..._args: any[]) => {
+    return ((..._args: unknown[]) => {
       if (fallbackFn) {
         fallbackFn()
       }

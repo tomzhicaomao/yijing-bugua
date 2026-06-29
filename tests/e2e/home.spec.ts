@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { loginAsTestUser, mockRecordsApi, createMockRecord } from './helpers/auth'
+import { loginAsTestUser } from './helpers/auth'
 
 test.describe('首页测试（已登录）', () => {
   test.beforeEach(async ({ page }) => {

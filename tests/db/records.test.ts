@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { DivinationRecord } from '../../src/types'
 
 // Persistent query builder — rebuilt in beforeEach, not via clearAllMocks
-let qb: Record<string, any> = {}
+let qb: Record<string, unknown> = {}
 
 function resetQb() {
   qb = {
@@ -17,7 +17,7 @@ function resetQb() {
     single: vi.fn(() => Promise.resolve({ data: null, error: null })),
     maybeSingle: vi.fn(() => Promise.resolve({ data: null, error: null })),
     // These are destructured from `await chainResult` where chainResult = qb
-    data: [] as any,
+    data: [] as unknown,
     error: null,
   }
 }

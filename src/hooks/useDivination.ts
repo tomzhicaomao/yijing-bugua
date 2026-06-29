@@ -49,14 +49,23 @@ export function useDivination() {
     setStep('casting')
   }, [])
 
+  const completingRef = useRef(false)
   const completeCasting = useCallback(async () => {
-    if (!category || !user) return
+    if (completingRef.current) return
+    completingRef.current = true
+
+    if (!category || !user) {
+      completingRef.current = false
+      return
+    }
 
     const validLines = lines.filter((l): l is LineValue => l !== null)
-    if (validLines.length !== 6) return
+    if (validLines.length !== 6) {
+      completingRef.current = false
+      return
+    }
 
     const calc = calculateHexagram(validLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
-    // Check for duplicate questions in the last 24 hours
     const allRecords = await getAllRecords(user.id)
     const duplicate = checkDuplicate(question, allRecords, 24) ?? undefined
     const record: DivinationRecord = {
@@ -95,10 +104,11 @@ export function useDivination() {
       setSavedRecordId(record.id)
       setStep('result')
       navigate(`/result/${record.id}`)
+    } finally {
+      completingRef.current = false
     }
   }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate, user])
 
-  // 当 6 爻全部填满时自动触发完成（用 useEffect 避免闭包过期）
   const [shouldComplete, setShouldComplete] = useState(false)
   
   const setLineValue = useCallback((value: LineValue) => {
@@ -112,7 +122,6 @@ export function useDivination() {
     const newIndex = currentIndex + 1
     setCurrentIndex(newIndex)
 
-    // 标记需要完成，让 useEffect 处理
     if (newIndex >= 6) {
       setShouldComplete(true)
     }
@@ -131,8 +140,6 @@ export function useDivination() {
     setCurrentIndex(currentIndex + 1)
   }, [currentIndex, lines, castingTimestamp])
 
-  // useEffect: 当 shouldComplete 为 true 时触发 completeCasting
-  // 此时 lines 已经是最新值，避免闭包过期
   const effectRan = useRef(false)
   useEffect(() => {
     if (shouldComplete && !effectRan.current) {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import HexagramBoard from '../../../src/components/casting/HexagramBoard.js'
-import type { LineValue } from '../../../src/types'
+import type { } from '../../../src/types'
 
 vi.mock('../../../src/lib/gsap.js', () => ({
   gsap: { from: vi.fn(), to: vi.fn(), fromTo: vi.fn() },

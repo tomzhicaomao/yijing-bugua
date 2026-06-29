@@ -49,7 +49,7 @@ describe('用神', () => {
   const cases: [string, string][] = [['工作','官鬼'],['人际','兄弟'],['财务','妻财'],['健康','子孙'],['其他','父母']]
   for (const [cat, liq] of cases) {
     it(`${cat} → ${liq}`, () => {
-      const r = calculateNajia(1, lines, mockTime, cat as any)
+      const r = calculateNajia(1, lines, mockTime, cat as unknown)
       expect(r.yongShen?.liuQin).toBe(liq)
     })
   }

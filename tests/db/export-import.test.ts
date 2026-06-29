@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Persistent query builder — rebuilt in beforeEach
-let qb: Record<string, any> = {}
+let qb: Record<string, unknown> = {}
 
 function resetQb() {
   qb = {
@@ -14,7 +14,7 @@ function resetQb() {
     lte: vi.fn(() => qb),
     single: vi.fn(() => Promise.resolve({ data: null, error: null })),
     maybeSingle: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    data: [] as any,
+    data: [] as unknown,
     error: null,
   }
 }

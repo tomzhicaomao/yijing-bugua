@@ -31,11 +31,10 @@ import {
 import {
   GAN_JI_GONG,
   BRANCH_WUXING,
-  BRANCH_YINYANG,
   ALL_BRANCHES,
   ALL_GANS,
 } from '../../../src/engine/liuren/types.js';
-import type { Branch, WuXing } from '../../../src/engine/liuren/types.js';
+import type { } from '../../../src/engine/liuren/types.js';
 
 describe('Phase 0: 常量表', () => {
 

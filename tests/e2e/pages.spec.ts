@@ -83,7 +83,7 @@ test.describe('设置页面测试', () => {
   test('设置页面显示标题', async ({ page }) => {
     await page.goto('/settings')
     await page.waitForTimeout(500)
-    await expect(page.locator('text=设置, text=SETTINGS')).toBeVisible()
+    await expect(page.locator('text=设置')).toBeVisible()
   })
 
   test('设置页面显示返回链接', async ({ page }) => {

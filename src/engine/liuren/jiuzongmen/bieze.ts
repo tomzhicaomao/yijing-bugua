@@ -49,7 +49,7 @@ export function bieze(
     // 阴日 → 日支三合的前一位上神
     // 例如：日支丑→巳酉丑三合，取巳上神（丑的前一合）
     const sanHe = SAN_HE[dayZhi];
-    const [a, b, _wx] = sanHe;
+    const [a, b] = sanHe;
     // 找三合中在日支之前的那个
     // 巳酉丑：日支丑→前一位是巳
     // 判断逻辑：三合中不是日支的两个，取顺时针前一个

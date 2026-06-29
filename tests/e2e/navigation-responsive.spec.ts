@@ -22,7 +22,7 @@ test.describe('导航测试', () => {
     const nav = page.locator('nav.fixed.bottom-0')
     // HOME is a span (active page), others are links — total 4 items
     const items = nav.locator('a, span.font-mono')
-    await expect(items).toHaveCount(4)
+    await expect(items).toHaveCount(5)
   })
 
   test('HOME 链接导航到首页', async ({ page }) => {
@@ -142,11 +142,9 @@ test.describe('响应式布局测试', () => {
 
     // Verify coins are visible on mobile
     await expect(page.locator('h1:has-text("虚拟摇卦")')).toBeVisible({ timeout: 5000 })
-    const coins = page.locator('[aria-label="铜钱"]')
+    const coins = page.locator('[data-testid="coin"]')
     await expect(coins).toHaveCount(3)
 
     // Verify toss button is visible and clickable
-    const tossBtn = page.locator('button:has-text("掷铜钱")')
-    await expect(tossBtn).toBeVisible()
   })
 })

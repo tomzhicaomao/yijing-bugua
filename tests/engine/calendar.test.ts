@@ -9,8 +9,6 @@ import {
   determineWangShuai,
 } from '../../src/engine/calendar.js'
 
-const TIAN_GAN_LIST = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸']
-const DI_ZHI_LIST = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥']
 
 describe('solarToGanzhi — 日干支', () => {
   it('1900-01-01 = 甲戌日', () => {

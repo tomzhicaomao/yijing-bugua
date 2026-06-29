@@ -5,7 +5,7 @@
 import { describe, it, expect } from 'vitest';
 import { buildSiKe, analyzeSiKe, getKeRelation } from '../../../src/engine/liuren/sike.js';
 import { buildTianDiPan } from '../../../src/engine/liuren/tiandi-pan.js';
-import type { Branch, Gan } from '../../../src/engine/liuren/types.js';
+import type { } from '../../../src/engine/liuren/types.js';
 
 describe('sike.ts 四课生成', () => {
 

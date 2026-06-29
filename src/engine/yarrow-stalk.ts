@@ -52,7 +52,7 @@ function generateThreeChanges(lineValue: LineValue): [ThreeChangeDetail, ThreeCh
   const targetRemaining = finalBundles[lineValue]
 
   const changes: ThreeChangeDetail[] = []
-  let currentRemaining = targetRemaining
+  const currentRemaining = targetRemaining
 
   for (let i = 2; i >= 0; i--) {
     const changeNumber = (i + 1) as 1 | 2 | 3

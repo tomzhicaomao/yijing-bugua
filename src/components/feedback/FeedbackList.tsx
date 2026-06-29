@@ -87,7 +87,7 @@ export default function FeedbackList({ onAllDone }: FeedbackListProps) {
   )
 }
 
-function FeedbackDetailForm({ record: _r, onSave }: { record: DivinationRecord; onSave: (d: FeedbackDetail) => Promise<void> }) {
+function FeedbackDetailForm({ onSave }: { record: DivinationRecord; onSave: (d: FeedbackDetail) => Promise<void> }) {
   const [actualResult, setActualResult] = useState("")
   const [satisfaction, setSatisfaction] = useState(3)
   const [actionTaken, setActionTaken] = useState("")

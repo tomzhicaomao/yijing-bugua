@@ -4,25 +4,24 @@
 
 import { describe, it, expect } from 'vitest';
 import { buildTianDiPan } from '../../../src/engine/liuren/tiandi-pan.js';
-import { buildSiKe, analyzeSiKe } from '../../../src/engine/liuren/sike.js';
 import { calculateSanChuan, deriveZhongMoChuan } from '../../../src/engine/liuren/sanchuan.js';
-import { zeke, getZekeCandidates } from '../../../src/engine/liuren/jiuzongmen/zeke.js';
+import { zeke } from '../../../src/engine/liuren/jiuzongmen/zeke.js';
 import { biyong } from '../../../src/engine/liuren/jiuzongmen/biyong.js';
-import { shehai, calculateShehaiDepth } from '../../../src/engine/liuren/jiuzongmen/shehai.js';
+import { calculateShehaiDepth } from '../../../src/engine/liuren/jiuzongmen/shehai.js';
 import { yaoke } from '../../../src/engine/liuren/jiuzongmen/yaoke.js';
-import { maoxing } from '../../../src/engine/liuren/jiuzongmen/maoxing.js';
-import { bieze } from '../../../src/engine/liuren/jiuzongmen/bieze.js';
-import { bazhuan } from '../../../src/engine/liuren/jiuzongmen/bazhuan.js';
-import { fuyin, isFuYin } from '../../../src/engine/liuren/jiuzongmen/fuyin.js';
+//import { maoxing } from '../../../src/engine/liuren/jiuzongmen/maoxing.js';
+//import { bieze } from '../../../src/engine/liuren/jiuzongmen/bieze.js';
+//import { bazhuan } from '../../../src/engine/liuren/jiuzongmen/bazhuan.js';
+import { isFuYin } from '../../../src/engine/liuren/jiuzongmen/fuyin.js';
 import { fanyin, isFanYin } from '../../../src/engine/liuren/jiuzongmen/fanyin.js';
 import { layoutTianJiang, isDaytime } from '../../../src/engine/liuren/tianjiang.js';
-import { calcShiGan, calcDunGan, calcLiuQin } from '../../../src/engine/liuren/dungan.js';
+import { calcShiGan, calcLiuQin } from '../../../src/engine/liuren/dungan.js';
 import { collectShenSha } from '../../../src/engine/liuren/shensha.js';
 import { checkTaiSui } from '../../../src/engine/liuren/tai-sui-check.js';
 import { detectShenShaConflict } from '../../../src/engine/liuren/shensha-conflict.js';
 import { detectKongWang, calcKongWang } from '../../../src/engine/liuren/kongwang-detect.js';
-import { calculateLiuren } from '../../../src/engine/liuren/index.js';
-import type { Branch, Gan, SiKeItem, LiurenPan, ShenShaItem } from '../../../src/engine/liuren/types.js';
+import { calculateLiuren, buildSiKe } from '../../../src/engine/liuren/index.js';
+import type { Branch, Gan, SiKeItem, ShenShaItem } from '../../../src/engine/liuren/types.js';
 
 // ==================== A1: 四课+三传 ====================
 
@@ -319,15 +318,15 @@ describe('A5: 防误判', () => {
   it('checkTaiSui 检测太岁', () => {
     const tianDiPan = buildTianDiPan('丑', '寅');
     const siKe = buildSiKe('甲', '子', tianDiPan);
-    const sanChuanResult = calculateSanChuan(siKe, '甲', '子', tianDiPan);
-    const tianJiangInfo = layoutTianJiang('甲', '寅', tianDiPan);
+    const _sanChuanResult = calculateSanChuan(siKe, '甲', '子', tianDiPan);
+    const _tianJiangInfo = layoutTianJiang('甲', '寅', tianDiPan);
 
     // 构造简单 pan
     const pan = {
       siKe,
-      sanChuan: [{ branch: '子' } as any, { branch: '丑' } as any, { branch: '寅' } as any],
+      sanChuan: [{ branch: '子' } as unknown, { branch: '丑' } as unknown, { branch: '寅' } as unknown],
       shenSha: [],
-    } as any;
+    } as unknown;
 
     const result = checkTaiSui(pan, '子');
     expect(result.taiSuiBranch).toBe('子');
@@ -365,7 +364,7 @@ describe('A5: 防误判', () => {
       { upperGod: '亥', lowerGod: '子', relation: '比和' },
       { upperGod: '丑', lowerGod: '亥', relation: '比和' },
     ];
-    const sanChuan: any = [
+    const sanChuan: Array<Record<string, unknown>> = [
       { branch: '戌' },
       { branch: '亥' },
       { branch: '子' },

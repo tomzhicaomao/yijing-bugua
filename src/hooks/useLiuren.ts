@@ -56,6 +56,89 @@ export function useLiuren() {
   const lastCallTime = useRef(0);
 
   /**
+   * 自动保存并跳转到结果页（后台执行）
+   */
+  const autoSaveAndNavigate = useCallback(async (
+    panData: LiurenPan,
+    q: string,
+    interp: InterpretationResult | null,
+  ) => {
+    if (!user) return;
+
+    const record: DivinationRecord = {
+      schemaVersion: 1,
+      id: uuidv4(),
+      timestamp: panData.dateTime,
+      question: q,
+      category,
+      method: 'virtual',
+      hexagram: {
+        original: 0,
+        changed: null,
+        changingLines: [],
+      },
+      interpretations: interp ? [interp] : [],
+      feedback: {
+        dueAt: null,
+        status: 'pending',
+      },
+      liurenPan: panData,
+      duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
+    };
+
+    try {
+      await createRecord(record, user.id);
+      setSavedRecordId(record.id);
+      navigate(`/liuren/${record.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '保存失败，但结果仍可查看');
+    }
+  }, [user, category, duplicateWarning, navigate]);
+
+  /**
+   * AI 解读
+   */
+  const startAIInterpretation = useCallback(async (
+    panData: LiurenPan,
+    q: string,
+  ) => {
+    aiCancelled.current = false;
+    setAiProgress('reasoning');
+
+    let finalInterp: InterpretationResult | null;
+
+    try {
+      const result = await callLiurenInterpretation(panData, q);
+
+      if (aiCancelled.current) return;
+
+      if (result.success && result.interpretation) {
+        finalInterp = result.interpretation;
+        setInterpretation(result.interpretation);
+        setAiProgress('done');
+      } else {
+        setAiProgress('error');
+        const fallback = generateLiurenFallback(panData, q);
+        finalInterp = fallback;
+        setInterpretation(fallback);
+        setAiProgress('done');
+      }
+    } catch {
+      if (aiCancelled.current) return;
+      setAiProgress('error');
+      const fallback = generateLiurenFallback(panData, q);
+      finalInterp = fallback;
+      setInterpretation(fallback);
+      setAiProgress('done');
+    }
+
+    setStep('result');
+
+    // 自动保存并跳转（后台执行，不阻塞 UI）
+    autoSaveAndNavigate(panData, q, finalInterp!);
+  }, [autoSaveAndNavigate]);
+
+  /**
    * 设置问题并进入起课
    */
   const submitQuestion = useCallback(async (
@@ -126,90 +209,7 @@ export function useLiuren() {
     } catch (err) {
       setError(err instanceof Error ? err.message : '起课失败');
     }
-  }, [user]);
-
-  /**
-   * AI 解读
-   */
-  const startAIInterpretation = useCallback(async (
-    panData: LiurenPan,
-    q: string,
-  ) => {
-    aiCancelled.current = false;
-    setAiProgress('reasoning');
-
-    let resultInterpretation: InterpretationResult | null = null;
-
-    try {
-      const result = await callLiurenInterpretation(panData, q);
-
-      if (aiCancelled.current) return;
-
-      if (result.success && result.interpretation) {
-        resultInterpretation = result.interpretation;
-        setInterpretation(result.interpretation);
-        setAiProgress('done');
-      } else {
-        setAiProgress('error');
-        const fallback = generateLiurenFallback(panData, q);
-        resultInterpretation = fallback;
-        setInterpretation(fallback);
-        setAiProgress('done');
-      }
-    } catch {
-      if (aiCancelled.current) return;
-      setAiProgress('error');
-      const fallback = generateLiurenFallback(panData, q);
-      resultInterpretation = fallback;
-      setInterpretation(fallback);
-      setAiProgress('done');
-    }
-
-    setStep('result');
-
-    // 自动保存并跳转（后台执行，不阻塞 UI）
-    autoSaveAndNavigate(panData, q, resultInterpretation);
-  }, []);
-
-  /**
-   * 自动保存并跳转到结果页（后台执行）
-   */
-  const autoSaveAndNavigate = useCallback(async (
-    panData: LiurenPan,
-    q: string,
-    interp: InterpretationResult | null,
-  ) => {
-    if (!user) return;
-
-    const record: DivinationRecord = {
-      schemaVersion: 1,
-      id: uuidv4(),
-      timestamp: panData.dateTime,
-      question: q,
-      category,
-      method: 'virtual',
-      hexagram: {
-        original: 0,
-        changed: null,
-        changingLines: [],
-      },
-      interpretations: interp ? [interp] : [],
-      feedback: {
-        dueAt: null,
-        status: 'pending',
-      },
-      liurenPan: panData,
-      duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
-    };
-
-    try {
-      await createRecord(record, user.id);
-      setSavedRecordId(record.id);
-      navigate(`/liuren/${record.id}`);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '保存失败，但结果仍可查看');
-    }
-  }, [user, category, duplicateWarning, navigate]);
+  }, [user, startAIInterpretation]);
 
   /**
    * 保存记录

@@ -21,8 +21,8 @@ describe('tossResultToLineValue', () => {
     expect(tossResultToLineValue(3)).toBe(9)
   })
   it('throws on invalid back count', () => {
-    expect(() => tossResultToLineValue(-1 as any)).toThrow()
-    expect(() => tossResultToLineValue(4 as any)).toThrow()
+    expect(() => tossResultToLineValue(-1 as unknown)).toThrow()
+    expect(() => tossResultToLineValue(4 as unknown)).toThrow()
   })
 })
 

@@ -40,7 +40,7 @@ test.describe('GSAP 动画测试', () => {
   test('铜钱元素使用 will-change-transform 类', async ({ page }) => {
     await goToCasting(page)
 
-    const coins = page.locator('[aria-label="铜钱"]')
+    const coins = page.locator('[data-testid="coin"]')
     await expect(coins).toHaveCount(3)
 
     // Verify coins have will-change-transform class
@@ -59,38 +59,28 @@ test.describe('GSAP 动画测试', () => {
   test('铜钱掷出后显示结果', async ({ page }) => {
     await goToCasting(page)
 
-    // Use evaluate to click the toss button (bypasses interception)
+    // Click a coin to toss - use evaluate for more reliable click
     await page.evaluate(() => {
-      const btn = document.querySelector('button')
-      const buttons = Array.from(document.querySelectorAll('button'))
-      const tossBtn = buttons.find(b => b.textContent?.includes('掷铜钱'))
-      if (tossBtn) tossBtn.click()
+      const coin = document.querySelector('[data-testid="coin"]')
+      if (coin) (coin as HTMLElement).click()
     })
 
-    // Wait for GSAP animation to complete
-    await page.waitForTimeout(2000)
+    // Wait for GSAP animation to complete + auto-confirm (longer timeout for E2E)
+    await page.waitForTimeout(3000)
 
     // Should show result
-    await expect(page.locator('text=/\\d+ 背 \\d+ 字/')).toBeVisible({ timeout: 5000 })
-    await expect(page.locator('button:has-text("确认此爻")')).toBeVisible()
+    await expect(page.locator('text=/\\d+ 背 \\d+ 字/')).toBeVisible({ timeout: 10000 })
   })
 
   test('卦象板使用 will-change-transform', async ({ page }) => {
     await goToCasting(page)
 
-    // Cast one line using evaluate
+    // Cast one line by clicking a coin
     await page.evaluate(() => {
-      const buttons = Array.from(document.querySelectorAll('button'))
-      const tossBtn = buttons.find(b => b.textContent?.includes('掷铜钱'))
-      if (tossBtn) tossBtn.click()
+      const coin = document.querySelector('[data-testid="coin"]')
+      if (coin) (coin as HTMLElement).click()
     })
-    await page.waitForTimeout(2000)
-    await page.evaluate(() => {
-      const buttons = Array.from(document.querySelectorAll('button'))
-      const confirmBtn = buttons.find(b => b.textContent?.includes('确认此爻'))
-      if (confirmBtn) confirmBtn.click()
-    })
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(3000)
 
     // Check hexagram board lines
     const hexLines = page.locator('.card-nothing .flex.items-center.gap-3')

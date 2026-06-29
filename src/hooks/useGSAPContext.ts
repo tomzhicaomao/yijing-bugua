@@ -21,6 +21,7 @@ export function useGSAPContext(
       ctxRef.current?.revert()
       ctxRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
   return ctxRef

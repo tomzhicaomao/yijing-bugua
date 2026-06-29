@@ -48,6 +48,7 @@ export function useScrollTrigger(
       triggerRef.current?.kill()
       triggerRef.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
   return { triggerRef, elementRef }
@@ -85,6 +86,7 @@ export function useScrollAnimation(
       trigger.kill()
       animation.kill()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
   return elementRef

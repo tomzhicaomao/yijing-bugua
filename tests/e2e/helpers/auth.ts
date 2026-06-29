@@ -8,7 +8,6 @@
 import { type Page } from '@playwright/test'
 
 // ── Constants ────────────────────────────────────────────────────────
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? 'https://hiqnvjeoaqtdkevpalvp.supabase.co'
 const PROJECT_REF = 'hiqnvjeoaqtdkevpalvp'
 const STORAGE_KEY = `sb-${PROJECT_REF}-auth-token`
 
@@ -162,7 +161,7 @@ export async function clearAuthSession(page: Page) {
 /**
  * Intercept the records API to return mock data
  */
-export async function mockRecordsApi(page: Page, records: any[] = []) {
+export async function mockRecordsApi(page: Page, records: unknown[] = []) {
   await page.route(`**/rest/v1/records*`, async (route) => {
     if (route.request().method() === 'GET') {
       await route.fulfill({
@@ -187,7 +186,7 @@ export async function mockRecordsApi(page: Page, records: any[] = []) {
 /**
  * Generate a mock divination record
  */
-export function createMockRecord(overrides: Partial<any> = {}) {
+export function createMockRecord(overrides: Partial<Record<string, unknown>> = {}) {
   return {
     id: crypto.randomUUID?.() ?? '00000000-0000-0000-0000-000000000099',
     schema_version: 1,
