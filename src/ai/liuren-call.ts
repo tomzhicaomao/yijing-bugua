@@ -4,7 +4,7 @@
  * 复用现有 AI 管道，为大六壬定制 Prompt
  */
 
-import { callDeepSeek, DeepSeekError, type DeepSeekRequest } from './deepseek-client.js';
+import { callDeepSeek, sleep, backoffDelay, DeepSeekError, type DeepSeekRequest } from './deepseek-client.js';
 import { DEFAULT_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from '../lib/constants.js';
 import { buildLiurenSystemPrompt, buildLiurenUserPrompt } from './liuren-prompt-builder.js';
 import type { LiurenPan } from '../engine/liuren/types.js';
@@ -39,6 +39,11 @@ export async function callLiurenInterpretation(
   let lastError: string | undefined;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // 非首次重试前等待（指数退避 + 抖动）
+    if (attempt > 0) {
+      await sleep(backoffDelay(attempt - 1));
+    }
+
     try {
       const req: DeepSeekRequest = {
         model,
@@ -48,6 +53,7 @@ export async function callLiurenInterpretation(
         ],
         temperature: DEFAULT_TEMPERATURE,
         response_format: { type: 'json_object' },
+        max_tokens: 3000,
       };
 
       const response = await callDeepSeek(req);

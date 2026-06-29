@@ -1,4 +1,4 @@
-import { callDeepSeek, type DeepSeekMessage } from "./deepseek-client.js"
+import { callDeepSeek, sleep, backoffDelay, type DeepSeekMessage } from "./deepseek-client.js"
 import { DEFAULT_MODEL, DEFAULT_TEMPERATURE } from "../lib/constants.js"
 import { buildNarrativeSystemPrompt, buildNarrativeUserPrompt } from "./prompt-builder.js"
 import type { InterpretationResult } from "../types"
@@ -25,12 +25,18 @@ export async function callNarrative(
 
   let lastError: string | undefined
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // 非首次重试前等待（指数退避 + 抖动）
+    if (attempt > 0) {
+      await sleep(backoffDelay(attempt - 1))
+    }
+
     try {
       const response = await callDeepSeek({
         model,
         messages,
         temperature: DEFAULT_TEMPERATURE,
+        max_tokens: 1500,
       })
 
       const content = response.choices[0]?.message?.content

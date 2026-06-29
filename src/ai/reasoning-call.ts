@@ -1,4 +1,4 @@
-import { callDeepSeek, type DeepSeekMessage } from "./deepseek-client.js"
+import { callDeepSeek, sleep, backoffDelay, type DeepSeekMessage } from "./deepseek-client.js"
 import { DEFAULT_MODEL, DEEP_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from "../lib/constants.js"
 import { aiReasoningSchema } from "../lib/schemas.js"
 import { buildReasoningSystemPrompt, buildReasoningUserPrompt } from "./prompt-builder.js"
@@ -13,12 +13,10 @@ export interface ReasoningInput {
   hexagramChanged: number | null
   changingLines: number[]
   hexagramMutual?: number
-  // Phase 1: 结构化断卦
   hexagramCuoGua?: number
   hexagramZongGua?: number
   tiYong?: TiYongRelation
   timeContext?: TimeContext
-  // Phase 2: 纳甲
   najia?: NajiaResult
 }
 
@@ -55,13 +53,19 @@ export async function callReasoning(
 
   let lastError: string | undefined
 
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    // 非首次重试前等待（指数退避 + 抖动）
+    if (attempt > 0) {
+      await sleep(backoffDelay(attempt - 1))
+    }
+
     try {
       const response = await callDeepSeek({
         model,
         messages,
         temperature: DEFAULT_TEMPERATURE,
         response_format: { type: "json_object" },
+        max_tokens: 3000,
       })
 
       const rawContent = response.choices[0]?.message?.content
