@@ -74,9 +74,32 @@ const beforeDivinationSchema = z.object({
   intendedAction: z.string().optional(),
 })
 
+// ========== Liuren pan data ==========
+const liurenPanDataSchema = z.object({
+  dateTime: z.string(),
+  solarTerm: z.string(),
+  yueJiang: z.string(),
+  shiZhi: z.string(),
+  dayGanZhi: z.string(),
+  isDaytime: z.boolean(),
+  geJu: z.string(),
+  siKe: z.array(z.object({
+    upperGod: z.string(),
+    lowerGod: z.string(),
+    relation: z.string(),
+  })),
+  sanChuan: z.array(z.object({
+    branch: z.string(),
+    tianJiang: z.string(),
+    liuQin: z.string(),
+    dunGan: z.string(),
+  })),
+  warnings: z.array(z.string()),
+})
+
 // ========== Category & method ==========
 const categorySchema = z.enum(['工作', '人际', '财务', '健康', '其他'])
-const methodSchema = z.enum(['virtual', 'manual'])
+const methodSchema = z.enum(['virtual', 'manual', 'liuren-zhengshi', 'liuren-huoshi'])
 
 // ========== DivinationRecord ==========
 export const divinationRecordSchema = z.object({
@@ -116,6 +139,8 @@ export const divinationRecordSchema = z.object({
   interpretations: z.array(interpretationResultSchema),
   feedback: feedbackSchema,
   duplicate: duplicateInfoSchema.optional(),
+  liurenPan: liurenPanDataSchema.optional(),
+  interpretation: interpretationResultSchema.optional(),
 })
 
 // ========== Export JSON ==========

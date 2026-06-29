@@ -19,14 +19,21 @@ export interface LiurenCallResult {
 
 /**
  * 调用 AI 解读大六壬课式
+ *
+ * @param pan 完整课式
+ * @param question 用户问题
+ * @param topic 问事类型：general/ganqing/shiye/caifu
+ * @param model AI 模型
+ * @param maxRetries 最大重试次数
  */
 export async function callLiurenInterpretation(
   pan: LiurenPan,
   question: string,
+  topic?: string,
   model: string = DEFAULT_MODEL,
   maxRetries: number = 3,
 ): Promise<LiurenCallResult> {
-  const systemPrompt = buildLiurenSystemPrompt();
+  const systemPrompt = buildLiurenSystemPrompt(topic);
   const userPrompt = buildLiurenUserPrompt(pan, question);
 
   let lastError: string | undefined;

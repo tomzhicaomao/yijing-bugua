@@ -80,7 +80,7 @@ export function layoutTianJiang(
       ? (guiRenTianPanIdx + i) % 12
       : ((guiRenTianPanIdx - i) % 12 + 12) % 12;
 
-    const branch = tianDiPan.diPan[tianPanIdx];
+    const branch = tianDiPan.tianPan[tianPanIdx];
     branchToJiang[branch] = jiangSequence[jiangIdx];
   }
 

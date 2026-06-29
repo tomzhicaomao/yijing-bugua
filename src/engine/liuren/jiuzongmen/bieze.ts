@@ -6,7 +6,8 @@
  *   阳日 → 初传 = 日干合神寄宫的上神
  *   阴日 → 初传 = 日支三合的前一位上神
  *
- *   中传 = 末传 = 初传（三传相同）
+ *   中传 = 初传在天盘所临之神（天地盘推导）
+ *   末传 = 中传在天盘所临之神
  */
 
 import type { Branch, Gan, SiKeItem, SanChuanResult, TianDiPan } from '../types.js';
@@ -65,11 +66,15 @@ export function bieze(
     chuChuan = getTianPanZhi(prevBranch, tianDiPan);
   }
 
-  // 中传 = 末传 = 初传
+  // 中传 = 末传 = 日干寄宫在天盘所临之神
+  const jiGong = GAN_JI_GONG[dayGan];
+  const zhongChuan = getTianPanZhi(jiGong, tianDiPan);
+  const moChuan = zhongChuan;
+
   return {
     chuChuan,
-    zhongChuan: chuChuan,
-    moChuan: chuChuan,
+    zhongChuan,
+    moChuan,
     geJu: '别责',
     details: `别责法：${isYang ? '阳' : '阴'}日，初传${chuChuan}`,
   };

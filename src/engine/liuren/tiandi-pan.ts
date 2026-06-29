@@ -21,10 +21,12 @@ export function buildTianDiPan(yueJiang: Branch, shiZhi: Branch): TianDiPan {
   const yueJiangIdx = BRANCH_INDEX[yueJiang];
   const shiZhiIdx = BRANCH_INDEX[shiZhi];
 
-  // 天盘：月将对占时
-  // 偏移量 = (shiZhiIdx - yueJiangIdx + 12) % 12
-  // 即：天盘第(shiZhiIdx)位 = yueJiang，天盘第0位需要推算
-  const offset = ((shiZhiIdx - yueJiangIdx) % 12 + 12) % 12;
+  // 天盘：月将对占时 — "月将加占时"
+  // 规则：天盘上的月将位 = 地盘上的占时位
+  // 即：tianPan[shiZhiIdx] = yueJiang
+  // 推导：ALL_BRANCHES[(shiZhiIdx + offset) % 12] = yueJiang
+  //       offset = (yueJiangIdx - shiZhiIdx + 12) % 12
+  const offset = ((yueJiangIdx - shiZhiIdx) % 12 + 12) % 12;
 
   // 对地盘进行循环移位（天盘起点 = 偏移量）
   const tianPan: Branch[] = [];

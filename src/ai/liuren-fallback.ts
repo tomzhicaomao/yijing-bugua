@@ -53,23 +53,34 @@ export function generateLiurenFallback(
 
 /**
  * 推断趋势
+ *
+ * 综合考虑格局、天将、六亲、神煞
  */
 function inferTrend(pan: LiurenPan): InterpretationResult['trend'] {
-  // 吉格局
+  let score = 0;
+
+  // 1. 格局吉凶
   const jiGeJu = ['元首', '重审'];
-  if (jiGeJu.includes(pan.geJu)) return '利';
-
-  // 凶格局
   const xiongGeJu = ['伏吟', '返吟'];
-  if (xiongGeJu.includes(pan.geJu)) return '不利';
+  if (jiGeJu.includes(pan.geJu)) score += 2;
+  if (xiongGeJu.includes(pan.geJu)) score -= 2;
 
-  // 三传中吉凶神数量
+  // 2. 三传天将吉凶
+  const jiGenerals = ['贵人', '青龙', '六合', '太常', '太阴', '天后'];
+  const xiongGenerals = ['白虎', '螣蛇', '朱雀', '勾陈', '玄武', '天空'];
+  pan.sanChuan.forEach(item => {
+    if (jiGenerals.includes(item.tianJiang)) score += 1;
+    if (xiongGenerals.includes(item.tianJiang)) score -= 1;
+  });
+
+  // 3. 神煞
   const jiCount = pan.shenSha.filter(s => s.category === '吉').length;
   const xiongCount = pan.shenSha.filter(s => s.category === '凶').length;
+  score += Math.min(jiCount - xiongCount, 3); // 最多 ±3
 
-  if (jiCount > xiongCount + 2) return '利';
-  if (xiongCount > jiCount + 2) return '不利';
-
+  // 4. 综合判断
+  if (score >= 2) return '利';
+  if (score <= -2) return '不利';
   return '中性';
 }
 
@@ -133,12 +144,51 @@ function buildConditions(pan: LiurenPan): string[] {
 
 /**
  * 推断应期
+ *
+ * 应期推算规则：
+ * 1. 伏吟：事主迟缓，应期在冲日（如子伏吟应午日）
+ * 2. 返吟：事主反复，应期在合日
+ * 3. 三传旺相：应在本日或当日
+ * 4. 三传休囚：应在生旺之日
+ * 5. 初传空亡：应在填实之日
+ * 6. 三传中见驿马：应在冲动之日
  */
 function inferTimeWindow(pan: LiurenPan): string {
-  // 简化版应期推断
-  if (pan.geJu === '伏吟') return '事主迟缓，应期较远';
-  if (pan.geJu === '返吟') return '事主反复，应期不定';
-  return '具体应期需结合课式细节判断';
+  const parts: string[] = [];
+
+  // 格局应期
+  if (pan.geJu === '伏吟') {
+    parts.push('事主迟缓，应期较远，宜待冲日');
+  } else if (pan.geJu === '返吟') {
+    parts.push('事主反复，应期不定，宜待合日');
+  }
+
+  // 三传应期
+  const chuanNames = ['初传', '中传', '末传'];
+  pan.sanChuan.forEach((item, idx) => {
+    // 空亡应期
+    if (pan.warnings.some(w => w.includes('空亡') && w.includes(item.branch))) {
+      parts.push(`${chuanNames[idx]}落空亡，应在填实之日`);
+    }
+  });
+
+  // 驿马应期
+  const yiMa = pan.shenSha.find(s => s.name === '驿马');
+  if (yiMa) {
+    parts.push(`驿马在${yiMa.branch}，应在冲${yiMa.branch}之日`);
+  }
+
+  // 日马应期
+  const riMa = pan.shenSha.find(s => s.name === '日马');
+  if (riMa) {
+    parts.push(`日马在${riMa.branch}，动象应在${riMa.branch}日`);
+  }
+
+  if (parts.length === 0) {
+    parts.push('具体应期需结合课式细节判断');
+  }
+
+  return parts.join('；');
 }
 
 /**

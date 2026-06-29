@@ -6,7 +6,7 @@
  * 涉害深度计算方法：
  *   对每个候选地支，计算其在地盘的涉害深度：
  *   从该地支在地盘的位置开始，顺时针数十二位
- *   每遇到一次"受克"（该位地支被候选地支五行所克）就记一次
+ *   每遇到一次"克我"（该位地支五行克候选地支五行）就记一次
  *
  * 规则：
  *   1. 计算所有候选的涉害深度
@@ -24,7 +24,7 @@ import { KE_MATRIX } from '../constants.js';
  * 计算某地支的涉害深度
  *
  * 从该地支在地盘的位置开始，顺时针数十二位
- * 每遇到一次"受克"（该位地支被候选地支五行所克）就记一次
+ * 每遇到一次"克我"（该位地支五行克候选地支五行）就记一次
  *
  * @param candidateBranch 候选地支
  * @returns 涉害深度
@@ -37,7 +37,7 @@ export function calculateShehaiDepth(candidateBranch: Branch): number {
   for (let i = 1; i <= 12; i++) {
     const currentBranch = ALL_BRANCHES[(startIdx + i) % 12];
     const currentWuXing: WuXing = BRANCH_WUXING[currentBranch];
-    if (KE_MATRIX[candidateWuXing][currentWuXing]) {
+    if (KE_MATRIX[currentWuXing][candidateWuXing]) {
       depth++;
     }
   }
