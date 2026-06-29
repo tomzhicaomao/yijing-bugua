@@ -21,8 +21,10 @@ export default function LiurenView() {
     aiProgress,
     error,
     duplicateWarning,
+    saveStatus,
     submitQuestion,
     reset,
+    retrySave,
   } = useLiuren();
 
   const [question, setQuestion] = useState('');
@@ -207,12 +209,25 @@ export default function LiurenView() {
             </div>
           )}
 
-          {/* 操作按钮 */}
+          {/* 保存状态 */}
           <div className="space-y-3">
-            <div className="text-center py-2">
-              <div className="inline-block w-4 h-4 border-2 border-nothing-text-display border-t-transparent rounded-full animate-spin" />
-              <p className="mt-2 font-mono text-[10px] text-nothing-text-disabled">正在保存记录…</p>
-            </div>
+            {saveStatus === 'saving' && (
+              <div className="text-center py-2">
+                <div className="inline-block w-4 h-4 border-2 border-nothing-text-display border-t-transparent rounded-full animate-spin" />
+                <p className="mt-2 font-mono text-[10px] text-nothing-text-disabled">正在保存记录…</p>
+              </div>
+            )}
+            {saveStatus === 'error' && (
+              <div className="border border-red-500/30 rounded-md p-4 text-center">
+                <p className="font-mono text-[11px] text-red-400 mb-3">{error || '保存失败'}</p>
+                <button
+                  onClick={retrySave}
+                  className="px-4 py-2 bg-nothing-text-display text-nothing-bg font-mono text-xs tracking-[0.1em] rounded-md hover:opacity-90 transition-opacity"
+                >
+                  重新保存
+                </button>
+              </div>
+            )}
           </div>
         </main>
       </div>

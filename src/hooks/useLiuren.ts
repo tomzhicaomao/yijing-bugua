@@ -20,6 +20,9 @@ import type { DivinationRecord, InterpretationResult, Category } from '../types'
 /** 起课步骤 */
 type LiurenStep = 'question' | 'casting' | 'result';
 
+/** 保存状态 */
+type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
+
 /** Hook 状态 */
 export interface UseLiurenState {
   step: LiurenStep;
@@ -32,6 +35,7 @@ export interface UseLiurenState {
   error: string | null;
   duplicateWarning: string | null;
   savedRecordId: string | null;
+  saveStatus: SaveStatus;
 }
 
 /**
@@ -51,49 +55,79 @@ export function useLiuren() {
   const [error, setError] = useState<string | null>(null);
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
 
   const aiCancelled = useRef(false);
   const lastCallTime = useRef(0);
 
   /**
-   * 自动保存并跳转到结果页（后台执行）
+   * 构建 DivinationRecord（不执行写入）
+   */
+  const buildRecord = useCallback((
+    panData: LiurenPan,
+    q: string,
+    interp: InterpretationResult | null,
+  ): DivinationRecord => ({
+    schemaVersion: 1,
+    id: uuidv4(),
+    timestamp: panData.dateTime,
+    question: q,
+    category,
+    method: 'virtual',
+    hexagram: {
+      original: 0,
+      changed: null,
+      changingLines: [],
+    },
+    interpretations: interp ? [interp] : [],
+    feedback: {
+      dueAt: null,
+      status: 'pending',
+    },
+    liurenPan: panData,
+    duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
+  }), [category, duplicateWarning]);
+
+  /**
+   * 自动保存并跳转（await 模式，不再 fire-and-forget）
+   *
+   * 返回 true = 保存成功并已导航，false = 保存失败
    */
   const autoSaveAndNavigate = useCallback(async (
     panData: LiurenPan,
     q: string,
     interp: InterpretationResult | null,
-  ) => {
-    if (!user) return;
+  ): Promise<boolean> => {
+    if (!user) {
+      setError('请先登录');
+      setSaveStatus('error');
+      return false;
+    }
 
-    const record: DivinationRecord = {
-      schemaVersion: 1,
-      id: uuidv4(),
-      timestamp: panData.dateTime,
-      question: q,
-      category,
-      method: 'virtual',
-      hexagram: {
-        original: 0,
-        changed: null,
-        changingLines: [],
-      },
-      interpretations: interp ? [interp] : [],
-      feedback: {
-        dueAt: null,
-        status: 'pending',
-      },
-      liurenPan: panData,
-      duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
-    };
+    setSaveStatus('saving');
+    const record = buildRecord(panData, q, interp);
 
     try {
       await createRecord(record, user.id);
       setSavedRecordId(record.id);
+      setSaveStatus('saved');
       navigate(`/liuren/${record.id}`);
+      return true;
     } catch (err) {
-      setError(err instanceof Error ? err.message : '保存失败，但结果仍可查看');
+      const msg = err instanceof Error ? err.message : '保存失败';
+      setError(msg);
+      setSaveStatus('error');
+      return false;
     }
-  }, [user, category, duplicateWarning, navigate]);
+  }, [user, buildRecord, navigate]);
+
+  /**
+   * 重试保存（保存失败后用户手动触发）
+   */
+  const retrySave = useCallback(async () => {
+    if (!pan) return;
+    await autoSaveAndNavigate(pan, question, interpretation);
+  }, [pan, question, interpretation, autoSaveAndNavigate]);
 
   /**
    * AI 解读
@@ -132,10 +166,8 @@ export function useLiuren() {
       setAiProgress('done');
     }
 
-    setStep('result');
-
-    // 自动保存并跳转（后台执行，不阻塞 UI）
-    autoSaveAndNavigate(panData, q, finalInterp!);
+    // 等待保存完成后再返回（不再 fire-and-forget）
+    await autoSaveAndNavigate(panData, q, finalInterp);
   }, [autoSaveAndNavigate]);
 
   /**
@@ -178,6 +210,7 @@ export function useLiuren() {
     setCategory(cat);
     setCustomShiZhi(shiZhi || null);
     setError(null);
+    setSaveStatus('idle');
     lastCallTime.current = Date.now();
 
     // 检查重复问题
@@ -204,7 +237,7 @@ export function useLiuren() {
       setPan(result);
       setStep('casting');
 
-      // 自动开始 AI 解读
+      // 自动开始 AI 解读 + 保存（await 完整流程）
       await startAIInterpretation(result, trimmed);
     } catch (err) {
       setError(err instanceof Error ? err.message : '起课失败');
@@ -212,32 +245,12 @@ export function useLiuren() {
   }, [user, startAIInterpretation]);
 
   /**
-   * 保存记录
+   * 手动保存记录（备用，保留向后兼容）
    */
   const saveRecord = useCallback(async () => {
     if (!user || !pan) return;
 
-    const record: DivinationRecord = {
-      schemaVersion: 1,
-      id: uuidv4(),
-      timestamp: pan.dateTime,
-      question,
-      category,
-      method: 'virtual',
-      hexagram: {
-        original: 0, // 六壬无卦象
-        changed: null,
-        changingLines: [],
-      },
-      interpretations: interpretation ? [interpretation] : [],
-      feedback: {
-        dueAt: null,
-        status: 'pending',
-      },
-      // 六壬特有数据
-      liurenPan: pan,
-      duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
-    };
+    const record = buildRecord(pan, question, interpretation);
 
     try {
       await createRecord(record, user.id);
@@ -247,7 +260,7 @@ export function useLiuren() {
       setError(err instanceof Error ? err.message : '保存失败');
       return undefined;
     }
-  }, [user, pan, question, category, interpretation, duplicateWarning]);
+  }, [user, pan, question, interpretation, buildRecord]);
 
   /**
    * 重置
@@ -264,6 +277,7 @@ export function useLiuren() {
     setError(null);
     setDuplicateWarning(null);
     setSavedRecordId(null);
+    setSaveStatus('idle');
   }, []);
 
   /**
@@ -285,11 +299,13 @@ export function useLiuren() {
     error,
     duplicateWarning,
     savedRecordId,
+    saveStatus,
 
     // 方法
     submitQuestion,
     saveRecord,
     reset,
     goToResult,
+    retrySave,
   };
 }
