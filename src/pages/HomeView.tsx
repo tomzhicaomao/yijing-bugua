@@ -62,18 +62,9 @@ export default function HomeView() {
         {FEATURE_LIUREN_ENABLED && (
           <div className="mb-8">
             <Link to="/liuren">
-              <div className="border border-nothing-border rounded-md p-4 hover:border-nothing-text-disabled transition-colors group">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <span className="font-mono text-sm text-nothing-text-display tracking-wider">大六壬</span>
-                    <span className="ml-2 font-mono text-[10px] text-nothing-text-disabled">LIU REN</span>
-                  </div>
-                  <span className="font-mono text-xs text-nothing-text-disabled group-hover:text-nothing-text-secondary transition-colors">→</span>
-                </div>
-                <p className="mt-2 font-mono text-[11px] text-nothing-text-disabled leading-relaxed">
-                  古代三式之一 · 以日干支起课 · 占事决策
-                </p>
-              </div>
+              <Button variant="secondary" className="w-full">
+                大六壬
+              </Button>
             </Link>
           </div>
         )}
