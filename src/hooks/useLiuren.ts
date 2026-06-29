@@ -166,7 +166,8 @@ export function useLiuren() {
       setAiProgress('done');
     }
 
-    // 等待保存完成后再返回（不再 fire-and-forget）
+    // 先切到结果页显示课式和解读，再等待保存完成
+    setStep('result');
     await autoSaveAndNavigate(panData, q, finalInterp);
   }, [autoSaveAndNavigate]);
 

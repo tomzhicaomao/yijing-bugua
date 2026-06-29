@@ -150,7 +150,7 @@ export function calculateLiuren(params: LiurenParams): LiurenPan {
   warnings.push(...kongWang.warnings);
 
   // 节气边界
-  if (isNearBoundary) {
+  if (isNearBoundary.isNear) {
     warnings.push(`占时接近节气边界 — 月将可能正在更替，结果仅供参考，建议换个时辰再占`);
   }
 
