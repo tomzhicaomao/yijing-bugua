@@ -145,8 +145,9 @@ export async function loginAsTestUser(page: Page) {
   await injectAuthSession(page)
   // Reload so AuthContext picks up the session
   await page.reload()
-  // Wait for the app to recognize the session
-  await page.waitForTimeout(500)
+  // Wait for the app to fully load and recognize the session
+  await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(300)
 }
 
 /**

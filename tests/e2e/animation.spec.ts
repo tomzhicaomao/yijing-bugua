@@ -26,11 +26,13 @@ test.describe('GSAP 动画测试', () => {
   })
 
   test('GSAP 库已正确加载（无控制台错误）', async ({ page }) => {
+    // 先注册监听器，再导航，再等待加载完成 — 避免导航竞态
     const errors: string[] = []
     page.on('console', msg => {
       if (msg.type() === 'error') errors.push(msg.text())
     })
     await page.goto('/divine')
+    await page.waitForLoadState('networkidle')
     await page.waitForTimeout(1000)
     // No GSAP-related errors
     const gsapErrors = errors.filter(e => e.toLowerCase().includes('gsap'))
