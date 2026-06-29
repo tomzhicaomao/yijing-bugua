@@ -14,7 +14,7 @@
 
 import type { Branch, Gan, LiurenPan, LiurenParams } from './types.js';
 import { buildTianDiPan } from './tiandi-pan.js';
-import { getYueJiang, getSolarTerm, isNearSolarTermBoundary } from './jieqi.js';
+import { getYueJiang, getSolarTerm, isNearSolarTermBoundary, getMonthZhi } from './jieqi.js';
 import { buildSiKe } from './sike.js';
 import { calculateSanChuan } from './sanchuan.js';
 import { layoutTianJiang } from './tianjiang.js';
@@ -124,7 +124,7 @@ export function calculateLiuren(params: LiurenParams): LiurenPan {
 
   // 11. 收集神煞
   const shiZhiBranch = shiZhi;
-  const monthZhi = yueJiang; // 月支近似为月将
+  const monthZhi = getMonthZhi(date);
   const shenSha = collectShenSha(yearGan, yearZhi, monthZhi, dayGan, dayZhi, shiZhiBranch);
 
   // 12. 防误判检查

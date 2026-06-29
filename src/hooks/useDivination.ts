@@ -21,10 +21,16 @@ export function useDivination() {
   const [category, setCategory] = useState<Category | null>(null)
   const [beforeDivination, setBeforeDivination] = useState<BeforeDivination>({})
   const [method, setMethod] = useState<CastingMethod>('virtual')
-  const [castingTimestamp, setCastingTimestamp] = useState<string>('')
   const [lines, setLines] = useState<(LineValue | null)[]>([null, null, null, null, null, null])
-  const [currentIndex, setCurrentIndex] = useState(0)
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null)
+
+  // 用 ref 跟踪时间戳，避免闭包捕获过时值
+  const castingTimestampRef = useRef<string>('')
+
+  // 从 lines 派生 currentIndex，消除闭包中的 index 依赖
+  function getNextIndex(currentLines: (LineValue | null)[]): number {
+    return currentLines.filter(l => l !== null).length
+  }
 
   const setQuestionAndCategory = useCallback((q: string, cat: Category) => {
     setQuestion(q)
@@ -44,8 +50,7 @@ export function useDivination() {
   const startCasting = useCallback((m: CastingMethod) => {
     setMethod(m)
     setLines([null, null, null, null, null, null])
-    setCurrentIndex(0)
-    setCastingTimestamp('')
+    castingTimestampRef.current = ''
     setStep('casting')
   }, [])
 
@@ -59,19 +64,21 @@ export function useDivination() {
       return
     }
 
-    const validLines = lines.filter((l): l is LineValue => l !== null)
-    if (validLines.length !== 6) {
+    // 从 lines 派生有效行数
+    const currentLines = lines.filter((l): l is LineValue => l !== null)
+    if (currentLines.length !== 6) {
       completingRef.current = false
       return
     }
 
-    const calc = calculateHexagram(validLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
+    const calc = calculateHexagram(currentLines as [LineValue, LineValue, LineValue, LineValue, LineValue, LineValue])
     const allRecords = await getAllRecords(user.id)
     const duplicate = checkDuplicate(question, allRecords, 24) ?? undefined
+    const timestamp = castingTimestampRef.current || new Date().toISOString()
     const record: DivinationRecord = {
       schemaVersion: 1,
       id: uuidv4(),
-      timestamp: castingTimestamp || new Date().toISOString(),
+      timestamp,
       question,
       category,
       method,
@@ -88,7 +95,7 @@ export function useDivination() {
       },
       interpretations: [],
       feedback: {
-        dueAt: calculateDefaultDueAt(castingTimestamp || new Date().toISOString(), category),
+        dueAt: calculateDefaultDueAt(timestamp, category),
         status: 'pending',
       },
       duplicate,
@@ -107,38 +114,41 @@ export function useDivination() {
     } finally {
       completingRef.current = false
     }
-  }, [lines, category, question, method, beforeDivination, castingTimestamp, navigate, user])
+  }, [lines, category, question, method, beforeDivination, navigate, user])
 
   const [shouldComplete, setShouldComplete] = useState(false)
-  
-  const setLineValue = useCallback((value: LineValue) => {
-    if (currentIndex >= 6) return
-    if (currentIndex === 0 && !castingTimestamp) {
-      setCastingTimestamp(new Date().toISOString())
-    }
-    const newLines = [...lines]
-    newLines[currentIndex] = value
-    setLines(newLines)
-    const newIndex = currentIndex + 1
-    setCurrentIndex(newIndex)
 
-    if (newIndex >= 6) {
-      setShouldComplete(true)
-    }
-  }, [currentIndex, lines, castingTimestamp])
+  // 修复过时闭包：使用函数式更新消除对 lines/currentIndex 的闭包依赖
+  const setLineValue = useCallback((value: LineValue) => {
+    setLines(prev => {
+      const nextIndex = getNextIndex(prev)
+      if (nextIndex >= 6) return prev
+      // 首行投掷时记录时间戳（ref 不触发重渲染）
+      if (nextIndex === 0 && !castingTimestampRef.current) {
+        castingTimestampRef.current = new Date().toISOString()
+      }
+      const newLines = [...prev]
+      newLines[nextIndex] = value
+      // 如果满 6 行，触发完成
+      if (nextIndex + 1 >= 6) {
+        setShouldComplete(true)
+      }
+      return newLines
+    })
+  }, [])
 
   const selectManualBack = useCallback((backCount: number) => {
-    if (currentIndex >= 6) return
-
-    if (currentIndex === 0 && !castingTimestamp) {
-      setCastingTimestamp(new Date().toISOString())
-    }
-
-    const newLines = [...lines]
-    newLines[currentIndex] = tossResultToLineValue(backCount)
-    setLines(newLines)
-    setCurrentIndex(currentIndex + 1)
-  }, [currentIndex, lines, castingTimestamp])
+    setLines(prev => {
+      const nextIndex = getNextIndex(prev)
+      if (nextIndex >= 6) return prev
+      if (nextIndex === 0 && !castingTimestampRef.current) {
+        castingTimestampRef.current = new Date().toISOString()
+      }
+      const newLines = [...prev]
+      newLines[nextIndex] = tossResultToLineValue(backCount)
+      return newLines
+    })
+  }, [])
 
   const effectRan = useRef(false)
   useEffect(() => {
@@ -150,6 +160,9 @@ export function useDivination() {
       })
     }
   }, [shouldComplete, completeCasting])
+
+  // 从 lines 派生 currentIndex 供外部使用
+  const currentIndex = getNextIndex(lines)
 
   return {
     step,

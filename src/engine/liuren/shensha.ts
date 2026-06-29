@@ -28,6 +28,12 @@ interface ShenShaRule {
   };
 }
 
+/** 天干合映射：甲合己、乙合庚、丙合辛、丁合壬、戊合癸 */
+const GAN_HE: Record<Gan, Gan> = {
+  '甲': '己', '乙': '庚', '丙': '辛', '丁': '壬', '戊': '癸',
+  '己': '甲', '庚': '乙', '辛': '丙', '壬': '丁', '癸': '戊',
+};
+
 /**
  * 收集所有神煞
  *
@@ -52,7 +58,7 @@ export function collectShenSha(
 
   for (const rule of rules) {
     try {
-      const items = resolveRule(rule, {
+      const items = resolveRule(rule, result, {
         yearGan, yearZhi, monthZhi, dayGan, dayZhi, shiZhi,
       });
       result.push(...items);
@@ -69,6 +75,7 @@ export function collectShenSha(
  */
 function resolveRule(
   rule: ShenShaRule,
+  resolved: ShenShaItem[],
   ctx: {
     yearGan: Gan;
     yearZhi: Branch;
@@ -83,7 +90,6 @@ function resolveRule(
 
   switch (type) {
     case 'gan_branch_lookup': {
-      // 日干/年干查表
       let key: string = ctx.dayGan;
       if (rule.dimension === '年') key = ctx.yearGan;
 
@@ -101,7 +107,6 @@ function resolveRule(
     }
 
     case 'ri_zhi_lookup': {
-      // 日支查表
       const key = ctx.dayZhi;
       if (mapping && mapping[key]) {
         const branch = mapping[key] as string;
@@ -115,11 +120,9 @@ function resolveRule(
     }
 
     case 'month_branch_lookup': {
-      // 月支查表
       const key = ctx.monthZhi;
       if (mapping && mapping[key]) {
         const value = mapping[key] as string;
-        // 如果映射值是天干，取该天干寄宫
         if (value.length === 1 && '甲乙丙丁戊己庚辛壬癸'.includes(value)) {
           const jiGong = GAN_JI_GONG[value as Gan];
           items.push({
@@ -139,7 +142,6 @@ function resolveRule(
     }
 
     case 'year_branch_chong': {
-      // 太岁冲位
       items.push({
         name: rule.name,
         category: rule.category,
@@ -149,7 +151,6 @@ function resolveRule(
     }
 
     case 'year_branch_offset': {
-      // 年支偏移
       const offset = rule.rules.offset || 0;
       const branches: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
       const idx = branches.indexOf(ctx.yearZhi);
@@ -163,7 +164,6 @@ function resolveRule(
     }
 
     case 'fixed_branch': {
-      // 固定地支
       if (rule.rules.branch) {
         items.push({
           name: rule.name,
@@ -175,29 +175,44 @@ function resolveRule(
     }
 
     case 'jiazi_cycle_null': {
-      // 空亡：根据日干支所在旬的空亡地支
       const ganOrder: Gan[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
       const zhiOrder: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 
       const dayGanIdx = ganOrder.indexOf(ctx.dayGan);
       const dayZhiIdx = zhiOrder.indexOf(ctx.dayZhi);
-      // 旬首的地支偏移
       const xunStartZhiIdx = (dayZhiIdx - dayGanIdx + 12) % 12;
 
-      // 空亡 = 旬中最后两个地支（旬首+10 和 旬首+11）
       const null1 = zhiOrder[(xunStartZhiIdx + 10) % 12];
       const null2 = zhiOrder[(xunStartZhiIdx + 11) % 12];
 
-      items.push({
-        name: rule.name,
-        category: rule.category,
-        branch: null1,
-      });
-      items.push({
-        name: rule.name,
-        category: rule.category,
-        branch: null2,
-      });
+      items.push({ name: rule.name, category: rule.category, branch: null1 });
+      items.push({ name: rule.name, category: rule.category, branch: null2 });
+      break;
+    }
+
+    case 'derived': {
+      // 派生神煞：基于已解析的源神煞，应用合/冲等方法
+      const { source, method: deriveMethod } = rule.rules;
+      if (!source || !deriveMethod) break;
+
+      const sourceItems = resolved.filter(r => r.name === source);
+      for (const src of sourceItems) {
+        if (deriveMethod === 'gan_he') {
+          // 天干合：取源神煞地支对应的天干，找其合干，再取合干寄宫
+          // 反查：找到源地支对应的天干（通过 GAN_JI_GONG 反查）
+          const srcBranch = src.branch;
+          const srcGan = Object.entries(GAN_JI_GONG).find(([, v]) => v === srcBranch)?.[0] as Gan | undefined;
+          if (srcGan) {
+            const heGan = GAN_HE[srcGan];
+            const heBranch = GAN_JI_GONG[heGan];
+            items.push({
+              name: rule.name,
+              category: rule.category,
+              branch: heBranch,
+            });
+          }
+        }
+      }
       break;
     }
 

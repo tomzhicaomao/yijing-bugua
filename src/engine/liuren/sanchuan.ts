@@ -1,9 +1,10 @@
 /**
  * 三传调度器 — 九宗门级联
  *
- * 按序尝试 ①→②→...→⑨
- * ① 贼克法 → ② 比用法 → ③ 涉害法 → ④ 遥克法
- * → ⑤ 昴星法 → ⑥ 别责法 → ⑦ 八专法 → ⑧ 伏吟法 → ⑨ 返吟法
+ * 调度顺序：
+ *   ① 先检查伏吟/返吟（天地盘特殊结构，优先级最高）
+ *   ② 再按贼克→比用→涉害→遥克→昴星→别责→八专级联
+ *   ③ 返吟法兜底（必定成功）
  *
  * 中传 = 初传本身在地盘所乘之神（初传转找天盘）
  * 末传 = 中传本身在地盘所乘之神
@@ -17,39 +18,27 @@ import { yaoke } from './jiuzongmen/yaoke.js';
 import { maoxing } from './jiuzongmen/maoxing.js';
 import { bieze } from './jiuzongmen/bieze.js';
 import { bazhuan } from './jiuzongmen/bazhuan.js';
-import { fuyin } from './jiuzongmen/fuyin.js';
+import { fuyin, isFuYin } from './jiuzongmen/fuyin.js';
 import { fanyin } from './jiuzongmen/fanyin.js';
 import { getTianPanZhi } from './tiandi-pan.js';
 
 /**
  * 推导中传和末传
  *
- * 中传 = 初传在地盘所乘之神（以初传为地盘位，查天盘）
- * 末传 = 中传在地盘所乘之神
- *
- * 注意：这里是 "初传在天盘所临之位的地盘上神"
- * 实际上是：以初传为天盘地支，找到它在地盘上的位置，再查该位置的天盘
- * 但更准确的说法是：初传的上神（天地盘查询）
+ * 中传 = 初传所乘之神（以初传为地盘位，查天盘）
+ * 末传 = 中传所乘之神
  */
 export function deriveZhongMoChuan(
   chuChuan: Branch,
   tianDiPan: TianDiPan,
 ): [Branch, Branch] {
-  // 中传 = 初传所乘之神（以初传为地盘位，查天盘）
   const zhongChuan = getTianPanZhi(chuChuan, tianDiPan);
-  // 末传 = 中传所乘之神
   const moChuan = getTianPanZhi(zhongChuan, tianDiPan);
   return [zhongChuan, moChuan];
 }
 
 /**
  * 九宗门级联调度
- *
- * @param siKe 四课
- * @param dayGan 日干
- * @param dayZhi 日支
- * @param tianDiPan 天地盘
- * @returns 三传结果
  */
 export function calculateSanChuan(
   siKe: [SiKeItem, SiKeItem, SiKeItem, SiKeItem],
@@ -57,37 +46,39 @@ export function calculateSanChuan(
   dayZhi: Branch,
   tianDiPan: TianDiPan,
 ): SanChuanResult {
-  // ① 贼克法
+  // ① 伏吟法 — 天地盘相同，优先检查（结构条件）
+  if (isFuYin(tianDiPan)) {
+    const fuyinResult = fuyin(siKe, dayGan, dayZhi, tianDiPan);
+    if (fuyinResult) return fuyinResult;
+  }
+
+  // ② 贼克法
   const zekeResult = zeke(siKe, dayGan, tianDiPan);
   if (zekeResult) return zekeResult;
 
-  // ② 比用法（处理多个候选）
+  // ③ 比用法
   const biyongResult = biyong(siKe, dayGan, tianDiPan);
   if (biyongResult) return biyongResult;
 
-  // ③ 涉害法
+  // ④ 涉害法
   const shehaiResult = shehai(siKe, dayGan, tianDiPan);
   if (shehaiResult) return shehaiResult;
 
-  // ④ 遥克法
+  // ⑤ 遥克法
   const yaokeResult = yaoke(siKe, dayGan, dayZhi, tianDiPan);
   if (yaokeResult) return yaokeResult;
 
-  // ⑤ 昴星法
+  // ⑥ 昴星法
   const maoxingResult = maoxing(siKe, dayGan, dayZhi, tianDiPan);
   if (maoxingResult) return maoxingResult;
 
-  // ⑥ 别责法
+  // ⑦ 别责法
   const biezeResult = bieze(siKe, dayGan, dayZhi, tianDiPan);
   if (biezeResult) return biezeResult;
 
-  // ⑦ 八专法
+  // ⑧ 八专法
   const bazhuanResult = bazhuan(siKe, dayGan, dayZhi, tianDiPan);
   if (bazhuanResult) return bazhuanResult;
-
-  // ⑧ 伏吟法
-  const fuyinResult = fuyin(siKe, dayGan, dayZhi, tianDiPan);
-  if (fuyinResult) return fuyinResult;
 
   // ⑨ 返吟法（兜底，必定成功）
   return fanyin(siKe, dayGan, dayZhi, tianDiPan);

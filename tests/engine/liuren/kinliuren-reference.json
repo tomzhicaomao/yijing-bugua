@@ -1,0 +1,3520 @@
+{
+  "metadata": {
+    "description": "kinliuren 参考数据集 v2 - 覆盖全部10种课体",
+    "total_cases": 42,
+    "geju_coverage": {
+      "八专": 10,
+      "伏吟": 5,
+      "贼克": 9,
+      "比用": 4,
+      "涉害": 3,
+      "昴星": 4,
+      "别责": 4,
+      "返吟": 3
+    }
+  },
+  "cases": {
+    "八专": [
+      {
+        "input": {
+          "jieqi": "驚蟄",
+          "lunar_month": "二",
+          "day_ganzhi": "庚申",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿孤辰"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿孤辰",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "雀",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "丁",
+            "zhongchuan": "未",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "己",
+            "mochuan": "未",
+            "mochuan_tianjiang": "貴",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "己"
+          },
+          "sike": {
+            "yike": "未庚",
+            "yike_tianjiang": "貴",
+            "erke": "午未",
+            "erke_tianjiang": "蛇",
+            "sanke": "未申",
+            "sanke_tianjiang": "貴",
+            "sike": "午未",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲寅",
+          "hour_ganzhi": "丁卯"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿孤辰"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿孤辰",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "勾",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "丁",
+            "zhongchuan": "亥",
+            "zhongchuan_tianjiang": "陰",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "癸",
+            "mochuan": "亥",
+            "mochuan_tianjiang": "陰",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "癸"
+          },
+          "sike": {
+            "yike": "亥甲",
+            "yike_tianjiang": "陰",
+            "erke": "申亥",
+            "erke_tianjiang": "虎",
+            "sanke": "亥寅",
+            "sanke_tianjiang": "陰",
+            "sike": "申亥",
+            "sike_tianjiang": "虎"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅"
+          ],
+          "tianjiang": [
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲寅",
+          "hour_ganzhi": "壬申"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿",
+          "sanchuan": {
+            "chuchuan": "酉",
+            "chuchuan_tianjiang": "勾",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "辛",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "虎",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "戊",
+            "mochuan": "午",
+            "mochuan_tianjiang": "虎",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "戊"
+          },
+          "sike": {
+            "yike": "午甲",
+            "yike_tianjiang": "虎",
+            "erke": "戌午",
+            "erke_tianjiang": "合",
+            "sanke": "午寅",
+            "sanke_tianjiang": "虎",
+            "sike": "戌午",
+            "sike_tianjiang": "合"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未"
+          ],
+          "tianjiang": [
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "己未",
+          "hour_ganzhi": "乙丑"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿",
+          "sanchuan": {
+            "chuchuan": "卯",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "乙",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "戊",
+            "mochuan": "午",
+            "mochuan_tianjiang": "雀",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "戊"
+          },
+          "sike": {
+            "yike": "午己",
+            "yike_tianjiang": "雀",
+            "erke": "巳午",
+            "erke_tianjiang": "合",
+            "sanke": "午未",
+            "sanke_tianjiang": "雀",
+            "sike": "巳午",
+            "sike_tianjiang": "合"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "己未",
+          "hour_ganzhi": "丙寅"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿孤辰"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿孤辰",
+          "sanchuan": {
+            "chuchuan": "丑",
+            "chuchuan_tianjiang": "虎",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "合",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "丁",
+            "mochuan": "巳",
+            "mochuan_tianjiang": "合",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "丁"
+          },
+          "sike": {
+            "yike": "巳己",
+            "yike_tianjiang": "合",
+            "erke": "卯巳",
+            "erke_tianjiang": "龍",
+            "sanke": "巳未",
+            "sanke_tianjiang": "合",
+            "sike": "卯巳",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "己未",
+          "hour_ganzhi": "丁卯"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "八專斬關勵德"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "八專斬關勵德",
+          "sanchuan": {
+            "chuchuan": "亥",
+            "chuchuan_tianjiang": "后",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "癸",
+            "zhongchuan": "辰",
+            "zhongchuan_tianjiang": "勾",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "丙",
+            "mochuan": "辰",
+            "mochuan_tianjiang": "勾",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "丙"
+          },
+          "sike": {
+            "yike": "辰己",
+            "yike_tianjiang": "勾",
+            "erke": "丑辰",
+            "erke_tianjiang": "蛇",
+            "sanke": "辰未",
+            "sanke_tianjiang": "勾",
+            "sike": "丑辰",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅"
+          ],
+          "tianjiang": [
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰",
+            "后"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "庚申",
+          "hour_ganzhi": "乙丑"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "帷簿孤辰"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "帷簿孤辰",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "雀",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "丁",
+            "zhongchuan": "未",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "己",
+            "mochuan": "未",
+            "mochuan_tianjiang": "貴",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "己"
+          },
+          "sike": {
+            "yike": "未庚",
+            "yike_tianjiang": "貴",
+            "erke": "午未",
+            "erke_tianjiang": "蛇",
+            "sanke": "未申",
+            "sanke_tianjiang": "貴",
+            "sike": "午未",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "春分",
+          "lunar_month": "二",
+          "day_ganzhi": "庚申",
+          "hour_ganzhi": "己巳"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "八專"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "八專",
+          "sanchuan": {
+            "chuchuan": "卯",
+            "chuchuan_tianjiang": "陰",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "乙",
+            "zhongchuan": "丑",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "空",
+            "mochuan": "丑",
+            "mochuan_tianjiang": "貴",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "丑庚",
+            "yike_tianjiang": "貴",
+            "erke": "午丑",
+            "erke_tianjiang": "虎",
+            "sanke": "丑申",
+            "sanke_tianjiang": "貴",
+            "sike": "午丑",
+            "sike_tianjiang": "虎"
+          },
+          "tianpan": [
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉"
+          ],
+          "dipan": [
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰"
+          ],
+          "tianjiang": [
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "芒種",
+          "lunar_month": "五",
+          "day_ganzhi": "己未",
+          "hour_ganzhi": "丙寅"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "八專斬關勵德"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "八專斬關勵德",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "父",
+            "chuchuan_dungan": "丁",
+            "zhongchuan": "丑",
+            "zhongchuan_tianjiang": "龍",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "空",
+            "mochuan": "丑",
+            "mochuan_tianjiang": "龍",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "丑己",
+            "yike_tianjiang": "龍",
+            "erke": "未丑",
+            "erke_tianjiang": "后",
+            "sanke": "丑未",
+            "sanke_tianjiang": "龍",
+            "sike": "未丑",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未"
+          ],
+          "dipan": [
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑"
+          ],
+          "tianjiang": [
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰",
+            "后"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "處暑",
+          "lunar_month": "七",
+          "day_ganzhi": "庚申",
+          "hour_ganzhi": "丙寅"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "八專",
+            "獨足"
+          ],
+          "geju_primary": "八專",
+          "geju_sub": "獨足",
+          "sanchuan": {
+            "chuchuan": "亥",
+            "chuchuan_tianjiang": "勾",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "癸",
+            "zhongchuan": "亥",
+            "zhongchuan_tianjiang": "勾",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "癸",
+            "mochuan": "亥",
+            "mochuan_tianjiang": "勾",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "癸"
+          },
+          "sike": {
+            "yike": "亥庚",
+            "yike_tianjiang": "勾",
+            "erke": "寅亥",
+            "erke_tianjiang": "虎",
+            "sanke": "亥申",
+            "sanke_tianjiang": "勾",
+            "sike": "寅亥",
+            "sike_tianjiang": "虎"
+          },
+          "tianpan": [
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰"
+          ],
+          "dipan": [
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑"
+          ],
+          "tianjiang": [
+            "陰",
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "伏吟": [
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "丙子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "伏吟",
+            "自任"
+          ],
+          "geju_primary": "伏吟",
+          "geju_sub": "自任",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "己",
+            "mochuan": "申",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "壬"
+          },
+          "sike": {
+            "yike": "寅甲",
+            "yike_tianjiang": "龍",
+            "erke": "寅寅",
+            "erke_tianjiang": "龍",
+            "sanke": "子子",
+            "sanke_tianjiang": "虎",
+            "sike": "子子",
+            "sike_tianjiang": "虎"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "乙丑",
+          "hour_ganzhi": "乙丑"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "伏吟",
+            "自任1"
+          ],
+          "geju_primary": "伏吟",
+          "geju_sub": "自任1",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "勾",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "丑",
+            "zhongchuan_tianjiang": "虎",
+            "zhongchuan_liuqin": "財",
+            "zhongchuan_dungan": "乙",
+            "mochuan": "戌",
+            "mochuan_tianjiang": "陰",
+            "mochuan_liuqin": "財",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "辰乙",
+            "yike_tianjiang": "勾",
+            "erke": "辰辰",
+            "erke_tianjiang": "勾",
+            "sanke": "丑丑",
+            "sanke_tianjiang": "虎",
+            "sike": "丑丑",
+            "sike_tianjiang": "虎"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲戌",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "伏吟",
+            "自任"
+          ],
+          "geju_primary": "伏吟",
+          "geju_sub": "自任",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "辛",
+            "mochuan": "申",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "寅甲",
+            "yike_tianjiang": "龍",
+            "erke": "寅寅",
+            "erke_tianjiang": "龍",
+            "sanke": "戌戌",
+            "sanke_tianjiang": "玄",
+            "sike": "戌戌",
+            "sike_tianjiang": "玄"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲戌",
+          "hour_ganzhi": "丙子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "伏吟",
+            "自任"
+          ],
+          "geju_primary": "伏吟",
+          "geju_sub": "自任",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "辛",
+            "mochuan": "申",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "寅甲",
+            "yike_tianjiang": "龍",
+            "erke": "寅寅",
+            "erke_tianjiang": "龍",
+            "sanke": "戌戌",
+            "sanke_tianjiang": "玄",
+            "sike": "戌戌",
+            "sike_tianjiang": "玄"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲戌",
+          "hour_ganzhi": "戊子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "伏吟",
+            "自任"
+          ],
+          "geju_primary": "伏吟",
+          "geju_sub": "自任",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "辛",
+            "mochuan": "申",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "寅甲",
+            "yike_tianjiang": "龍",
+            "erke": "寅寅",
+            "erke_tianjiang": "龍",
+            "sanke": "戌戌",
+            "sanke_tianjiang": "玄",
+            "sike": "戌戌",
+            "sike_tianjiang": "玄"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "贼克": [
+      {
+        "input": {
+          "jieqi": "春分",
+          "lunar_month": "二",
+          "day_ganzhi": "乙丑",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審",
+          "sanchuan": {
+            "chuchuan": "亥",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "父",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "酉",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "癸",
+            "mochuan": "未",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "財",
+            "mochuan_dungan": "辛"
+          },
+          "sike": {
+            "yike": "寅乙",
+            "yike_tianjiang": "空",
+            "erke": "子寅",
+            "erke_tianjiang": "常",
+            "sanke": "亥丑",
+            "sanke_tianjiang": "玄",
+            "sike": "酉亥",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "春分",
+          "lunar_month": "二",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "丙子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "元首"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "元首",
+          "sanchuan": {
+            "chuchuan": "戌",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "申",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "子甲",
+            "yike_tianjiang": "虎",
+            "erke": "戌子",
+            "erke_tianjiang": "玄",
+            "sanke": "戌子",
+            "sanke_tianjiang": "玄",
+            "sike": "申戌",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "芒種",
+          "lunar_month": "五",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "丙子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審",
+          "sanchuan": {
+            "chuchuan": "戌",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "寅",
+            "mochuan_tianjiang": "虎",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "丙"
+          },
+          "sike": {
+            "yike": "戌甲",
+            "yike_tianjiang": "合",
+            "erke": "午戌",
+            "erke_tianjiang": "后",
+            "sanke": "申子",
+            "sanke_tianjiang": "蛇",
+            "sike": "辰申",
+            "sike_tianjiang": "玄"
+          },
+          "tianpan": [
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰",
+            "后",
+            "貴"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "戊子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審斫輪"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審斫輪",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "己",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "卯甲",
+            "yike_tianjiang": "勾",
+            "erke": "辰卯",
+            "erke_tianjiang": "合",
+            "sanke": "丑子",
+            "sanke_tianjiang": "空",
+            "sike": "寅丑",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "庚子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審斫輪"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審斫輪",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "己",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "卯甲",
+            "yike_tianjiang": "勾",
+            "erke": "辰卯",
+            "erke_tianjiang": "合",
+            "sanke": "丑子",
+            "sanke_tianjiang": "空",
+            "sike": "寅丑",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審斫輪"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審斫輪",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "己",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "卯甲",
+            "yike_tianjiang": "勾",
+            "erke": "辰卯",
+            "erke_tianjiang": "合",
+            "sanke": "丑子",
+            "sanke_tianjiang": "空",
+            "sike": "寅丑",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "壬子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審斫輪"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審斫輪",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "雀",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "己",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "卯甲",
+            "yike_tianjiang": "勾",
+            "erke": "辰卯",
+            "erke_tianjiang": "合",
+            "sanke": "丑子",
+            "sanke_tianjiang": "空",
+            "sike": "寅丑",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "乙丑",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "元首"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "元首",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "空",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "卯",
+            "zhongchuan_tianjiang": "龍",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "丁",
+            "mochuan": "辰",
+            "mochuan_tianjiang": "勾",
+            "mochuan_liuqin": "財",
+            "mochuan_dungan": "戊"
+          },
+          "sike": {
+            "yike": "巳乙",
+            "yike_tianjiang": "合",
+            "erke": "午巳",
+            "erke_tianjiang": "雀",
+            "sanke": "寅丑",
+            "sanke_tianjiang": "空",
+            "sike": "卯寅",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "丙寅",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "賊尅",
+            "重審"
+          ],
+          "geju_primary": "賊尅",
+          "geju_sub": "重審",
+          "sanchuan": {
+            "chuchuan": "辰",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "戊",
+            "zhongchuan": "巳",
+            "zhongchuan_tianjiang": "勾",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "己",
+            "mochuan": "午",
+            "mochuan_tianjiang": "合",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "午丙",
+            "yike_tianjiang": "合",
+            "erke": "未午",
+            "erke_tianjiang": "雀",
+            "sanke": "卯寅",
+            "sanke_tianjiang": "空",
+            "sike": "辰卯",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "比用": [
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "乙丑"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "比用",
+            "退茹"
+          ],
+          "geju_primary": "比用",
+          "geju_sub": "退茹",
+          "sanchuan": {
+            "chuchuan": "戌",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "酉",
+            "zhongchuan_tianjiang": "陰",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "癸",
+            "mochuan": "申",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "壬"
+          },
+          "sike": {
+            "yike": "丑甲",
+            "yike_tianjiang": "空",
+            "erke": "子丑",
+            "erke_tianjiang": "虎",
+            "sanke": "亥子",
+            "sanke_tianjiang": "常",
+            "sike": "戌亥",
+            "sike_tianjiang": "玄"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "己巳"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "比用",
+            "知一"
+          ],
+          "geju_primary": "比用",
+          "geju_sub": "知一",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "后",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "酉",
+            "zhongchuan_tianjiang": "勾",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "癸",
+            "mochuan": "辰",
+            "mochuan_tianjiang": "玄",
+            "mochuan_liuqin": "財",
+            "mochuan_dungan": "戊"
+          },
+          "sike": {
+            "yike": "酉甲",
+            "yike_tianjiang": "勾",
+            "erke": "辰酉",
+            "erke_tianjiang": "玄",
+            "sanke": "未子",
+            "sanke_tianjiang": "空",
+            "sike": "寅未",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰"
+          ],
+          "tianjiang": [
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "辛未"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "比用",
+            "知一不備"
+          ],
+          "geju_primary": "比用",
+          "geju_sub": "知一不備",
+          "sanchuan": {
+            "chuchuan": "戌",
+            "chuchuan_tianjiang": "合",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "卯",
+            "zhongchuan_tianjiang": "陰",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "丁",
+            "mochuan": "申",
+            "mochuan_tianjiang": "龍",
+            "mochuan_liuqin": "官",
+            "mochuan_dungan": "壬"
+          },
+          "sike": {
+            "yike": "未甲",
+            "yike_tianjiang": "空",
+            "erke": "子未",
+            "erke_tianjiang": "蛇",
+            "sanke": "巳子",
+            "sanke_tianjiang": "常",
+            "sike": "戌巳",
+            "sike_tianjiang": "合"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午"
+          ],
+          "tianjiang": [
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "丁卯",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "比用",
+            "從革"
+          ],
+          "geju_primary": "比用",
+          "geju_sub": "從革",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "勾",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "己",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "合",
+            "zhongchuan_liuqin": "兄",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "未",
+            "mochuan_tianjiang": "雀",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "辛"
+          },
+          "sike": {
+            "yike": "申丁",
+            "yike_tianjiang": "蛇",
+            "erke": "酉申",
+            "erke_tianjiang": "貴",
+            "sanke": "辰卯",
+            "sanke_tianjiang": "龍",
+            "sike": "巳辰",
+            "sike_tianjiang": "勾"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "涉害": [
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "甲戌"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "涉害",
+            "從革"
+          ],
+          "geju_primary": "涉害",
+          "geju_sub": "從革",
+          "sanchuan": {
+            "chuchuan": "午",
+            "chuchuan_tianjiang": "蛇",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "庚",
+            "zhongchuan": "申",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "戌",
+            "mochuan_tianjiang": "玄",
+            "mochuan_liuqin": "財",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "辰甲",
+            "yike_tianjiang": "合",
+            "erke": "午辰",
+            "erke_tianjiang": "蛇",
+            "sanke": "寅子",
+            "sanke_tianjiang": "龍",
+            "sike": "辰寅",
+            "sike_tianjiang": "合"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "丙寅",
+          "hour_ganzhi": "己巳"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "涉害",
+            "斬關"
+          ],
+          "geju_primary": "涉害",
+          "geju_sub": "斬關",
+          "sanchuan": {
+            "chuchuan": "子",
+            "chuchuan_tianjiang": "蛇",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "甲",
+            "zhongchuan": "未",
+            "zhongchuan_tianjiang": "常",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "辛",
+            "mochuan": "寅",
+            "mochuan_tianjiang": "合",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "丙"
+          },
+          "sike": {
+            "yike": "子丙",
+            "yike_tianjiang": "蛇",
+            "erke": "未子",
+            "erke_tianjiang": "常",
+            "sanke": "酉寅",
+            "sanke_tianjiang": "陰",
+            "sike": "辰酉",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰"
+          ],
+          "tianjiang": [
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰",
+            "后",
+            "貴"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "丙寅",
+          "hour_ganzhi": "癸酉"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "涉害",
+            "間傳1"
+          ],
+          "geju_primary": "涉害",
+          "geju_sub": "間傳1",
+          "sanchuan": {
+            "chuchuan": "申",
+            "chuchuan_tianjiang": "蛇",
+            "chuchuan_liuqin": "財",
+            "chuchuan_dungan": "壬",
+            "zhongchuan": "亥",
+            "zhongchuan_tianjiang": "陰",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "空",
+            "mochuan": "寅",
+            "mochuan_tianjiang": "虎",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "丙"
+          },
+          "sike": {
+            "yike": "申丙",
+            "yike_tianjiang": "蛇",
+            "erke": "亥申",
+            "erke_tianjiang": "陰",
+            "sanke": "巳寅",
+            "sanke_tianjiang": "勾",
+            "sike": "申巳",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申"
+          ],
+          "tianjiang": [
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "昴星": [
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "己巳",
+          "hour_ganzhi": "乙亥"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "昴星",
+            "冬蛇掩目"
+          ],
+          "geju_primary": "昴星",
+          "geju_sub": "冬蛇掩目",
+          "sanchuan": {
+            "chuchuan": "申",
+            "chuchuan_tianjiang": "貴",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "壬",
+            "zhongchuan": "申",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "午",
+            "mochuan_tianjiang": "雀",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "申己",
+            "yike_tianjiang": "貴",
+            "erke": "酉申",
+            "erke_tianjiang": "后",
+            "sanke": "午巳",
+            "sanke_tianjiang": "雀",
+            "sike": "未午",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌"
+          ],
+          "tianjiang": [
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "庚午",
+          "hour_ganzhi": "乙亥"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "昴星",
+            "虎視"
+          ],
+          "geju_primary": "昴星",
+          "geju_sub": "虎視",
+          "sanchuan": {
+            "chuchuan": "戌",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "父",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "未",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "辛",
+            "mochuan": "酉",
+            "mochuan_tianjiang": "陰",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "癸"
+          },
+          "sike": {
+            "yike": "酉庚",
+            "yike_tianjiang": "陰",
+            "erke": "戌酉",
+            "erke_tianjiang": "玄",
+            "sanke": "未午",
+            "sanke_tianjiang": "貴",
+            "sike": "申未",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "戊寅",
+          "hour_ganzhi": "壬申"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "昴星",
+            "虎視"
+          ],
+          "geju_primary": "昴星",
+          "geju_sub": "虎視",
+          "sanchuan": {
+            "chuchuan": "丑",
+            "chuchuan_tianjiang": "貴",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "丁",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "虎",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "酉",
+            "mochuan_tianjiang": "勾",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "空"
+          },
+          "sike": {
+            "yike": "酉戊",
+            "yike_tianjiang": "勾",
+            "erke": "丑酉",
+            "erke_tianjiang": "貴",
+            "sanke": "午寅",
+            "sanke_tianjiang": "虎",
+            "sike": "戌午",
+            "sike_tianjiang": "合"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未"
+          ],
+          "tianjiang": [
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "己巳",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "昴星",
+            "冬蛇掩目"
+          ],
+          "geju_primary": "昴星",
+          "geju_sub": "冬蛇掩目",
+          "sanchuan": {
+            "chuchuan": "申",
+            "chuchuan_tianjiang": "貴",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "壬",
+            "zhongchuan": "申",
+            "zhongchuan_tianjiang": "貴",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "午",
+            "mochuan_tianjiang": "雀",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "申己",
+            "yike_tianjiang": "貴",
+            "erke": "酉申",
+            "erke_tianjiang": "后",
+            "sanke": "午巳",
+            "sanke_tianjiang": "雀",
+            "sike": "未午",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "别责": [
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "戊辰",
+          "hour_ganzhi": "乙亥"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "別責",
+            "別責"
+          ],
+          "geju_primary": "別責",
+          "geju_sub": "別責",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "蛇",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "午戊",
+            "yike_tianjiang": "蛇",
+            "erke": "未午",
+            "erke_tianjiang": "貴",
+            "sanke": "巳辰",
+            "sanke_tianjiang": "雀",
+            "sike": "午巳",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌"
+          ],
+          "tianjiang": [
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "辛未",
+          "hour_ganzhi": "癸酉"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "別責",
+            "蕪淫"
+          ],
+          "geju_primary": "別責",
+          "geju_sub": "蕪淫",
+          "sanchuan": {
+            "chuchuan": "亥",
+            "chuchuan_tianjiang": "玄",
+            "chuchuan_liuqin": "子",
+            "chuchuan_dungan": "空",
+            "zhongchuan": "丑",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "乙",
+            "mochuan": "丑",
+            "mochuan_tianjiang": "后",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "乙"
+          },
+          "sike": {
+            "yike": "丑辛",
+            "yike_tianjiang": "后",
+            "erke": "辰丑",
+            "erke_tianjiang": "雀",
+            "sanke": "戌未",
+            "sanke_tianjiang": "常",
+            "sike": "丑戌",
+            "sike_tianjiang": "后"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申"
+          ],
+          "tianjiang": [
+            "陰",
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "立春",
+          "lunar_month": "正",
+          "day_ganzhi": "丁丑",
+          "hour_ganzhi": "庚午"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "別責",
+            "蕪淫"
+          ],
+          "geju_primary": "別責",
+          "geju_sub": "蕪淫",
+          "sanchuan": {
+            "chuchuan": "巳",
+            "chuchuan_tianjiang": "空",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "辛",
+            "zhongchuan": "丑",
+            "zhongchuan_tianjiang": "陰",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "丁",
+            "mochuan": "丑",
+            "mochuan_tianjiang": "陰",
+            "mochuan_liuqin": "子",
+            "mochuan_dungan": "丁"
+          },
+          "sike": {
+            "yike": "丑丁",
+            "yike_tianjiang": "陰",
+            "erke": "未丑",
+            "erke_tianjiang": "勾",
+            "sanke": "未丑",
+            "sanke_tianjiang": "勾",
+            "sike": "丑未",
+            "sike_tianjiang": "陰"
+          },
+          "tianpan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "dipan": [
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳"
+          ],
+          "tianjiang": [
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎",
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "冬至",
+          "lunar_month": "十一",
+          "day_ganzhi": "戊辰",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "別責",
+            "別責"
+          ],
+          "geju_primary": "別責",
+          "geju_sub": "別責",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "官",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "蛇",
+            "zhongchuan_liuqin": "父",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "午",
+            "mochuan_tianjiang": "蛇",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "庚"
+          },
+          "sike": {
+            "yike": "午戊",
+            "yike_tianjiang": "蛇",
+            "erke": "未午",
+            "erke_tianjiang": "貴",
+            "sanke": "巳辰",
+            "sanke_tianjiang": "雀",
+            "sike": "午巳",
+            "sike_tianjiang": "蛇"
+          },
+          "tianpan": [
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "空",
+            "龍",
+            "勾",
+            "合",
+            "雀",
+            "蛇",
+            "貴",
+            "后",
+            "陰",
+            "玄",
+            "常",
+            "虎"
+          ],
+          "shensha": {}
+        }
+      }
+    ],
+    "返吟": [
+      {
+        "input": {
+          "jieqi": "大暑",
+          "lunar_month": "六",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "甲子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "返吟",
+            "無依"
+          ],
+          "geju_primary": "返吟",
+          "geju_sub": "無依",
+          "sanchuan": {
+            "chuchuan": "寅",
+            "chuchuan_tianjiang": "虎",
+            "chuchuan_liuqin": "兄",
+            "chuchuan_dungan": "丙",
+            "zhongchuan": "申",
+            "zhongchuan_tianjiang": "蛇",
+            "zhongchuan_liuqin": "官",
+            "zhongchuan_dungan": "壬",
+            "mochuan": "寅",
+            "mochuan_tianjiang": "虎",
+            "mochuan_liuqin": "兄",
+            "mochuan_dungan": "丙"
+          },
+          "sike": {
+            "yike": "申甲",
+            "yike_tianjiang": "蛇",
+            "erke": "寅申",
+            "erke_tianjiang": "虎",
+            "sanke": "午子",
+            "sanke_tianjiang": "后",
+            "sike": "子午",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "大暑",
+          "lunar_month": "六",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "丙子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "返吟",
+            "元胎勵德"
+          ],
+          "geju_primary": "返吟",
+          "geju_sub": "元胎勵德",
+          "sanchuan": {
+            "chuchuan": "子",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "父",
+            "chuchuan_dungan": "甲",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "子",
+            "mochuan_tianjiang": "龍",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "甲"
+          },
+          "sike": {
+            "yike": "申甲",
+            "yike_tianjiang": "蛇",
+            "erke": "寅申",
+            "erke_tianjiang": "虎",
+            "sanke": "午子",
+            "sanke_tianjiang": "后",
+            "sike": "子午",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      },
+      {
+        "input": {
+          "jieqi": "大暑",
+          "lunar_month": "六",
+          "day_ganzhi": "甲子",
+          "hour_ganzhi": "戊子"
+        },
+        "kinliuren_output": {
+          "geju_raw": [
+            "返吟",
+            "元胎勵德"
+          ],
+          "geju_primary": "返吟",
+          "geju_sub": "元胎勵德",
+          "sanchuan": {
+            "chuchuan": "子",
+            "chuchuan_tianjiang": "龍",
+            "chuchuan_liuqin": "父",
+            "chuchuan_dungan": "甲",
+            "zhongchuan": "午",
+            "zhongchuan_tianjiang": "后",
+            "zhongchuan_liuqin": "子",
+            "zhongchuan_dungan": "庚",
+            "mochuan": "子",
+            "mochuan_tianjiang": "龍",
+            "mochuan_liuqin": "父",
+            "mochuan_dungan": "甲"
+          },
+          "sike": {
+            "yike": "申甲",
+            "yike_tianjiang": "蛇",
+            "erke": "寅申",
+            "erke_tianjiang": "虎",
+            "sanke": "午子",
+            "sanke_tianjiang": "后",
+            "sike": "子午",
+            "sike_tianjiang": "龍"
+          },
+          "tianpan": [
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥",
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳"
+          ],
+          "dipan": [
+            "子",
+            "丑",
+            "寅",
+            "卯",
+            "辰",
+            "巳",
+            "午",
+            "未",
+            "申",
+            "酉",
+            "戌",
+            "亥"
+          ],
+          "tianjiang": [
+            "后",
+            "貴",
+            "蛇",
+            "雀",
+            "合",
+            "勾",
+            "龍",
+            "空",
+            "虎",
+            "常",
+            "玄",
+            "陰"
+          ],
+          "shensha": {}
+        }
+      }
+    ]
+  }
+}
