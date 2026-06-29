@@ -115,6 +115,7 @@ export function useLiuren() {
       return true;
     } catch (err) {
       const msg = err instanceof Error ? err.message : '保存失败';
+      console.error('[Liuren] autoSave failed:', err);
       setError(msg);
       setSaveStatus('error');
       return false;

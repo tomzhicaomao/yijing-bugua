@@ -34,7 +34,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries: number = 2): Promi
  * Convert a local DivinationRecord (camelCase) to a Supabase row (snake_case)
  */
 function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
-  return {
+  const row: Record<string, unknown> = {
     id: record.id,
     schema_version: record.schemaVersion,
     timestamp: record.timestamp,
@@ -46,9 +46,11 @@ function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
     interpretations: record.interpretations,
     feedback: record.feedback,
     duplicate: record.duplicate ?? null,
-    liuren_pan: record.liurenPan ?? null,
-    interpretation: record.interpretation ?? null,
   }
+  // 仅当 liuren 字段有值时才包含（兼容未执行 migration 的数据库）
+  if (record.liurenPan) row.liuren_pan = record.liurenPan
+  if (record.interpretation) row.interpretation = record.interpretation
+  return row
 }
 
 /**
