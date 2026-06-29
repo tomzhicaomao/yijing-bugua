@@ -127,3 +127,15 @@
 **isNearBoundary 误判修复**
 - `index.ts:153`: `if (isNearBoundary)` → `if (isNearBoundary.isNear)`
 - 对象永远 truthy，导致每条记录都显示虚假的节气边界警告
+
+---
+
+## Liuren 保存失败修复 (`823b962`)
+
+**问题**: 大六壬占卜完成后"正在保存记录"持续很久，记录未保存到 history。
+
+**根因**: `toSupabaseRow` 总是发送 `liuren_pan` 和 `interpretation` 字段，但初始 schema 没有这两列（需要 migration `20250101000000` 添加）。migration 未执行时，整条 INSERT 失败，基础字段也无法保存。
+
+**修复**:
+- `records.ts`: `toSupabaseRow` 改为条件包含——只有当 `liurenPan`/`interpretation` 有值时才加入 INSERT
+- `useLiuren.ts`: `autoSaveAndNavigate` 添加 `console.error` 便于调试

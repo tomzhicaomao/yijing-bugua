@@ -235,3 +235,38 @@ f58634d fix: High Priority H5-H12 + Medium 修复
 ```
 342c388 fix: Round 2 审查修复 — setStep 回归 + isNearBoundary 误判
 ```
+
+---
+
+## Round 3: Liuren 保存失败修复（2026-06-30）
+
+### 问题
+
+用户报告：大六壬占卜完成后，页面显示"正在保存记录"持续很久，记录未保存到 history。
+
+### 根因分析（第一性原理）
+
+| 步骤 | 推理 |
+|------|------|
+| 1 | Yijing 占卜能保存 → Supabase 连接正常 |
+| 2 | Liuren 用同一个 `createRecord` → 函数本身没问题 |
+| 3 | 区别：Liuren INSERT 多了 `liuren_pan` 和 `interpretation` 字段 |
+| 4 | 初始 schema 没有这两列 → 需要 migration `20250101000000` |
+| 5 | migration 未执行 → 整条 INSERT 失败 → 所有字段都无法保存 |
+
+### 修复
+
+`toSupabaseRow` 改为条件包含——只有当 `liurenPan` / `interpretation` 有值时才加入 INSERT。这样即使 migration 未执行，基础字段仍能正常保存。
+
+### 验证
+
+| 测试 | 结果 |
+|------|------|
+| 单元测试 | ✅ 291/291 |
+| E2E 测试 | ✅ 76/76 |
+
+### Commit
+
+```
+823b962 fix: Liuren 保存失败 — 仅当字段存在时才发送 liuren_pan
+```
