@@ -115,3 +115,15 @@
 - **新增代码**: ~500 行
 - **删除代码**: ~100 行
 - **修复问题**: 19 项 Critical/High + 3 项 Medium
+
+---
+
+## Round 2 审查修复 (`342c388`)
+
+**setStep('result') 回归修复**
+- `useLiuren.ts`: 恢复 `setStep('result')` 调用（在 `autoSaveAndNavigate` 之前）
+- 修复结果页不可达的关键回归
+
+**isNearBoundary 误判修复**
+- `index.ts:153`: `if (isNearBoundary)` → `if (isNearBoundary.isNear)`
+- 对象永远 truthy，导致每条记录都显示虚假的节气边界警告

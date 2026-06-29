@@ -203,3 +203,35 @@ f58634d fix: High Priority H5-H12 + Medium 修复
 8. **G2**: 离线回退 / Service Worker
 9. **G3**: Playwright 多浏览器测试（Firefox, WebKit）
 10. **H9**: Supabase RLS 策略审计
+
+---
+
+## Round 2 对抗式审查（2026-06-30）
+
+### 修复验证
+
+**20/20 修复全部验证通过**（10 个通用 + 10 个 Liuren），零回归。
+
+### 新发现
+
+| 级别 | 问题 | 状态 |
+|------|------|------|
+| CRITICAL | `setStep('result')` 在 auto-save 修复时误删，结果页不可达 | ✅ 已修复 |
+| HIGH | `isNearBoundary` 对象直接当 boolean（永远 truthy），每条记录都显示节气边界警告 | ✅ 已修复 |
+| HIGH | Serverless 代理原样转发请求体，可注入任意参数 | 已记录 |
+| MEDIUM | 安全层零测试覆盖（wrapUserInput/sanitizeForPrompt） | 已记录 |
+| MEDIUM | API Key 明文存储在 Supabase | 已记录 |
+
+### 验证结果
+
+| 测试 | 结果 |
+|------|------|
+| TypeScript | ✅ 零错误 |
+| 单元测试 | ✅ 291/291 |
+| E2E 测试 | ✅ 76/76（单独运行全部通过） |
+
+### Commit 历史（Round 2）
+
+```
+342c388 fix: Round 2 审查修复 — setStep 回归 + isNearBoundary 误判
+```
