@@ -51,9 +51,12 @@ src/
 
 ## Database Migration
 
-**大六壬字段需手动 migration**：`supabase/migrations/20260630000000_add_liuren_fields.sql`
-在 Supabase Dashboard → SQL Editor 中运行，添加 `liuren_pan` 和 `interpretation` 列。
-未执行会导致大六壬保存失败（"Could not find the 'liuren_pan' column"）。
+**需手动执行的 migration**（在 Supabase Dashboard → SQL Editor 中运行）：
+
+1. `20260630000000_add_liuren_fields.sql` — 添加 `liuren_pan` 和 `interpretation` JSONB 列
+2. `20260630010000_alter_method_column.sql` — 扩展 `method` 列 `VARCHAR(10)` → `VARCHAR(20)`（大六壬方法名超出 10 字符限制）
+
+未执行会导致大六壬保存失败。
 
 ## Environment
 
