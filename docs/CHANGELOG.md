@@ -30,6 +30,43 @@
 
 ---
 
+## 2026-06-29
+
+### 对抗式审查修复（4 个 commit）
+
+**Critical 修复 (5d3e97b)**
+- C6: Google Fonts 加载 — 添加 Space Grotesk + Space Mono
+- C1: .env 凭证暴露 — 从 git 移除，.gitignore 添加规则
+- C4: Zod Schema 扩展 — methodSchema 新增 liuren 类型
+- C2: 天将映射修复 — `diPan[tianPanIdx]` → `tianPan[tianPanIdx]`
+- C5: 涉害深度方向修复 — KE_MATRIX 索引修正
+- C3: 提示注入防护 — `wrapUserInput()` 隔离用户输入
+
+**High 修复 (3989b8a)**
+- H1: max_tokens 限制（3000/1500/3000）
+- H2: 速率限制（3 秒最小间隔）
+- H3: 指数退避重试
+- H4: 并发调用锁
+
+**High+Medium 修复 (f58634d)**
+- H5: 过时闭包修复（useDivination）
+- H6: 数据库写入重试（withRetry）
+- H7: 触摸目标增至 44px
+- H8: 键盘可访问性
+- H10: 节气 JD 计算改进（Meeus 算法）
+- H11: 月支/月将分离
+- H12: 神煞 derived 类型处理
+- 九宗门级联修正（伏吟检查提前）
+
+**Round 2 修复 (342c388)**
+- setStep('result') 回归修复
+- isNearBoundary 误判修复
+
+**Liuren 保存失败修复 (823b962)**
+- toSupabaseRow 条件包含 liuren_pan/interpretation
+
+---
+
 ## 2026-06-19
 
 ### ✨ 大六壬完整集成（5个Phase · 58个文件 · 11091行新增）
