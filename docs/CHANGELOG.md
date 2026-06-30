@@ -2,6 +2,22 @@
 
 ## 2026-06-30
 
+### 🐛 大六壬记录 method 字段修复 + VARCHAR 扩展
+
+**问题**：大六壬保存失败，报 "value too long for type character varying(10)"。
+
+**根因**：
+1. `useLiuren.ts` 的 `buildRecord` 硬编码 `method: 'virtual'`，大六壬记录被存为虚拟摇卦
+2. 初始 schema 定义 `method VARCHAR(10)`，但 `'liuren-zhengshi'`(16字符) 超出限制
+
+**修复**：
+1. `buildRecord` 改为 `customShiZhi ? 'liuren-huoshi' : 'liuren-zhengshi'`
+2. 新增 migration `20260630010000_alter_method_column.sql`：`VARCHAR(10)` → `VARCHAR(20)`
+
+**涉及文件**：`src/hooks/useLiuren.ts`、`supabase/migrations/20260630010000_alter_method_column.sql`
+
+---
+
 ### 🐛 大六壬历史记录路由修复
 
 **问题**：从历史列表点击查看大六壬记录时，页面错误显示"虚拟摇卦"、"卦辞"栏和空白栏。
