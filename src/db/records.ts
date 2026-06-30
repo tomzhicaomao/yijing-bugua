@@ -59,7 +59,7 @@ function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
 function fromSupabaseRow(row: Record<string, unknown>): DivinationRecord {
   return {
     id: row.id as string,
-    schemaVersion: (row.schema_version as number) ?? 1,
+    schemaVersion: 1 as const,
     timestamp: row.timestamp as string,
     question: row.question as string,
     category: row.category as DivinationRecord['category'],

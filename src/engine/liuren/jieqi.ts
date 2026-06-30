@@ -32,11 +32,9 @@ export const SOLAR_TERM_NAMES: string[] = [
  */
 function calcSolarTermJD(year: number, termIndex: number): number {
   // J2000.0 基准：2000年1月1日 12:00 TT = JD 2451545.0
-  const J2000 = 2451545.0;
 
   // 太阳黄经到达的角度（每个节气 15°）
   // 小寒=285°, 大寒=300°, 立春=315°, ..., 冬至=270°
-  const targetLong = (285 + termIndex * 15) % 360;
 
   // 太阳平黄经近似公式
   // L0 = 280.46646 + 36000.76983 * T + 0.0003032 * T^2
