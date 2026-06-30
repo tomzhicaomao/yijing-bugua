@@ -16,7 +16,7 @@ import LiurenPanTable from '../components/liuren/LiurenPanTable';
 import Interpretation from '../components/result/Interpretation';
 import FeedbackForm from '../components/feedback/FeedbackForm';
 import type { DivinationRecord, LiurenPanData } from '../types';
-import type { LiurenPan, TianJiangName } from '../engine/liuren/types';
+import type { LiurenPan, TianDiPan, TianJiangName } from '../engine/liuren/types';
 
 // ─── Section header ─────────────────────────────────────────────
 
@@ -439,7 +439,7 @@ export default function LiurenResultView() {
 
           {pan?.tianDiPan ? (
             <div className="mb-6">
-              <LiurenPanTable tianDiPan={pan.tianDiPan} />
+              <LiurenPanTable tianDiPan={pan.tianDiPan as unknown as TianDiPan} />
             </div>
           ) : pan ? (
             <div className="mb-6">
