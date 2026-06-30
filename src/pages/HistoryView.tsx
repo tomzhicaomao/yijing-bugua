@@ -74,10 +74,10 @@ export default function HistoryView() {
           ) : (
             <div ref={listRef} className="space-y-4">
               {records.map((r, i) => (
-                <Link 
-                  key={r.id} 
+                <Link
+                  key={r.id}
                   ref={el => { itemRefs.current[i] = el }}
-                  to={`/history/${r.id}`} 
+                  to={r.method.startsWith('liuren') ? `/liuren/${r.id}` : `/history/${r.id}`}
                   className="block"
                 >
                   <GlassCard className="p-5">
