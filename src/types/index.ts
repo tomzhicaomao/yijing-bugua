@@ -136,6 +136,9 @@ export interface LiurenPanData {
   geJu: string;
   siKe: Array<{ upperGod: string; lowerGod: string; relation: string }>;
   sanChuan: Array<{ branch: string; tianJiang: string; liuQin: string; dunGan: string }>;
+  tianDiPan?: { diPan: string[]; tianPan: string[]; diToTian: Record<string, string> };
+  tianJiang?: { guiRenBranch: string; direction: '顺' | '逆'; branchToJiang: Record<string, string> };
+  shenSha?: Array<{ category: '吉' | '凶' | '中性'; name: string; branch: string }>;
   warnings: string[];
 }
 

@@ -1,5 +1,35 @@
 # 项目变更记录
 
+## 2026-06-30
+
+### 🐛 Migration 时间戳修复 + 大六壬详情页重新设计
+
+**问题根因**：`20250101000000_add_liuren_fields.sql` 时间戳早于 `20260530000000_initial_schema.sql`，导致 Supabase 按顺序执行时 ALTER TABLE 在表创建之前运行，`liuren_pan` 和 `interpretation` 列从未成功创建。
+
+**修复**：
+
+| 文件 | 说明 |
+|------|------|
+| `supabase/migrations/20260630000000_add_liuren_fields.sql` | 重命名自 `20250101000000_*`，修正时间戳顺序 |
+| `supabase/migrations/20260630000000_add_liuren_fields_rollback.sql` | 对应 rollback 文件同步重命名 |
+| `src/types/index.ts` | `LiurenPanData` 补全 `tianDiPan?`、`tianJiang?`、`shenSha?` 三个缺失字段 |
+| `src/pages/LiurenResultView.tsx` | 大六壬详情页完全重设计（5 层渐进式架构） |
+
+**LiurenResultView 设计变更**（第一性原理）：
+
+| 层级 | 内容 | 设计意图 |
+|------|------|----------|
+| Layer 1 | 问题 + AI 结论（趋势/置信度/答案） | 一眼看到"所以呢" |
+| Layer 1.5 | 格局 + 日干支 + 起课条件 | 课式概览 |
+| Layer 2 | 三传（发用→传递→归结）→ 四课 | 核心推导结果，三传最突出 |
+| Layer 3 | 天地盘、起课参数 | 可折叠参考信息 |
+| Layer 4 | 天将、神煞、警告 | 可折叠附加信息 |
+| Layer 5 | AI 详细解读 + 反馈 | 反思与验证 |
+
+**待手动操作**：在 Supabase Dashboard SQL Editor 执行 `20260630000000_add_liuren_fields.sql` 中的 ALTER TABLE 语句。
+
+---
+
 ## 2026-06-19
 
 ### ✨ 大六壬完整集成（5个Phase · 58个文件 · 11091行新增）
