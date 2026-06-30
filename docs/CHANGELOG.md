@@ -2,6 +2,52 @@
 
 ## 2026-06-30
 
+### ⚠️ 部署问题排查
+
+**Vercel 环境变量缺失**：生产站点无法连接 Supabase（"Failed to fetch"）。
+- 根因：`.env` 被从 git 移除后，Vercel 未配置 `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`
+- 修复：`vercel env add VITE_SUPABASE_URL production` + `vercel env add VITE_SUPABASE_ANON_KEY production`
+- ⚠️ Vercel CLI 部署（`vercel --prod`）不会自动读取 .env，必须手动添加
+
+**大六壬保存失败**："Could not find the 'liuren_pan' column"
+- 根因：Supabase 数据库未执行 liuren migration
+- 修复：在 Supabase Dashboard → SQL Editor 运行 `supabase/migrations/20260630000000_add_liuren_fields.sql`
+
+### ✅ 全量验证修复 — ESLint / 单元测试 / E2E / 安全漏洞
+
+**安全 (npm audit fix)**
+- 升级 undici (7 个漏洞) + vite (2 个漏洞) → 0 vulnerabilities
+
+**ESLint (61 错误 + 9 警告 → 0)**
+- `eslint.config.js`: 添加 `argsIgnorePattern: "^_"` + `varsIgnorePattern: "^_"`
+- `useReducedMotion.ts`: lazy initializer + `unknown` 替代 `any`
+- `useGSAPContext.ts` / `useScrollTrigger.ts`: eslint-disable 注释（deps param 模式）
+- `VirtualCoins.tsx`: `useReducer` 替代多个 `setState`
+- `useLiuren.ts`: 函数重排序 + dep 数组修复
+- `ResultView.tsx`: `useRef` 替代 `useState` 守卫标志 + 函数提前声明
+- `LiurenResultView.tsx`: 移除冗余 `setLoading(true)`
+- `AuthContext.tsx`: eslint-disable for useAuth
+- `yarrow-stalk.ts`: `let` → `const`
+- `bieze.ts`: 移除未使用变量
+- 20+ 测试文件: 修复 `any` 类型和未使用导入
+
+**单元测试 (281/281)**
+- `schemas.ts`: `claims.min(1)` → `min(5)` 匹配测试预期
+- `useDivination.ts`: `completingRef` 防重复调用
+
+**E2E 测试 (76/76)**
+- 铜钱选择器: `[aria-label="铜钱"]` → `[data-testid="coin"]`
+- 导航栏: `4` → `5`（六壬功能默认开启）
+- 设置页标题: 移除不存在的 "SETTINGS" 断言
+- 统计页: 恢复误删的 `mockRecordsApi` 导入
+- 铜钱组件: 同步结果计算 + postMessage 自动推进
+
+### 🎨 统一首页大六壬按钮样式
+
+- `HomeView.tsx`: 大六壬入口从自定义卡片改为 `Button variant="secondary"`，与"开始起卦"保持一致
+
+---
+
 ### 🐛 Migration 时间戳修复 + 大六壬详情页重新设计
 
 **问题根因**：`20250101000000_add_liuren_fields.sql` 时间戳早于 `20260530000000_initial_schema.sql`，导致 Supabase 按顺序执行时 ALTER TABLE 在表创建之前运行，`liuren_pan` 和 `interpretation` 列从未成功创建。

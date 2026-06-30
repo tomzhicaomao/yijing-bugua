@@ -1,5 +1,7 @@
 # 易经占卜与思考工具 — 设计概要 v1
 
+> ⚠️ **归档文档** — Phase A 原始设计（2026-06）。项目已演进为 Phase A + B（含大六壬），存储从 IndexedDB 迁移到 Supabase。当前架构见 `CLAUDE.md` 和 `docs/CHANGELOG.md`。
+
 > Phase A：周易古占 · 实验派 · 个人 Web 应用
 
 ---
