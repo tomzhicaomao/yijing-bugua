@@ -1,12 +1,11 @@
 /**
  * 大六壬结果详情页
  *
- * 排版原则（第一性原理）：
+ * 排版原则：
  *   1. 阅读顺序 = 推导顺序：天地盘 → 四课 → 三传 → 解读
- *   2. 移动端单列全宽，不用横向并排挤压中文字符
- *   3. 三传是最终输出，视觉最重；四课是推导过程，次之
- *   4. 附加信息（天将、神煞）合并为一个折叠区块，减少点击
- *   5. AI 结论紧接三传之后（课式→结论 自然衔接）
+ *   2. 移动端单列全宽，不横向挤压中文字符
+ *   3. 每个区块必须有内容或明确的空状态提示，杜绝空白
+ *   4. AI 结论始终显示（即使无数据也给提示）
  */
 
 import { useState, useEffect } from 'react';
@@ -35,10 +34,12 @@ function SectionLabel({ label, sub }: { label: string; sub?: string }) {
 function Collapsible({
   title,
   defaultOpen = false,
+  badge,
   children,
 }: {
   title: string;
   defaultOpen?: boolean;
+  badge?: number;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -48,9 +49,16 @@ function Collapsible({
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-4 py-3 bg-nothing-bg-secondary hover:bg-nothing-raised transition-colors"
       >
-        <span className="font-mono text-xs tracking-[0.15em] text-nothing-text-secondary">
-          {title}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs tracking-[0.15em] text-nothing-text-secondary">
+            {title}
+          </span>
+          {badge !== undefined && badge > 0 && (
+            <span className="font-mono text-[9px] text-nothing-text-disabled bg-nothing-raised px-1.5 py-0.5 rounded">
+              {badge}
+            </span>
+          )}
+        </div>
         <span className="font-mono text-[10px] text-nothing-text-disabled">
           {open ? '收起' : '展开'}
         </span>
@@ -77,11 +85,22 @@ function TrendBadge({ trend }: { trend: string }) {
   );
 }
 
-// ─── SanChuan — 竖排，每个传占一行 ─────────────────────────────
+// ─── SanChuan — 竖排，每传一行 ─────────────────────────────────
 
 function SanChuanCard({ items }: { items: LiurenPanData['sanChuan'] }) {
   const labels = ['初传', '中传', '末传'];
   const sublabels = ['发用', '传递', '归结'];
+
+  if (!items || items.length === 0) {
+    return (
+      <div>
+        <SectionLabel label="三传" sub="九宗门推导" />
+        <div className="border border-nothing-border rounded-md p-4 text-center">
+          <span className="font-mono text-[11px] text-nothing-text-disabled">暂无三传数据</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -96,18 +115,20 @@ function SanChuanCard({ items }: { items: LiurenPanData['sanChuan'] }) {
                 : 'border-nothing-border'
             }`}
           >
-            {/* 左侧：地支（大字） */}
+            {/* 左侧：地支 */}
             <div className="text-center shrink-0 w-12">
               <div
                 className={`font-mono text-2xl leading-none ${
                   idx === 0 ? 'text-nothing-accent' : 'text-nothing-text-display'
                 }`}
               >
-                {item.branch}
+                {item.branch || '—'}
               </div>
-              <div className="font-mono text-[9px] text-nothing-text-disabled mt-1">
-                遁{item.dunGan}
-              </div>
+              {item.dunGan && (
+                <div className="font-mono text-[9px] text-nothing-text-disabled mt-1">
+                  遁{item.dunGan}
+                </div>
+              )}
             </div>
 
             {/* 右侧：标签 + 天将 + 六亲 */}
@@ -117,12 +138,16 @@ function SanChuanCard({ items }: { items: LiurenPanData['sanChuan'] }) {
                 <span className="font-mono text-[9px] text-nothing-text-disabled">{sublabels[idx]}</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="font-mono text-sm text-nothing-text-primary">{item.tianJiang}</span>
-                <span className="font-mono text-[11px] text-nothing-text-disabled">{item.liuQin}</span>
+                <span className="font-mono text-sm text-nothing-text-primary">
+                  {item.tianJiang || '—'}
+                </span>
+                <span className="font-mono text-[11px] text-nothing-text-disabled">
+                  {item.liuQin || ''}
+                </span>
               </div>
             </div>
 
-            {/* 流向箭头（非末项） */}
+            {/* 流向箭头 */}
             {idx < items.length - 1 && (
               <div className="text-nothing-text-disabled text-[10px] shrink-0">↓</div>
             )}
@@ -133,10 +158,21 @@ function SanChuanCard({ items }: { items: LiurenPanData['sanChuan'] }) {
   );
 }
 
-// ─── SiKe — 2×2 网格，每格有足够空间 ───────────────────────────
+// ─── SiKe — 2×2 网格 ───────────────────────────────────────────
 
 function SiKeCard({ items }: { items: LiurenPanData['siKe'] }) {
   const labels = ['一课', '二课', '三课', '四课'];
+
+  if (!items || items.length === 0) {
+    return (
+      <div>
+        <SectionLabel label="四课" sub="日干支推演" />
+        <div className="border border-nothing-border rounded-md p-4 text-center">
+          <span className="font-mono text-[11px] text-nothing-text-disabled">暂无四课数据</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -155,9 +191,13 @@ function SiKeCard({ items }: { items: LiurenPanData['siKe'] }) {
           return (
             <div key={idx} className="border border-nothing-border rounded-md p-3 text-center">
               <div className="font-mono text-[10px] text-nothing-text-disabled mb-2">{labels[idx]}</div>
-              <div className="font-mono text-xl text-nothing-text-display">{item.upperGod}</div>
+              <div className="font-mono text-xl text-nothing-text-display">
+                {item.upperGod || '—'}
+              </div>
               <div className={`font-mono text-sm my-1 ${relColor}`}>{relSymbol}</div>
-              <div className="font-mono text-xl text-nothing-text-secondary">{item.lowerGod}</div>
+              <div className="font-mono text-xl text-nothing-text-secondary">
+                {item.lowerGod || '—'}
+              </div>
             </div>
           );
         })}
@@ -172,7 +212,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between py-1.5">
       <span className="font-mono text-[11px] text-nothing-text-disabled">{label}</span>
-      <span className="font-mono text-[11px] text-nothing-text-secondary">{value}</span>
+      <span className="font-mono text-[11px] text-nothing-text-secondary">{value || '—'}</span>
     </div>
   );
 }
@@ -180,7 +220,13 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 // ─── ShenSha ────────────────────────────────────────────────────
 
 function ShenShaList({ items }: { items: NonNullable<LiurenPan['shenSha']> }) {
-  if (!items || items.length === 0) return null;
+  if (!items || items.length === 0) {
+    return (
+      <div className="text-center py-3">
+        <span className="font-mono text-[11px] text-nothing-text-disabled">暂无神煞数据</span>
+      </div>
+    );
+  }
 
   const grouped = {
     '吉': items.filter((s) => s.category === '吉'),
@@ -234,9 +280,6 @@ function WarningList({ warnings }: { warnings: string[] }) {
           <span className="text-orange-500 text-sm">⚠</span>
           <span className="font-mono text-xs tracking-[0.1em] text-orange-600">注意事项</span>
         </div>
-        <p className="mt-0.5 font-mono text-[10px] text-orange-400">
-          以下提示不影响起课结果，解读时留意即可
-        </p>
       </div>
       <div className="p-3 space-y-2">
         {warnings.map((w, idx) => (
@@ -246,6 +289,16 @@ function WarningList({ warnings }: { warnings: string[] }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// ─── Empty state helper ─────────────────────────────────────────
+
+function EmptyHint({ text }: { text: string }) {
+  return (
+    <div className="text-center py-4">
+      <span className="font-mono text-[11px] text-nothing-text-disabled">{text}</span>
     </div>
   );
 }
@@ -303,6 +356,10 @@ export default function LiurenResultView() {
   const pan = record.liurenPan;
   const interp = record.interpretation || record.interpretations?.[0];
 
+  // 计算天将/神煞是否有实际内容
+  const hasTianJiang = pan?.tianJiang?.branchToJiang && Object.keys(pan.tianJiang.branchToJiang).length > 0;
+  const hasShenSha = pan?.shenSha && pan.shenSha.length > 0;
+
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
       {/* ── Top bar ── */}
@@ -334,8 +391,8 @@ export default function LiurenResultView() {
               {record.question}
             </h1>
 
-            {pan && (
-              <div className="flex items-center gap-3">
+            {pan ? (
+              <div className="flex items-center gap-3 flex-wrap">
                 <span className="font-mono text-lg text-nothing-text-display">{pan.geJu}</span>
                 <span className="text-nothing-text-disabled">·</span>
                 <span className="font-mono text-[11px] text-nothing-text-secondary">{pan.dayGanZhi}</span>
@@ -344,21 +401,55 @@ export default function LiurenResultView() {
                   {pan.solarTerm} 月将{pan.yueJiang} {pan.isDaytime ? '昼' : '夜'}占{pan.shiZhi}时
                 </span>
               </div>
+            ) : (
+              <div className="font-mono text-[11px] text-nothing-text-disabled">
+                {record.method === 'liuren-zhengshi' ? '大六壬·正时' :
+                 record.method === 'liuren-huoshi' ? '大六壬·活时' : '六壬占卜'}
+                {' · '}
+                {new Date(record.timestamp).toLocaleString('zh-CN')}
+              </div>
             )}
           </div>
 
           {/* ══════════════════════════════════════════════════════
-              ② 天地盘（基础，默认展开）
+              ② AI 结论（始终显示，最优先）
              ══════════════════════════════════════════════════════ */}
 
-          {pan && pan.tianDiPan && (
+          <div className="mb-6">
+            {interp ? (
+              <div className="border border-nothing-border rounded-md p-4 bg-nothing-surface">
+                <div className="flex items-center gap-3 mb-3">
+                  <TrendBadge trend={interp.trend} />
+                  <span className="font-mono text-[10px] text-nothing-text-disabled">
+                    置信度 {interp.confidence}
+                  </span>
+                </div>
+                <p className="text-sm text-nothing-text-primary leading-relaxed">{interp.answer}</p>
+              </div>
+            ) : (
+              <div className="border border-nothing-border rounded-md p-4 bg-nothing-surface">
+                <EmptyHint text="暂无 AI 解读" />
+              </div>
+            )}
+          </div>
+
+          {/* ══════════════════════════════════════════════════════
+              ③ 天地盘
+             ══════════════════════════════════════════════════════ */}
+
+          {pan?.tianDiPan ? (
             <div className="mb-6">
               <LiurenPanTable tianDiPan={pan.tianDiPan} />
             </div>
-          )}
+          ) : pan ? (
+            <div className="mb-6">
+              <SectionLabel label="天地盘" />
+              <EmptyHint text="暂无天地盘数据" />
+            </div>
+          ) : null}
 
           {/* ══════════════════════════════════════════════════════
-              ③ 四课（2×2 网格）
+              ④ 四课
              ══════════════════════════════════════════════════════ */}
 
           {pan && (
@@ -368,7 +459,7 @@ export default function LiurenResultView() {
           )}
 
           {/* ══════════════════════════════════════════════════════
-              ④ 三传（竖排，视觉最重）
+              ⑤ 三传
              ══════════════════════════════════════════════════════ */}
 
           {pan && (
@@ -378,70 +469,9 @@ export default function LiurenResultView() {
           )}
 
           {/* ══════════════════════════════════════════════════════
-              ⑤ AI 结论（紧接课式之后）
+              ⑥ 警告（始终展示，如果有）
              ══════════════════════════════════════════════════════ */}
 
-          {interp && (
-            <div className="mb-6 border border-nothing-border rounded-md p-4 bg-nothing-surface">
-              <div className="flex items-center gap-3 mb-3">
-                <TrendBadge trend={interp.trend} />
-                <span className="font-mono text-[10px] text-nothing-text-disabled">
-                  置信度 {interp.confidence}
-                </span>
-              </div>
-              <p className="text-sm text-nothing-text-primary leading-relaxed">{interp.answer}</p>
-            </div>
-          )}
-
-          {/* ══════════════════════════════════════════════════════
-              ⑥ 附加信息（合并折叠）
-             ══════════════════════════════════════════════════════ */}
-
-          {(pan?.tianJiang || (pan?.shenSha && pan.shenSha.length > 0)) && (
-            <div className="mb-6">
-              <Collapsible title="天将与神煞">
-                <div className="space-y-5">
-                  {/* 天将 */}
-                  {pan?.tianJiang && (
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-[10px] text-nothing-text-disabled tracking-wider">
-                          天将排列
-                        </span>
-                        <span className="font-mono text-[10px] text-nothing-text-disabled">
-                          贵人 {pan.tianJiang.guiRenBranch} ({pan.tianJiang.direction}行)
-                        </span>
-                      </div>
-                      {pan.tianJiang.branchToJiang && (
-                        <div className="grid grid-cols-3 gap-1.5">
-                          {Object.entries(pan.tianJiang.branchToJiang).map(([branch, jiang]) => (
-                            <div
-                              key={branch}
-                              className="flex items-center justify-between px-2 py-1.5 border border-nothing-border rounded text-[11px]"
-                            >
-                              <span className="font-mono text-nothing-text-display">{branch}</span>
-                              <span className="font-mono text-nothing-text-disabled">
-                                {jiang as TianJiangName}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* 神煞 */}
-                  {pan?.shenSha && pan.shenSha.length > 0 && (
-                    <div>
-                      <ShenShaList items={pan.shenSha as NonNullable<LiurenPan['shenSha']>} />
-                    </div>
-                  )}
-                </div>
-              </Collapsible>
-            </div>
-          )}
-
-          {/* 警告（始终展示） */}
           {pan?.warnings && pan.warnings.length > 0 && (
             <div className="mb-6">
               <WarningList warnings={pan.warnings} />
@@ -449,7 +479,56 @@ export default function LiurenResultView() {
           )}
 
           {/* ══════════════════════════════════════════════════════
-              ⑦ AI 详细解读
+              ⑦ 天将与神煞（合并折叠）
+             ══════════════════════════════════════════════════════ */}
+
+          {(hasTianJiang || hasShenSha) && (
+            <div className="mb-6">
+              <Collapsible
+                title="天将与神煞"
+                badge={(hasShenSha ? pan!.shenSha!.length : 0)}
+              >
+                <div className="space-y-5">
+                  {/* 天将 */}
+                  {hasTianJiang && (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-[10px] text-nothing-text-disabled tracking-wider">
+                          天将排列
+                        </span>
+                        <span className="font-mono text-[10px] text-nothing-text-disabled">
+                          贵人 {pan!.tianJiang!.guiRenBranch} ({pan!.tianJiang!.direction}行)
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {Object.entries(pan!.tianJiang!.branchToJiang!).map(([branch, jiang]) => (
+                          <div
+                            key={branch}
+                            className="flex items-center justify-between px-2 py-1.5 border border-nothing-border rounded text-[11px]"
+                          >
+                            <span className="font-mono text-nothing-text-display">{branch}</span>
+                            <span className="font-mono text-nothing-text-disabled">
+                              {jiang as TianJiangName}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 神煞 */}
+                  {hasShenSha && (
+                    <div>
+                      <ShenShaList items={pan!.shenSha as NonNullable<LiurenPan['shenSha']>} />
+                    </div>
+                  )}
+                </div>
+              </Collapsible>
+            </div>
+          )}
+
+          {/* ══════════════════════════════════════════════════════
+              ⑧ AI 详细解读
              ══════════════════════════════════════════════════════ */}
 
           {interp && interp.analysis && (
@@ -492,7 +571,7 @@ export default function LiurenResultView() {
             </div>
           )}
 
-          {/* 兼容：无 liurenPan 但有 interpretation 的记录 */}
+          {/* 兼容：无 liurenPan 但有 interpretation */}
           {!pan && interp && (
             <div className="mb-6">
               <Interpretation record={record} />
@@ -500,7 +579,7 @@ export default function LiurenResultView() {
           )}
 
           {/* ══════════════════════════════════════════════════════
-              ⑧ 反馈
+              ⑨ 反馈
              ══════════════════════════════════════════════════════ */}
 
           <div className="mb-6">
@@ -525,7 +604,10 @@ export default function LiurenResultView() {
             </div>
           )}
 
-          {/* ── 起课参数 + 元信息（底部） ── */}
+          {/* ══════════════════════════════════════════════════════
+              ⑩ 起课参数 + 元信息
+             ══════════════════════════════════════════════════════ */}
+
           {pan && (
             <div className="mb-6">
               <Collapsible title="起课参数">
