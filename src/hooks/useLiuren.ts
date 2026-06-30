@@ -73,7 +73,7 @@ export function useLiuren() {
     timestamp: panData.dateTime,
     question: q,
     category,
-    method: 'virtual',
+    method: customShiZhi ? 'liuren-huoshi' : 'liuren-zhengshi',
     hexagram: {
       original: 0,
       changed: null,
