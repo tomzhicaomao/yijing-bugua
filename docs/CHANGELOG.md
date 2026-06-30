@@ -2,6 +2,18 @@
 
 ## 2026-06-30
 
+### 🐛 大六壬历史记录路由修复
+
+**问题**：从历史列表点击查看大六壬记录时，页面错误显示"虚拟摇卦"、"卦辞"栏和空白栏。
+
+**根因**：`HistoryView.tsx` 硬编码所有记录跳转到 `/history/:id`（易经详情页），大六壬记录应走 `/liuren/:id`（大六壬详情页）。
+
+**修复**：`HistoryView.tsx` 根据 `r.method` 字段条件路由 — `liuren-*` → `/liuren/:id`，其余 → `/history/:id`。
+
+**涉及文件**：`src/pages/HistoryView.tsx`
+
+---
+
 ### ⚠️ 部署问题排查
 
 **Vercel 环境变量缺失**：生产站点无法连接 Supabase（"Failed to fetch"）。

@@ -47,7 +47,7 @@ src/
 - **类型定义**: `types/index.ts` 中 `LiurenPanData` 定义 JSONB schema（与引擎层 `LiurenPan` 类型对应）
 - **天地盘类型转换**: `LiurenPanData.tianDiPan` 用 `string[]`，传给 `LiurenPanTable` 时需 `as unknown as TianDiPan`
 - **占卜方式**: `method` 字段 — `'virtual'`(摇卦) / `'liuren-zhengshi'`(正时) / `'liuren-huoshi'`(活时)
-- **路由**: `/liuren/:id` → LiurenResultView, `/history/:id` → HistoryDetailView
+- **路由**: `/liuren/:id` → LiurenResultView, `/history/:id` → HistoryDetailView；HistoryView 根据 `method` 字段自动分流（`liuren-*` → `/liuren/:id`，其余 → `/history/:id`）
 
 ## Database Migration
 
