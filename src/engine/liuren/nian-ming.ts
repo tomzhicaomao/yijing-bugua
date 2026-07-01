@@ -55,15 +55,20 @@ export function calculateNianMingContext(
 
   // 干支年份计算：以 2024 甲辰年为锚点
   const ANCHOR_YEAR = 2024;
+  const ANCHOR_GAN = 0; // 甲=0 (2024 天干 = 甲)
   const ANCHOR_ZHI = 4; // 辰=4 (2024 地支 = 辰)
 
+  const currentGan = ((currentYear - ANCHOR_YEAR + ANCHOR_GAN) % 10 + 10) % 10;
   const currentZhi = ((currentYear - ANCHOR_YEAR + ANCHOR_ZHI) % 12 + 12) % 12;
 
   // 出生年索引（60甲子）
   const birthGZIndex = ganZhiIndex(nianMing.gan, nianMing.zhi);
 
-  // 虚岁：当前年地支 - 出生年地支 + 1（简化算法）
-  const age = ((currentZhi - (birthGZIndex % 12)) % 12 + 12) % 12 + 1;
+  // 当前年的 60 甲子索引
+  const currentGZIndex = ganZhiIndex(GAN_LIST[currentGan], ZHI_LIST[currentZhi]);
+
+  // 虚岁：当前年 60 甲子序 - 出生年 60 甲子序 + 1
+  const age = ((currentGZIndex - birthGZIndex) % 60 + 60) % 60 + 1;
 
   // 行年：简化为 60 甲子中从出生年顺推 age-1 步
   const xingNianGZ = ganZhiByIndex(birthGZIndex + age - 1);
