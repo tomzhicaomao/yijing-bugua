@@ -404,9 +404,9 @@ export default function LiurenResultView() {
               ③ 天地盘
              ══════════════════════════════════════════════════════ */}
 
-          {pan?.tianDiPan ? (
+          {pan?.tianDiPan && deserializedPan?.tianDiPan ? (
             <div className="mb-6">
-              <LiurenPanTable tianDiPan={deserializedPan!.tianDiPan} />
+              <LiurenPanTable tianDiPan={deserializedPan.tianDiPan} />
             </div>
           ) : pan ? (
             <div className="mb-6">
