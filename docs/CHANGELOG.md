@@ -1,5 +1,15 @@
 # 项目变更记录
 
+## 2026-07-01 (Bug Fixes)
+
+### 🔧 修复 3 个运行时问题
+
+1. **LiurenResultView 空指针崩溃**：`deserializedPan!.tianDiPan` 在反序列化失败时崩溃 → 改为 `deserializedPan?.tianDiPan` 空安全访问
+2. **虚岁计算错误**：`calculateNianMingContext` 仅用地支差计算虚岁（同支不同干时结果=1） → 改用完整 60 甲子序差值（1990庚午→虚岁37）
+3. **AI 解读静默 fallback**：`api/deepseek.ts` Zod schema 只允许 `deepseek-chat`/`deepseek-reasoner`，但客户端发送 `deepseek-v4-flash` → 放宽为 `z.string()` 兼容所有模型名
+
+---
+
 ## 2026-07-01 (年命必填 + 占事分类对齐)
 
 ### ✅ 完整实现（8 Phase）
