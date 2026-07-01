@@ -1,5 +1,43 @@
 # 项目变更记录
 
+## 2026-07-01 (年命必填 + 占事分类对齐)
+
+### ✅ 完整实现（8 Phase）
+
+**Phase 1 — 类型层 + 数据库**：
+- 新增 `src/types/nian-ming.ts`：NianMing / NianMingContext 类型 + 天干地支选项常量
+- 扩展 `LiurenPanData`、`DivinationRecord`、`LiurenParams`、`LiurenPan` 添加 nianMing 字段
+- 新增 2 个 Supabase migration（user_settings.nian_ming、records.nian_ming）
+
+**Phase 2 — 年命持久化层**：
+- 新增 `src/lib/nian-ming-storage.ts`：localStorage + Supabase 云同步
+- `AuthContext` 登录时自动加载年命到 localStorage
+
+**Phase 3 — 设置页 UI**：
+- 新增 `src/components/liuren/NianMingPicker.tsx`：天干+地支双列选择器
+- `SettingsView` 新增年命设置区块（保存/修改/清除）
+
+**Phase 4 — 年命计算引擎**：
+- 新增 `src/engine/liuren/nian-ming.ts`：虚岁 + 行年干支计算
+
+**Phase 5 — 起课页 + Hook**：
+- `LiurenView` 分类替换为 ZhanShi 9 宫格选择
+- `LiurenView` 新增年命覆盖（代占场景）
+- `useLiuren` hook：nianMing 校验、计算、传递
+
+**Phase 6 — AI Prompt 集成**：
+- `liuren-prompt-builder` V2 注入年命+行年信息
+- `liuren-call` V2 传递 nianMingContext
+
+**Phase 7 — 结果展示 + DB**：
+- `LiurenResultView` 显示年命/行年/虚岁
+- `db/records.ts` 序列化 nianMing 字段
+
+**Phase 8 — 常量**：
+- `lib/constants.ts` 新增 ZHAN_SHI_OPTIONS（9 类占事）
+
+---
+
 ## 2026-07-01 (修复计划执行)
 
 ### ✅ FIX-PLAN.md 全量执行完成

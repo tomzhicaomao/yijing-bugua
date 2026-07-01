@@ -44,7 +44,8 @@ src/
 │       ├── jieqi.ts         # 节气 + 月将计算
 │       ├── kongwang-detect.ts # 空亡检测
 │       ├── shensha-conflict.ts # 神煞冲突检测
-│       └── tai-sui-check.ts # 太岁检查
+│       ├── tai-sui-check.ts # 太岁检查
+│       └── nian-ming.ts      # 年命计算（虚岁+行年）
 ├── ai/                  # AI 解读
 │   ├── liuren-call.ts       # 大六壬 AI 调用（V1+V2）
 │   ├── liuren-prompt-builder.ts  # Prompt 构建器（V1+V2）
@@ -56,9 +57,13 @@ src/
 │       ├── SectionLabel.tsx  # 区块标题
 │       ├── Collapsible.tsx   # 折叠面板
 │       ├── TrendBadge.tsx    # 吉凶标签
+│       ├── NianMingPicker.tsx # 年命选择器（天干+地支）
 │       └── ...               # LiurenPanTable, SiKeTable 等
-├── types/index.ts       # 全局类型定义
+├── types/
+│   ├── index.ts         # 全局类型定义
+│   └── nian-ming.ts     # NianMing/NianMingContext 类型
 └── lib/                 # 工具函数
+    └── nian-ming-storage.ts # 年命存储（localStorage+Supabase）
 ```
 
 ## Key Patterns
