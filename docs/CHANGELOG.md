@@ -1,5 +1,55 @@
 # 项目变更记录
 
+## 2026-07-01
+
+### 📝 第一性原理审查 + 修复方案
+
+- 新增 `docs/FIRST-PRINCIPLES-REVIEW.md`：基于第一性原理的全面项目审查报告（37 个问题，按 CRITICAL/HIGH/MEDIUM/LOW 分级）
+- 新增 `docs/FIX-PLAN.md`：4 阶段修复方案（常量去重 → 类型安全 → AI/UI 统一 → 测试补全，共 ~35h）
+- 更新 `CLAUDE.md`：补充架构树缺失文件 + 添加深入文档指针表 + 红线规则
+
+### ✅ 框架层实现（4 Phase 全量完成）
+
+**目标**：将大六壬从"AI自由联想"升级为"确定性计算 + 标准化框架 + AI叙事合成"
+
+**Phase 1 — 框架层核心**：
+- `keGe.ts` + `keGeDb.ts`：64课名分类（10基础 + 8特殊课格）
+- `bifa.ts` + `bifaRules.ts`：20条毕法赋规则匹配引擎
+- `tianjiang-meaning.ts`：12天将 × 8占事类型语义映射
+- `liuqin-analysis.ts`：8种占事场景的六亲权重分析
+- `framework.ts`：`analyzeFramework()` 统一入口
+
+**Phase 2 — 框架层完善**：
+- `kongwang-analysis.ts`：空亡四级分类（真空/半空/转空/落底）
+- `yingqi.ts`：三传数理 + 空亡填实 + 驿马冲动 + 三合局应期推算
+
+**Phase 3 — AI Prompt 升级**：
+- `liuren-prompt-builder.ts` V2：AI 角色从"判断者"改为"叙事者"
+- `liuren-call.ts` V2：`callLiurenInterpretationV2()` 先框架分析后AI合成
+
+**Phase 4 — 前端集成**：
+- `types/index.ts`：`DivinationRecord.framework` JSONB 字段
+- `LiurenDetailView.tsx`：课格/毕法赋/天将/六亲/信号折叠面板
+
+**测试**：142 tests passing across 12 test files
+
+---
+
+### 🔧 对抗性审查修复
+
+**CRITICAL 修复**：
+1. `db/records.ts`：`toSupabaseRow`/`fromSupabaseRow` 添加 `framework` 字段持久化
+2. `framework.ts`：集成 `analyzeKongWang` + `calculateYingQi`（此前为死代码）
+3. `bifaRules.ts` Rule 17：条件数学上不可能 → 改为检查三传落墓库(辰戌丑未)
+4. `bifaRules.ts` Rule 9：`GAN_JI_GONG[dayGan]` → `dayGanZhi[1]`（日支）
+
+**HIGH 修复**：
+5. `keGe.ts`：连茹检测支持逆序/循环序列（差值=1或11）
+6. `kongwang-analysis.ts`：月份映射 `['丑','寅',...]` → `['寅','卯',...]`（寅月起）
+7. `bifa.test.ts`：vacuous `expect(true).toBe(true)` → 实际断言
+
+---
+
 ## 2026-06-30
 
 ### 🐛 大六壬记录 method 字段修复 + VARCHAR 扩展
