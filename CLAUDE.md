@@ -100,4 +100,5 @@ src/
 | `docs/CHANGELOG.md` | 完整变更历史 |
 | `docs/FIRST-PRINCIPLES-REVIEW.md` | 第一性原理项目审查（问题清单） |
 | `docs/FIX-PLAN.md` | 基于审查的 4 阶段修复方案 |
+| `docs/ADVERSARIAL-REVIEW-2026-07-01.md` | 对抗性审查报告（28子代理+线上实测，含P0-P3修复优先级） |
 | `docs/research/` | 大六壬算法研究报告 |

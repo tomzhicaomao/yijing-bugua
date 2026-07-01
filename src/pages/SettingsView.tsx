@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { getApiKey, setApiKey, removeApiKey, saveApiKeyToCloud, removeApiKeyFromCloud } from '../lib/api-key'
+import { getNianMing, setNianMing, removeNianMing, saveNianMingToCloud, removeNianMingFromCloud, NIAN_MING_CHANGED_EVENT } from '../lib/nian-ming-storage'
+import type { NianMing } from '../types/nian-ming'
+import NianMingPicker from '../components/liuren/NianMingPicker'
 import { exportToJSON, exportFilename, importFromJSON } from '../db/export-import.js'
 import { SCHEMA_VERSION, PROMPT_VERSION, DEFAULT_MODEL, DEEP_MODEL } from '../lib/constants.js'
 import GlassCard from '../components/ui/GlassCard'
@@ -12,12 +15,22 @@ export default function SettingsView() {
   const { user, signOut, refreshHasKey } = useAuth()
   const [apiKey, setApiKeyState] = useState(getApiKey() ?? '')
   const [showKey, setShowKey] = useState(false)
+  const [nianMing, setNianMingState] = useState<NianMing | null>(getNianMing())
+  const [showNianMingEditor, setShowNianMingEditor] = useState(false)
+  const [nianMingSaved, setNianMingSaved] = useState(false)
 
   // Sync input with localStorage when cloud key arrives
   useEffect(() => {
     const onKeyChange = () => setApiKeyState(getApiKey() ?? '')
     window.addEventListener("api-key-changed", onKeyChange)
     return () => window.removeEventListener("api-key-changed", onKeyChange)
+  }, [])
+
+  // Sync nianMing with localStorage when changed from elsewhere
+  useEffect(() => {
+    const onNianMingChange = () => setNianMingState(getNianMing())
+    window.addEventListener(NIAN_MING_CHANGED_EVENT, onNianMingChange)
+    return () => window.removeEventListener(NIAN_MING_CHANGED_EVENT, onNianMingChange)
   }, [])
   const [importResult, setImportResult] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
@@ -34,6 +47,24 @@ export default function SettingsView() {
     refreshHasKey()
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
+  }
+
+  const handleSaveNianMing = async (nm: NianMing) => {
+    if (!user) return
+    setNianMing(nm)
+    await saveNianMingToCloud(user.id, nm)
+    setNianMingState(nm)
+    setShowNianMingEditor(false)
+    setNianMingSaved(true)
+    setTimeout(() => setNianMingSaved(false), 2000)
+  }
+
+  const handleRemoveNianMing = async () => {
+    if (!user) return
+    removeNianMing()
+    await removeNianMingFromCloud(user.id)
+    setNianMingState(null)
+    setShowNianMingEditor(false)
   }
 
   const handleExport = async () => {
@@ -96,6 +127,43 @@ export default function SettingsView() {
               </div>
             </GlassCard>
           )}
+
+          {/* 年命设置 */}
+          <GlassCard className="p-5">
+            <h3 className="text-sm text-nothing-text-secondary mb-1 tracking-wide">年命设置</h3>
+            <p className="text-[11px] text-nothing-text-disabled mb-4">
+              出生年的天干地支，用于大六壬断课中的行年计算
+            </p>
+
+            {nianMing && !showNianMingEditor ? (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between p-3 border border-nothing-border rounded-md">
+                  <span className="font-mono text-lg text-nothing-text-display">
+                    {nianMing.gan}{nianMing.zhi}年
+                  </span>
+                  <Button variant="ghost" onClick={() => setShowNianMingEditor(true)} className="text-sm">
+                    修改
+                  </Button>
+                </div>
+                <Button variant="ghost" onClick={handleRemoveNianMing} className="w-full py-2 text-sm text-red-400">
+                  清除年命
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <NianMingPicker
+                  value={nianMing}
+                  onChange={handleSaveNianMing}
+                />
+                {showNianMingEditor && (
+                  <Button variant="ghost" onClick={() => setShowNianMingEditor(false)} className="w-full py-2 text-sm">
+                    取消
+                  </Button>
+                )}
+              </div>
+            )}
+            {nianMingSaved && <p className="text-sm text-nothing-accent mt-2">已保存</p>}
+          </GlassCard>
 
           {/* API Key */}
           <GlassCard className="p-5">

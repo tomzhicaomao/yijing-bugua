@@ -10,6 +10,7 @@ import { buildLiurenSystemPrompt, buildLiurenUserPrompt, buildLiurenSystemPrompt
 import type { LiurenPan } from '../engine/liuren/types.js';
 import { analyzeFramework } from '../engine/liuren/framework.js';
 import type { ZhanShi } from '../engine/liuren/bifa.js';
+import type { NianMingContext } from '../types/nian-ming.js';
 import type { InterpretationResult } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -169,6 +170,7 @@ export async function callLiurenInterpretationV2(
   question: string,
   zhanShi?: ZhanShi,
   model: string = DEFAULT_MODEL,
+  nianMingContext?: NianMingContext,
   maxRetries: number = 3,
 ): Promise<LiurenCallResult> {
   // 1. 框架层分析（确定性，无AI调用）
@@ -176,7 +178,7 @@ export async function callLiurenInterpretationV2(
 
   // 2. 构建 prompt（结构化输入）
   const systemPrompt = buildLiurenSystemPromptV2();
-  const userPrompt = buildLiurenUserPromptV2(pan, question, framework, zhanShi);
+  const userPrompt = buildLiurenUserPromptV2(pan, question, framework, zhanShi, nianMingContext);
 
   let lastError: string | undefined;
 

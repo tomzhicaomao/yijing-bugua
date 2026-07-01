@@ -175,6 +175,7 @@ export function buildLiurenUserPrompt(
 
 import type { FrameworkAnalysis } from '../engine/liuren/framework.js';
 import type { ZhanShi } from '../engine/liuren/bifa.js';
+import type { NianMingContext } from '../types/nian-ming.js';
 
 /**
  * 构建 System Prompt（V2）
@@ -227,11 +228,19 @@ export function buildLiurenUserPromptV2(
   question: string,
   framework: FrameworkAnalysis,
   zhanShi?: ZhanShi,
+  nianMingContext?: NianMingContext,
 ): string {
   const parts: string[] = [];
 
   parts.push(`## 用户问题`);
   parts.push(wrapUserInput(question));
+
+  // 年命信息
+  if (nianMingContext) {
+    parts.push(`## 年命信息`);
+    parts.push(`年命：${nianMingContext.yearGanZhi}年，虚岁${nianMingContext.age}岁`);
+    parts.push(`行年：${nianMingContext.xingNian}`);
+  }
 
   parts.push(`## 课式概要`);
   parts.push(`日干支：${pan.dayGanZhi} | 月将：${pan.yueJiang} | 占时：${pan.shiZhi}（${pan.isDaytime ? '昼' : '夜'}占）`);

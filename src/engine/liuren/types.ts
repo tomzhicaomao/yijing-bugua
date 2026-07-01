@@ -96,6 +96,13 @@ export interface LiurenPan {
 
   // 防误判标记
   warnings: string[];                      // 矛盾标记、节气边界警告等
+
+  // 年命信息
+  nianMing?: {
+    yearGanZhi: string;
+    age?: number;
+    xingNian?: string;
+  };
 }
 
 /** 起课参数 */
@@ -103,6 +110,11 @@ export interface LiurenParams {
   date: Date;
   shiZhi?: Branch;                         // 可选，不传则使用占时推算
   question?: string;
+  /** 年命 — 判断层必需输入 */
+  nianMing?: {
+    gan: string;
+    zhi: string;
+  };
 }
 
 /** 九宗门计算结果（用于内部级联） */

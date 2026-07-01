@@ -51,6 +51,8 @@ function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
   if (record.liurenPan) row.liuren_pan = record.liurenPan
   // interpretation 字段已废弃，不再写入新记录
   if (record.framework) row.framework = record.framework
+  // 年命快照
+  if (record.nianMing) row.nian_ming = record.nianMing
   return row
 }
 
@@ -73,6 +75,7 @@ function fromSupabaseRow(row: Record<string, unknown>): DivinationRecord {
     liurenPan: (row.liuren_pan as DivinationRecord['liurenPan']) ?? undefined,
     interpretation: (row.interpretation as DivinationRecord['interpretation']) ?? undefined,
     framework: (row.framework as DivinationRecord['framework']) ?? undefined,
+    nianMing: (row.nian_ming as DivinationRecord['nianMing']) ?? undefined,
   }
 }
 

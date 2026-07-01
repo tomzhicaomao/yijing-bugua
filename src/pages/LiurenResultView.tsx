@@ -347,6 +347,13 @@ export default function LiurenResultView() {
                 {new Date(record.timestamp).toLocaleString('zh-CN')}
               </div>
             )}
+
+            {/* 年命信息 */}
+            {record.nianMing && (
+              <div className="mt-2 font-mono text-[10px] text-nothing-text-disabled">
+                年命{record.nianMing.yearGanZhi} · 行年{record.nianMing.xingNian} · 虚岁{record.nianMing.age}
+              </div>
+            )}
           </div>
 
           {/* ══════════════════════════════════════════════════════

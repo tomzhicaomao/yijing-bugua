@@ -142,6 +142,12 @@ export interface LiurenPanData {
   tianJiang?: { guiRenBranch: string; direction: '顺' | '逆'; branchToJiang: Record<string, string> };
   shenSha?: Array<{ category: '吉' | '凶' | '中性'; name: string; branch: string }>;
   warnings: string[];
+  /** 年命信息（传入时存在） */
+  nianMing?: {
+    yearGanZhi: string;
+    age?: number;
+    xingNian?: string;
+  };
 }
 
 // ========== 2.5 DivinationRecord ==========
@@ -176,6 +182,12 @@ export interface DivinationRecord {
   interpretation?: InterpretationResult
   /** 框架层分析结果（JSONB）— 复用引擎层 FrameworkAnalysis 类型 */
   framework?: FrameworkAnalysis
+  /** 年命快照（保存时记录，便于后续查看） */
+  nianMing?: {
+    yearGanZhi: string;
+    age?: number;
+    xingNian?: string;
+  }
 }
 
 // ========== Export format ==========

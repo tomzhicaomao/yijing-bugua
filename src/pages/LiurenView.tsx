@@ -5,12 +5,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLiuren } from '../hooks/useLiuren';
-import { FEATURE_LIUREN_ENABLED } from '../lib/constants';
+import { FEATURE_LIUREN_ENABLED, ZHAN_SHI_OPTIONS } from '../lib/constants';
 import ShiZhiPicker from '../components/liuren/ShiZhiPicker';
-import type { Category } from '../types';
+import NianMingPicker from '../components/liuren/NianMingPicker';
+import { getNianMing } from '../lib/nian-ming-storage';
+import type { ZhanShi } from '../engine/liuren/bifa';
+import type { NianMing } from '../types/nian-ming';
 import type { Branch as LiurenBranch } from '../engine/liuren/types';
-
-const CATEGORIES: Category[] = ['工作', '人际', '财务', '健康', '其他'];
 
 export default function LiurenView() {
   const navigate = useNavigate();
@@ -28,9 +29,13 @@ export default function LiurenView() {
   } = useLiuren();
 
   const [question, setQuestion] = useState('');
-  const [category, setCategory] = useState<Category>('其他');
+  const [zhanShi, setZhanShi] = useState<ZhanShi>('其他');
   const [shiZhi, setShiZhi] = useState<LiurenBranch | null>(null);
+  const [overrideNianMing, setOverrideNianMing] = useState<NianMing | null>(null);
+  const [showNianMingOverride, setShowNianMingOverride] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  const effectiveNianMing = overrideNianMing ?? getNianMing();
 
   if (!FEATURE_LIUREN_ENABLED) {
     return (
@@ -42,9 +47,12 @@ export default function LiurenView() {
 
   const handleSubmit = async () => {
     if (!question.trim() || submitting) return;
+    if (!effectiveNianMing) {
+      return;
+    }
     setSubmitting(true);
     try {
-      await submitQuestion(question.trim(), category, shiZhi || undefined);
+      await submitQuestion(question.trim(), zhanShi, shiZhi || undefined, effectiveNianMing);
     } finally {
       setSubmitting(false);
     }
@@ -283,27 +291,69 @@ export default function LiurenView() {
           </div>
         </div>
 
-        {/* 分类选择 */}
+        {/* 占事分类选择 */}
         <div className="mb-6">
           <label className="block font-mono text-[10px] text-nothing-text-disabled tracking-wider mb-2">
-            问题分类
+            占事分类
           </label>
-          <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map(cat => (
+          <div className="grid grid-cols-3 gap-2">
+            {ZHAN_SHI_OPTIONS.map(opt => (
               <button
-                key={cat}
+                key={opt.value}
                 type="button"
-                onClick={() => setCategory(cat)}
-                className={`px-3 py-1.5 rounded border font-mono text-xs transition-colors ${
-                  category === cat
+                onClick={() => setZhanShi(opt.value as ZhanShi)}
+                className={`px-3 py-2 rounded border font-mono text-xs transition-colors text-left ${
+                  zhanShi === opt.value
                     ? 'border-nothing-text-display text-nothing-text-display bg-nothing-bg-secondary'
                     : 'border-nothing-border text-nothing-text-disabled hover:text-nothing-text-secondary'
                 }`}
               >
-                {cat}
+                <div>{opt.label}</div>
+                <div className="text-[9px] text-nothing-text-disabled mt-0.5">{opt.desc}</div>
               </button>
             ))}
           </div>
+        </div>
+
+        {/* 年命覆盖（为他人代占） */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <label className="font-mono text-[10px] text-nothing-text-disabled tracking-wider">
+              年命（代占时可覆盖）
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowNianMingOverride(!showNianMingOverride)}
+              className="font-mono text-[10px] text-nothing-text-secondary hover:text-nothing-text-primary"
+            >
+              {showNianMingOverride ? '收起' : '修改'}
+            </button>
+          </div>
+          {effectiveNianMing ? (
+            <div className="p-3 border border-nothing-border rounded-md">
+              <span className="font-mono text-sm text-nothing-text-display">
+                {effectiveNianMing.gan}{effectiveNianMing.zhi}年
+              </span>
+              {overrideNianMing && (
+                <span className="ml-2 font-mono text-[10px] text-nothing-text-disabled">（已覆盖）</span>
+              )}
+            </div>
+          ) : (
+            <div className="p-3 border border-red-500/30 rounded-md">
+              <span className="font-mono text-[11px] text-red-400">
+                请先在设置页设置年命
+              </span>
+            </div>
+          )}
+          {showNianMingOverride && (
+            <div className="mt-3">
+              <NianMingPicker
+                value={overrideNianMing}
+                onChange={setOverrideNianMing}
+                compact
+              />
+            </div>
+          )}
         </div>
 
         {/* 时辰选择 */}
@@ -324,7 +374,7 @@ export default function LiurenView() {
         {/* 提交按钮 */}
         <button
           onClick={handleSubmit}
-          disabled={!question.trim() || submitting}
+          disabled={!question.trim() || !effectiveNianMing || submitting}
           className="w-full py-3 bg-nothing-text-display text-nothing-bg font-mono text-sm tracking-[0.1em] rounded-md hover:opacity-90 transition-opacity disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {submitting ? (

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import type { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 import { loadApiKeyFromCloud, setApiKey, hasApiKey } from '../lib/api-key'
+import { loadNianMingFromCloud, setNianMing } from '../lib/nian-ming-storage'
 
 interface AuthContextType {
   user: User | null
@@ -44,6 +45,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setApiKey(cloudKey) // writes to localStorage + dispatches api-key-changed
           }
         })
+        loadNianMingFromCloud(session.user.id).then(cloudNianMing => {
+          if (cloudNianMing) {
+            setNianMing(cloudNianMing) // writes to localStorage + dispatches nian-ming-changed
+          }
+        })
       }
     })
 
@@ -55,6 +61,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loadApiKeyFromCloud(session.user.id).then(cloudKey => {
           if (cloudKey) {
             setApiKey(cloudKey) // writes to localStorage + dispatches api-key-changed
+          }
+        })
+        loadNianMingFromCloud(session.user.id).then(cloudNianMing => {
+          if (cloudNianMing) {
+            setNianMing(cloudNianMing) // writes to localStorage + dispatches nian-ming-changed
           }
         })
       }

@@ -4,20 +4,23 @@
  * 管理起课、AI 解读、保存记录的完整流程
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import type { LiurenPan, Branch } from '../engine/liuren/types.js';
 import { calculateLiuren } from '../engine/liuren/index.js';
 import { serializePan } from '../engine/liuren/serialize.js';
 import { callLiurenInterpretationV2 } from '../ai/liuren-call.js';
-import { inferZhanShi } from '../engine/liuren/zhanShi.js';
 import { generateLiurenFallback } from '../ai/liuren-fallback.js';
 import { createRecord, getAllRecords } from '../db/records.js';
 import { checkDuplicate } from '../engine/duplicate-check.js';
 import { useAuth } from '../auth/AuthContext';
 import { validateQuestion, validateDateRange, checkRateLimit } from '../lib/security.js';
-import type { DivinationRecord, InterpretationResult, Category } from '../types';
+import { getNianMing, NIAN_MING_CHANGED_EVENT } from '../lib/nian-ming-storage.js';
+import { calculateNianMingContext } from '../engine/liuren/nian-ming.js';
+import type { NianMing, NianMingContext } from '../types/nian-ming.js';
+import type { ZhanShi } from '../engine/liuren/bifa.js';
+import type { DivinationRecord, InterpretationResult } from '../types';
 
 /** 起课步骤 */
 type LiurenStep = 'question' | 'casting' | 'result';
@@ -29,7 +32,7 @@ type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 export interface UseLiurenState {
   step: LiurenStep;
   question: string;
-  category: Category;
+  zhanShi: ZhanShi;
   customShiZhi: Branch | null;
   pan: LiurenPan | null;
   interpretation: InterpretationResult | null;
@@ -38,6 +41,7 @@ export interface UseLiurenState {
   duplicateWarning: string | null;
   savedRecordId: string | null;
   saveStatus: SaveStatus;
+  nianMing: NianMing | null;
 }
 
 /**
@@ -49,7 +53,7 @@ export function useLiuren() {
 
   const [step, setStep] = useState<LiurenStep>('question');
   const [question, setQuestion] = useState('');
-  const [category, setCategory] = useState<Category>('其他');
+  const [zhanShi, setZhanShi] = useState<ZhanShi>('其他');
   const [customShiZhi, setCustomShiZhi] = useState<Branch | null>(null);
   const [pan, setPan] = useState<LiurenPan | null>(null);
   const [interpretation, setInterpretation] = useState<InterpretationResult | null>(null);
@@ -58,9 +62,17 @@ export function useLiuren() {
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [nianMing, setNianMingState] = useState<NianMing | null>(getNianMing());
 
   const aiCancelled = useRef(false);
   const lastCallTime = useRef(0);
+
+  // 监听设置页年命变化
+  useEffect(() => {
+    const handler = () => setNianMingState(getNianMing());
+    window.addEventListener(NIAN_MING_CHANGED_EVENT, handler);
+    return () => window.removeEventListener(NIAN_MING_CHANGED_EVENT, handler);
+  }, []);
 
   /**
    * 构建 DivinationRecord（不执行写入）
@@ -69,12 +81,14 @@ export function useLiuren() {
     panData: LiurenPan,
     q: string,
     interp: InterpretationResult | null,
+    effectiveNianMing?: NianMing,
+    nianMingCtx?: NianMingContext,
   ): DivinationRecord => ({
     schemaVersion: 1,
     id: uuidv4(),
     timestamp: panData.dateTime,
     question: q,
-    category,
+    category: '其他',
     method: customShiZhi ? 'liuren-huoshi' : 'liuren-zhengshi',
     hexagram: {
       original: 0,
@@ -88,7 +102,12 @@ export function useLiuren() {
     },
     liurenPan: serializePan(panData),
     duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
-  }), [category, duplicateWarning]);
+    nianMing: effectiveNianMing ? {
+      yearGanZhi: `${effectiveNianMing.gan}${effectiveNianMing.zhi}`,
+      age: nianMingCtx?.age,
+      xingNian: nianMingCtx?.xingNian,
+    } : undefined,
+  }), [customShiZhi, duplicateWarning]);
 
   /**
    * 自动保存并跳转（await 模式，不再 fire-and-forget）
@@ -99,6 +118,8 @@ export function useLiuren() {
     panData: LiurenPan,
     q: string,
     interp: InterpretationResult | null,
+    effectiveNianMing?: NianMing,
+    nianMingCtx?: NianMingContext,
   ): Promise<boolean> => {
     if (!user) {
       setError('请先登录');
@@ -107,7 +128,7 @@ export function useLiuren() {
     }
 
     setSaveStatus('saving');
-    const record = buildRecord(panData, q, interp);
+    const record = buildRecord(panData, q, interp, effectiveNianMing, nianMingCtx);
 
     try {
       await createRecord(record, user.id);
@@ -138,6 +159,8 @@ export function useLiuren() {
   const startAIInterpretation = useCallback(async (
     panData: LiurenPan,
     q: string,
+    zhanShiParam: ZhanShi,
+    nianMingCtx?: NianMingContext,
   ) => {
     aiCancelled.current = false;
     setAiProgress('reasoning');
@@ -145,8 +168,7 @@ export function useLiuren() {
     let finalInterp: InterpretationResult | null;
 
     try {
-      const zhanShi = inferZhanShi(q);
-      const result = await callLiurenInterpretationV2(panData, q, zhanShi);
+      const result = await callLiurenInterpretationV2(panData, q, zhanShiParam, undefined, nianMingCtx);
 
       if (aiCancelled.current) return;
 
@@ -172,19 +194,28 @@ export function useLiuren() {
 
     // 先切到结果页显示课式和解读，再等待保存完成
     setStep('result');
-    await autoSaveAndNavigate(panData, q, finalInterp);
-  }, [autoSaveAndNavigate]);
+    const effectiveNM = nianMing;
+    await autoSaveAndNavigate(panData, q, finalInterp, effectiveNM, nianMingCtx);
+  }, [autoSaveAndNavigate, nianMing]);
 
   /**
    * 设置问题并进入起课
    */
   const submitQuestion = useCallback(async (
     q: string,
-    cat: Category,
+    zhanShiParam: ZhanShi,
     shiZhi?: Branch,
+    overrideNianMing?: NianMing,
   ) => {
     if (!user) {
       setError('请先登录');
+      return;
+    }
+
+    // 年命校验
+    const effectiveNianMing = overrideNianMing ?? nianMing;
+    if (!effectiveNianMing) {
+      setError('请先在设置页设置年命，或在起课前选择年命');
       return;
     }
 
@@ -212,7 +243,7 @@ export function useLiuren() {
 
     const trimmed = q.trim();
     setQuestion(trimmed);
-    setCategory(cat);
+    setZhanShi(zhanShiParam);
     setCustomShiZhi(shiZhi || null);
     setError(null);
     setSaveStatus('idle');
@@ -231,6 +262,9 @@ export function useLiuren() {
       // 忽略重复检查错误
     }
 
+    // 计算年命上下文
+    const nianMingCtx = calculateNianMingContext(effectiveNianMing, new Date());
+
     // 起课
     try {
       const date = new Date();
@@ -238,16 +272,17 @@ export function useLiuren() {
         date,
         shiZhi: shiZhi || undefined,
         question: trimmed,
+        nianMing: effectiveNianMing,
       });
       setPan(result);
       setStep('casting');
 
       // 自动开始 AI 解读 + 保存（await 完整流程）
-      await startAIInterpretation(result, trimmed);
+      await startAIInterpretation(result, trimmed, zhanShiParam, nianMingCtx);
     } catch (err) {
       setError(err instanceof Error ? err.message : '起课失败');
     }
-  }, [user, startAIInterpretation]);
+  }, [user, nianMing, startAIInterpretation]);
 
   /**
    * 手动保存记录（备用，保留向后兼容）
@@ -274,7 +309,7 @@ export function useLiuren() {
     aiCancelled.current = true;
     setStep('question');
     setQuestion('');
-    setCategory('其他');
+    setZhanShi('其他');
     setCustomShiZhi(null);
     setPan(null);
     setInterpretation(null);
@@ -296,7 +331,7 @@ export function useLiuren() {
     // 状态
     step,
     question,
-    category,
+    zhanShi,
     customShiZhi,
     pan,
     interpretation,
@@ -305,6 +340,7 @@ export function useLiuren() {
     duplicateWarning,
     savedRecordId,
     saveStatus,
+    nianMing,
 
     // 方法
     submitQuestion,
