@@ -2,13 +2,14 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { z } from 'zod'
 
 const RequestSchema = z.object({
-  model: z.enum(['deepseek-chat', 'deepseek-reasoner']),
+  model: z.string().min(1).max(100),
   messages: z.array(z.object({
     role: z.enum(['system', 'user', 'assistant']),
     content: z.string().max(10000),
   })).max(20),
   max_tokens: z.number().int().min(1).max(8192).optional(),
   temperature: z.number().min(0).max(2).optional(),
+  response_format: z.object({ type: z.string() }).optional(),
 })
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
