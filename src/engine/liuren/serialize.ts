@@ -19,6 +19,7 @@ import type {
 } from './types.js';
 import type { LiurenPanData } from '../../types/index.js';
 import { ALL_BRANCHES, ALL_GANS } from './types.js';
+import { calcShiGan } from './dungan.js';
 
 const VALID_BRANCHES_SET = new Set<string>(ALL_BRANCHES);
 const VALID_GAN_SET = new Set<string>(ALL_GANS);
@@ -80,6 +81,7 @@ export function serializePan(pan: LiurenPan): LiurenPanData {
     },
     shenSha: pan.shenSha,
     warnings: pan.warnings,
+    nianMing: pan.nianMing,
   };
 }
 
@@ -162,7 +164,7 @@ export function deserializePan(data: LiurenPanData): LiurenPan {
     sanChuan,
     tianJiang,
     dunGan: {
-      shiGan: dayGan,
+      shiGan: calcShiGan(dayGan, shiZhi),
       sanChuanGan: sanChuan.map((sc: SanChuanItem) => sc.dunGan) as [Gan, Gan, Gan],
     },
     shenSha,

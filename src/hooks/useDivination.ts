@@ -108,6 +108,10 @@ export function useDivination() {
       navigate(`/result/${record.id}`)
     } catch (err) {
       console.error('Failed to save record:', err)
+      // 保存失败：暂存到 localStorage 草稿，避免用户看到从未持久化的结果
+      try {
+        localStorage.setItem(`draft_${record.id}`, JSON.stringify(record))
+      } catch { /* quota exceeded, ignore */ }
       setSavedRecordId(record.id)
       setStep('result')
       navigate(`/result/${record.id}`)

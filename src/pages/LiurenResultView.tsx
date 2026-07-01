@@ -250,6 +250,8 @@ export default function LiurenResultView() {
   const [record, setRecord] = useState<DivinationRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deserializedPan, setDeserializedPan] = useState<LiurenPan | null>(null);
+  const [deserError, setDeserError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -261,6 +263,20 @@ export default function LiurenResultView() {
       .catch((err) => setError(err instanceof Error ? err.message : '加载失败'))
       .finally(() => setLoading(false));
   }, [id, user]);
+
+  // 安全反序列化：损坏数据不会导致白屏
+  useEffect(() => {
+    const pan = record?.liurenPan;
+    if (!pan) { setDeserializedPan(null); return; }
+    try {
+      setDeserializedPan(deserializePan(pan));
+      setDeserError(null);
+    } catch (err) {
+      console.error('反序列化失败:', err);
+      setDeserError('数据格式损坏，无法显示课式');
+      setDeserializedPan(null);
+    }
+  }, [record]);
 
   if (loading) {
     return (
@@ -292,7 +308,6 @@ export default function LiurenResultView() {
 
   const pan = record.liurenPan;
   const interp = record.interpretation || record.interpretations?.[0];
-  const deserializedPan = pan ? deserializePan(pan) : null;
 
   // 计算天将/神煞是否有实际内容
   const hasTianJiang = pan?.tianJiang?.branchToJiang && Object.keys(pan.tianJiang.branchToJiang).length > 0;
@@ -300,6 +315,13 @@ export default function LiurenResultView() {
 
   return (
     <div className="min-h-screen bg-nothing-bg text-nothing-text-primary">
+      {/* ── Deserialization error banner ── */}
+      {deserError && (
+        <div className="bg-orange-500/10 border-b border-orange-500/30 px-5 py-3">
+          <p className="font-mono text-xs text-orange-600">{deserError}</p>
+        </div>
+      )}
+
       {/* ── Top bar ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-nothing-bg/80 backdrop-blur-md border-b border-nothing-border">
         <div className="flex items-center justify-between px-6 h-16 max-w-md mx-auto">

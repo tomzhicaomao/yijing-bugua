@@ -7,7 +7,6 @@
 
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
 import type { DivinationRecord } from '../types'
 import { getRecordById } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
@@ -17,9 +16,9 @@ import TrendBadge from '../components/liuren/TrendBadge'
 /** 信号类型徽章 */
 function SignalBadge({ type }: { type: string }) {
   const colors: Record<string, string> = {
-    '吉': 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800',
-    '凶': 'bg-red-50 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800',
-    '中性': 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700',
+    '吉': 'bg-green-50 text-green-700 border-green-200',
+    '凶': 'bg-red-50 text-red-700 border-red-200',
+    '中性': 'bg-nothing-raised text-nothing-text-secondary border-nothing-border',
   }
   return (
     <span className={`inline-block px-1.5 py-0.5 rounded text-xs border ${colors[type] || colors['中性']}`}>
@@ -46,18 +45,18 @@ export default function LiurenDetailView() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">加载中...</div>
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex items-center justify-center">
+        <div className="text-nothing-text-disabled">加载中...</div>
       </div>
     )
   }
 
   if (!record) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <div className="text-gray-500">记录不存在</div>
-        <button onClick={() => navigate(-1)} className="text-blue-500 hover:underline">
-          返回
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex flex-col items-center justify-center gap-4">
+        <div className="text-nothing-text-disabled">记录不存在</div>
+        <button onClick={() => navigate(-1)} className="font-mono text-xs text-nothing-text-secondary hover:text-nothing-text-primary">
+          ← 返回
         </button>
       </div>
     )
@@ -66,43 +65,46 @@ export default function LiurenDetailView() {
   const framework = record.framework
   if (!framework) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <div className="text-gray-500">该记录无框架层分析数据</div>
-        <button onClick={() => navigate(-1)} className="text-blue-500 hover:underline">
-          返回
+      <div className="min-h-screen bg-nothing-bg text-nothing-text-primary flex flex-col items-center justify-center gap-4">
+        <div className="text-nothing-text-disabled">该记录无框架层分析数据</div>
+        <button onClick={() => navigate(-1)} className="font-mono text-xs text-nothing-text-secondary hover:text-nothing-text-primary">
+          ← 返回
         </button>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
+    <div className="min-h-screen bg-nothing-bg text-nothing-text-primary pb-20">
       {/* 顶部导航 */}
-      <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div className="sticky top-0 z-10 bg-nothing-bg/80 backdrop-blur-md border-b border-nothing-border">
         <div className="flex items-center gap-3 px-4 py-3">
-          <button onClick={() => navigate(-1)} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
-            <ArrowLeft size={20} />
+          <button
+            onClick={() => navigate(-1)}
+            className="font-mono text-xs tracking-[0.1em] text-nothing-text-secondary hover:text-nothing-text-primary transition-colors"
+          >
+            ← 返回
           </button>
-          <h1 className="text-lg font-semibold">断卦详情</h1>
+          <h1 className="text-lg font-semibold text-nothing-text-display">断卦详情</h1>
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
         {/* 课格卡片 */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+        <div className="bg-nothing-surface rounded-lg p-4 border border-nothing-border">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+            <h2 className="text-xl font-bold text-nothing-text-display">
               课格：{framework.keGe.keGe.name}
             </h2>
             <TrendBadge trend={framework.keGe.keGe.trend} />
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <p className="text-sm text-nothing-text-secondary mb-2">
             {framework.keGe.keGe.meaning}
           </p>
-          <div className="text-xs text-gray-500 dark:text-gray-500">
+          <div className="text-xs text-nothing-text-disabled">
             分类：{framework.keGe.keGe.category} | 置信度：{(framework.keGe.confidence * 100).toFixed(0)}%
           </div>
-          <div className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+          <div className="text-xs text-nothing-text-disabled mt-1">
             {framework.keGe.reasoning}
           </div>
         </div>
@@ -114,18 +116,18 @@ export default function LiurenDetailView() {
             defaultOpen={true}
           >
             {framework.bifa.map((b, idx) => (
-              <div key={idx} className="border-l-2 border-blue-300 dark:border-blue-700 pl-3 py-1">
+              <div key={idx} className="border-l-2 border-nothing-accent/30 pl-3 py-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
+                  <span className="font-medium text-sm text-nothing-text-primary">
                     第{b.rule.id}法「{b.rule.title}」
                   </span>
                   <TrendBadge trend={b.rule.category} />
                 </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-xs text-nothing-text-secondary mt-1">
                   {b.rule.description}
                 </p>
                 {b.sceneJudgment && (
-                  <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                  <p className="text-xs text-nothing-interactive mt-1">
                     → {b.sceneJudgment}
                   </p>
                 )}
@@ -142,15 +144,15 @@ export default function LiurenDetailView() {
             const names = ['初传', '中传', '末传']
             return (
               <div key={idx} className="flex items-center gap-2 text-sm">
-                <span className="text-gray-500 w-12">{names[idx]}</span>
-                <span className="font-medium text-gray-800 dark:text-gray-200">{item.jiang}</span>
-                <span className="text-gray-400">临</span>
-                <span className="font-medium text-gray-800 dark:text-gray-200">{item.branch}</span>
+                <span className="text-nothing-text-disabled w-12">{names[idx]}</span>
+                <span className="font-medium text-nothing-text-primary">{item.jiang}</span>
+                <span className="text-nothing-text-disabled">临</span>
+                <span className="font-medium text-nothing-text-primary">{item.branch}</span>
               </div>
             )
           })}
           {framework.tianJiang.summary && (
-            <p className="text-xs text-gray-600 dark:text-gray-400 mt-2 whitespace-pre-line">
+            <p className="text-xs text-nothing-text-secondary mt-2 whitespace-pre-line">
               {framework.tianJiang.summary}
             </p>
           )}
@@ -161,10 +163,10 @@ export default function LiurenDetailView() {
           title="六亲分析"
         >
           <div className="text-sm mb-2">
-            <span className="text-gray-500">用神：</span>
-            <span className="font-medium text-gray-800 dark:text-gray-200">{framework.liuQin.yongShen}</span>
+            <span className="text-nothing-text-disabled">用神：</span>
+            <span className="font-medium text-nothing-text-primary">{framework.liuQin.yongShen}</span>
           </div>
-          <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-line">
+          <p className="text-xs text-nothing-text-secondary whitespace-pre-line">
             {framework.liuQin.summary}
           </p>
         </Collapsible>
@@ -178,14 +180,14 @@ export default function LiurenDetailView() {
             <div key={idx} className="flex items-start gap-2 py-1">
               <SignalBadge type={signal.type} />
               <div className="flex-1 min-w-0">
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-xs font-medium text-nothing-text-primary">
                   {signal.source}
                 </span>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
+                <p className="text-xs text-nothing-text-secondary">
                   {signal.description}
                 </p>
               </div>
-              <span className="text-xs text-gray-400 whitespace-nowrap">
+              <span className="text-xs text-nothing-text-disabled whitespace-nowrap">
                 w:{signal.weight.toFixed(1)}
               </span>
             </div>
@@ -195,9 +197,9 @@ export default function LiurenDetailView() {
         {/* 返回按钮 */}
         <button
           onClick={() => navigate(-1)}
-          className="w-full py-3 bg-gray-200 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          className="w-full py-3 bg-nothing-bg-secondary rounded-lg text-nothing-text-secondary font-medium hover:bg-nothing-raised transition-colors"
         >
-          返回
+          ← 返回
         </button>
       </div>
     </div>

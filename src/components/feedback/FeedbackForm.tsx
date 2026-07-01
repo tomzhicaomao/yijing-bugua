@@ -153,7 +153,7 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
                             const others = claimFeedback.filter(f => f.claimId !== c.id)
                             setClaimFeedback(status === s ? others : [...others, { claimId: c.id, status: s }])
                           }}
-                          className={`text-xs px-2 py-0.5 rounded transition-colors ${status === s ? (s === 'hit' ? 'bg-green-50 text-green-700' : s === 'miss' ? 'bg-red-50 text-red-700' : 'bg-nothing-raised text-nothing-text-secondary') : 'bg-nothing-raised text-nothing-text-disabled hover:text-nothing-text-primary'}`}
+                          className={`text-sm px-4 py-2.5 rounded-lg min-h-[44px] transition-colors ${status === s ? (s === 'hit' ? 'bg-green-50 text-green-700' : s === 'miss' ? 'bg-red-50 text-red-700' : 'bg-nothing-raised text-nothing-text-secondary') : 'bg-nothing-raised text-nothing-text-disabled hover:text-nothing-text-primary'}`}
                         >
                           {s === 'hit' ? '✓' : s === 'miss' ? '✗' : '?'}
                         </button>

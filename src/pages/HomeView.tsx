@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { getAllRecords, queryPendingDue } from '../db/records.js'
+import { getRecordCount, queryPendingDue } from '../db/records.js'
 import { useAuth } from '../auth/AuthContext'
 import Button from '../components/ui/Button'
 import { FEATURE_LIUREN_ENABLED } from '../lib/constants'
@@ -8,17 +8,12 @@ import { FEATURE_LIUREN_ENABLED } from '../lib/constants'
 export default function HomeView() {
   const { user } = useAuth()
   const [total, setTotal] = useState(0)
-  const [todayCount, setTodayCount] = useState(0)
   const [pending, setPending] = useState(0)
 
   useEffect(() => {
     if (!user) return
-    getAllRecords(user.id).then(r => {
-      setTotal(r.length)
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      setTodayCount(r.filter(rec => new Date(rec.timestamp) >= today).length)
-    }).catch(err => console.error('加载记录失败:', err))
+    getRecordCount(user.id).then(c => setTotal(c))
+      .catch(err => console.error('加载记录数失败:', err))
     queryPendingDue(user.id).then(r => setPending(r.length))
       .catch(err => console.error('加载待反馈失败:', err))
   }, [user])
@@ -29,7 +24,7 @@ export default function HomeView() {
       <nav className="flex items-center justify-between px-6 h-16 max-w-md mx-auto">
         <span className="font-mono text-xs tracking-[0.15em] text-nothing-text-secondary">易经</span>
         <span className="font-mono text-[10px] tracking-[0.1em] text-nothing-text-disabled">
-          {todayCount > 0 ? `TODAY ${todayCount}` : ''}
+          {total > 0 ? `共 ${total} 条记录` : ''}
         </span>
       </nav>
 

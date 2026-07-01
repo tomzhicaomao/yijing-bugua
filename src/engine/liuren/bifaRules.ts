@@ -8,6 +8,7 @@
 import type { Branch, Gan } from './types.js';
 import { BRANCH_INDEX, BRANCH_WUXING, GAN_JI_GONG, getShengKe, BRANCH_YINYANG } from './types.js';
 import { calcKongWang } from './kongwang-detect.js';
+import { LU_MAP, MU_KU_MAP } from './constants.js';
 import type { BiFaRule } from './bifa.js';
 
 /**
@@ -116,11 +117,7 @@ export const BI_FA_RULES: BiFaRule[] = [
     category: '官禄功名',
     condition: (pan) => {
       const dayGan = pan.dayGanZhi[0] as Gan;
-      const luMap: Record<Gan, Branch> = {
-        '甲': '寅', '乙': '卯', '丙': '巳', '丁': '午', '戊': '巳',
-        '己': '午', '庚': '申', '辛': '酉', '壬': '亥', '癸': '子',
-      };
-      const lu = luMap[dayGan];
+      const lu = LU_MAP[dayGan];
       return pan.sanChuan[0].branch === lu;
     },
     judgment: {
@@ -140,12 +137,7 @@ export const BI_FA_RULES: BiFaRule[] = [
     category: '墓神凶象',
     condition: (pan) => {
       const dayZhi = pan.dayGanZhi[1] as Branch;
-      const muMap: Record<Branch, Branch> = {
-        '子': '辰', '丑': '辰', '寅': '未', '卯': '未',
-        '辰': '戌', '巳': '戌', '午': '丑', '未': '丑',
-        '申': '辰', '酉': '辰', '戌': '未', '亥': '未',
-      };
-      const mu = muMap[dayZhi];
+      const mu = MU_KU_MAP[dayZhi];
       return pan.sanChuan.some(item => item.branch === mu);
     },
     judgment: {

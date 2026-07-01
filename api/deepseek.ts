@@ -1,4 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import { z } from 'zod'
+
+const RequestSchema = z.object({
+  model: z.enum(['deepseek-chat', 'deepseek-reasoner']),
+  messages: z.array(z.object({
+    role: z.enum(['system', 'user', 'assistant']),
+    content: z.string().max(10000),
+  })).max(20),
+  max_tokens: z.number().int().min(1).max(8192).optional(),
+  temperature: z.number().min(0).max(2).optional(),
+})
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // 只允许 POST 请求
@@ -14,6 +25,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const apiKey = authHeader.replace('Bearer ', '')
 
+  // 输入校验
+  const parsed = RequestSchema.safeParse(req.body)
+  if (!parsed.success) {
+    return res.status(400).json({ error: 'Invalid request', details: parsed.error.flatten() })
+  }
+
   try {
     const response = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
@@ -21,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${apiKey}`,
       },
-      body: JSON.stringify(req.body),
+      body: JSON.stringify(parsed.data),
     })
 
     const data = await response.json()

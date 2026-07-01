@@ -8,7 +8,7 @@
 import type { Branch, Gan, ShenShaItem, ShenShaCategory } from './types.js';
 import { GAN_JI_GONG, ALL_BRANCHES, ALL_GANS } from './types.js';
 import shenshaRules from '../../data/liuren/shensha-rules.json' with { type: 'json' };
-import { CHONG_MAP } from './constants.js';
+import { CHONG_MAP, GAN_HE } from './constants.js';
 
 const VALID_BRANCHES_SET = new Set<string>(ALL_BRANCHES);
 
@@ -36,12 +36,6 @@ interface ShenShaRule {
     note?: string;
   };
 }
-
-/** 天干合映射：甲合己、乙合庚、丙合辛、丁合壬、戊合癸 */
-const GAN_HE: Record<Gan, Gan> = {
-  '甲': '己', '乙': '庚', '丙': '辛', '丁': '壬', '戊': '癸',
-  '己': '甲', '庚': '乙', '辛': '丙', '壬': '丁', '癸': '戊',
-};
 
 /**
  * 收集所有神煞

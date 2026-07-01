@@ -127,17 +127,40 @@ export async function getRecordById(id: string, userId: string): Promise<Divinat
   return fromSupabaseRow(data as Record<string, unknown>)
 }
 
-export async function getAllRecords(userId: string): Promise<DivinationRecord[]> {
+export async function getAllRecords(
+  userId: string,
+  options: { limit?: number; offset?: number } = {},
+): Promise<DivinationRecord[]> {
   checkSupabase()
-  const { data, error } = await supabase
+  const { limit, offset } = options
+  let query = supabase
     .from('records')
     .select('*')
     .eq('user_id', userId)
     .order("timestamp", { ascending: false })
+  if (limit !== undefined && offset !== undefined) {
+    query = query.range(offset, offset + limit - 1)
+  }
+  const { data, error } = await query
   if (error) {
     throw new Error(`Failed to get records: ${error.message}`)
   }
   return (data || []).map(row => fromSupabaseRow(row as Record<string, unknown>))
+}
+
+/**
+ * 获取用户记录总数（不加载完整数据）
+ */
+export async function getRecordCount(userId: string): Promise<number> {
+  checkSupabase()
+  const { count, error } = await supabase
+    .from('records')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+  if (error) {
+    throw new Error(`Failed to count records: ${error.message}`)
+  }
+  return count ?? 0
 }
 
 export async function queryByCategory(category: Category, userId: string): Promise<DivinationRecord[]> {

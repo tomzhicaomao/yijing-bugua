@@ -194,7 +194,7 @@ export function useLiuren() {
 
     // 先切到结果页显示课式和解读，再等待保存完成
     setStep('result');
-    const effectiveNM = nianMing;
+    const effectiveNM = nianMing ?? undefined;
     await autoSaveAndNavigate(panData, q, finalInterp, effectiveNM, nianMingCtx);
   }, [autoSaveAndNavigate, nianMing]);
 

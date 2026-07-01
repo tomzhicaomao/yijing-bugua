@@ -55,10 +55,8 @@ export function calculateNianMingContext(
 
   // 干支年份计算：以 2024 甲辰年为锚点
   const ANCHOR_YEAR = 2024;
-  const ANCHOR_GAN = 0; // 甲=0 (2024 天干 = 甲)
   const ANCHOR_ZHI = 4; // 辰=4 (2024 地支 = 辰)
 
-  const currentGan = ((currentYear - ANCHOR_YEAR + ANCHOR_GAN) % 10 + 10) % 10;
   const currentZhi = ((currentYear - ANCHOR_YEAR + ANCHOR_ZHI) % 12 + 12) % 12;
 
   // 出生年索引（60甲子）
