@@ -77,6 +77,8 @@ src/
 1. `20260630000000_add_liuren_fields.sql` — 添加 `liuren_pan` 和 `interpretation` JSONB 列
 2. `20260630010000_alter_method_column.sql` — 扩展 `method` 列 `VARCHAR(10)` → `VARCHAR(20)`
 3. `ALTER TABLE records ADD COLUMN IF NOT EXISTS framework JSONB` — 框架层分析结果（2026-07-01 已执行）
+4. `20260701000000_add_nianming_to_settings.sql` — user_settings 新增 `nian_ming` JSONB
+5. `20260701000001_add_nianming_to_records.sql` — records 新增 `nian_ming` JSONB
 
 ## Environment
 
