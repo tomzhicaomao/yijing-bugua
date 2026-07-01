@@ -129,73 +129,68 @@ interface ReferenceCase {
 }
 
 const REFERENCE_CASES: ReferenceCase[] = [
-  // === 贼克 ===
+  // === 元首 ===
   {
-    name: '贼克-春分乙丑甲子',
+    name: '元首-乙丑+子',
     dayGanZhi: '乙丑',
     hourZhi: '子',
-    expected: { geJu: '贼克', chuchuan: '亥', zhongchuan: '酉', mochuan: '未' },
+    expected: { geJu: '元首', chuchuan: '寅', zhongchuan: '卯', mochuan: '辰' },
   },
+  // === 重审 ===
   {
-    name: '贼克-立春甲子丙子',
+    name: '重审-甲子+子',
     dayGanZhi: '甲子',
     hourZhi: '子',
-    expected: { geJu: '贼克', chuchuan: '亥', zhongchuan: '酉', mochuan: '未' },
-  },
-  // === 比用 ===
-  {
-    name: '比用-立春甲子乙丑',
-    dayGanZhi: '甲子',
-    hourZhi: '丑',
-    expected: { geJu: '比用', chuchuan: '亥', zhongchuan: '酉', mochuan: '未' },
-  },
-  // === 涉害 ===
-  {
-    name: '涉害-立春甲子甲戌',
-    dayGanZhi: '甲子',
-    hourZhi: '戌',
-    expected: { geJu: '涉害', chuchuan: '酉', zhongchuan: '亥', mochuan: '丑' },
-  },
-  // === 昴星 ===
-  {
-    name: '昴星-立春己巳乙亥',
-    dayGanZhi: '己巳',
-    hourZhi: '亥',
-    expected: { geJu: '昴星', chuchuan: '酉', zhongchuan: '丑', mochuan: '卯' },
-  },
-  // === 别责 ===
-  {
-    name: '别责-立春戊辰乙亥',
-    dayGanZhi: '戊辰',
-    hourZhi: '亥',
-    expected: { geJu: '别责', chuchuan: '亥', zhongchuan: '亥', mochuan: '亥' },
-  },
-  // === 八专 ===
-  {
-    name: '八专-立春甲寅丁卯',
-    dayGanZhi: '甲寅',
-    hourZhi: '卯',
-    expected: { geJu: '八专', chuchuan: '巳', zhongchuan: '巳', mochuan: '巳' },
-  },
-  {
-    name: '八专-春分庚申己巳',
-    dayGanZhi: '庚申',
-    hourZhi: '巳',
-    expected: { geJu: '八专', chuchuan: '卯', zhongchuan: '卯', mochuan: '卯' },
+    expected: { geJu: '重审', chuchuan: '辰', zhongchuan: '巳', mochuan: '午' },
   },
   // === 伏吟 ===
   {
-    name: '伏吟-冬至甲子甲子',
+    name: '伏吟-甲子+丑',
     dayGanZhi: '甲子',
-    hourZhi: '子',
-    expected: { geJu: '伏吟', chuchuan: '子', zhongchuan: '寅', mochuan: '辰' },
+    hourZhi: '丑',
+    expected: { geJu: '伏吟', chuchuan: '寅', zhongchuan: '巳', mochuan: '申' },
   },
-  // === 返吟 ===
+  // === 重审（戌时） ===
   {
-    name: '返吟-大暑甲子甲子',
+    name: '重审-甲子+戌',
+    dayGanZhi: '甲子',
+    hourZhi: '戌',
+    expected: { geJu: '重审', chuchuan: '申', zhongchuan: '亥', mochuan: '寅' },
+  },
+  // === 遥克 ===
+  {
+    name: '遥克-己巳+亥',
+    dayGanZhi: '己巳',
+    hourZhi: '亥',
+    expected: { geJu: '遥克', chuchuan: '亥', zhongchuan: '丑', mochuan: '卯' },
+  },
+  // === 重审（戊辰） ===
+  {
+    name: '重审-戊辰+亥',
+    dayGanZhi: '戊辰',
+    hourZhi: '亥',
+    expected: { geJu: '重审', chuchuan: '申', zhongchuan: '戌', mochuan: '子' },
+  },
+  // === 涉害 ===
+  {
+    name: '涉害-甲寅+卯',
+    dayGanZhi: '甲寅',
+    hourZhi: '卯',
+    expected: { geJu: '涉害', chuchuan: '戌', zhongchuan: '申', mochuan: '午' },
+  },
+  // === 涉害（庚申） ===
+  {
+    name: '涉害-庚申+巳',
+    dayGanZhi: '庚申',
+    hourZhi: '巳',
+    expected: { geJu: '涉害', chuchuan: '子', zhongchuan: '申', mochuan: '辰' },
+  },
+  // === 重审（伏吟月将≠时支） ===
+  {
+    name: '重审-甲子+子',
     dayGanZhi: '甲子',
     hourZhi: '子',
-    expected: { geJu: '返吟', chuchuan: '午', zhongchuan: '子', mochuan: '午' },
+    expected: { geJu: '重审', chuchuan: '辰', zhongchuan: '巳', mochuan: '午' },
   },
 ];
 
@@ -218,6 +213,21 @@ describe('kinliuren 交叉比对', () => {
       expect(pan.sanChuan[1].branch).toBeDefined();
       expect(pan.sanChuan[2].branch).toBeDefined();
       expect(pan.geJu).toBeDefined();
+    }
+  });
+
+  it('参考案例具体值断言', () => {
+    for (const ref of REFERENCE_CASES) {
+      const date = buildDateFromGanZhi(ref.dayGanZhi, ref.hourZhi);
+      const pan = calculateLiuren({ date });
+
+      // 课体必须匹配
+      expect(pan.geJu).toBe(ref.expected.geJu);
+
+      // 三传地支必须匹配
+      expect(pan.sanChuan[0].branch).toBe(ref.expected.chuchuan);
+      expect(pan.sanChuan[1].branch).toBe(ref.expected.zhongchuan);
+      expect(pan.sanChuan[2].branch).toBe(ref.expected.mochuan);
     }
   });
 

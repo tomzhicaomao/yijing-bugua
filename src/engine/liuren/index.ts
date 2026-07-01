@@ -13,6 +13,7 @@
  */
 
 import type { Branch, Gan, LiurenPan, LiurenParams } from './types.js';
+import { ALL_BRANCHES } from './types.js';
 import { buildTianDiPan } from './tiandi-pan.js';
 import { getYueJiang, getSolarTerm, isNearSolarTermBoundary, getMonthZhi } from './jieqi.js';
 import { buildSiKe } from './sike.js';
@@ -82,7 +83,20 @@ export function calcShiGanZhi(date: Date, dayGan: Gan): [Gan, Branch] {
  * @param params 起课参数
  * @returns 完整课式
  */
+const VALID_BRANCHES_SET = new Set<string>(ALL_BRANCHES);
+
 export function calculateLiuren(params: LiurenParams): LiurenPan {
+  // 输入验证
+  if (!params?.date || !(params.date instanceof Date) || isNaN(params.date.getTime())) {
+    throw new Error('calculateLiuren: 无效的日期参数');
+  }
+  if (params.date.getFullYear() < 1901) {
+    throw new Error('calculateLiuren: 不支持 1901 年前的日期');
+  }
+  if (params.shiZhi !== undefined && !VALID_BRANCHES_SET.has(params.shiZhi)) {
+    throw new Error(`calculateLiuren: 无效的时辰 "${params.shiZhi}"`);
+  }
+
   const { date, shiZhi: customShiZhi } = params;
 
   // 1. 推算日干支
@@ -187,6 +201,22 @@ export { calcShiGan, calcDunGan, calcLiuQin, buildSanChuanItems } from './dungan
 export { collectShenSha } from './shensha.js';
 export { checkTaiSui } from './tai-sui-check.js';
 export { detectShenShaConflict } from './shensha-conflict.js';
-export { checkJieqiBoundary } from './jieqi-boundary.js';
+// checkJieqiBoundary — 已移除（未被使用）
 export { detectKongWang, calcKongWang } from './kongwang-detect.js';
-export { runAllWarnings } from './warnings.js';
+// runAllWarnings — 已移除（未被使用）
+
+// 框架层模块
+export { classifyKeGe } from './keGe.js';
+export type { KeGeAnalysis } from './keGe.js';
+export { KE_GE_DB } from './keGeDb.js';
+export type { KeGe } from './keGeDb.js';
+export type { KeGeCategory } from './framework-types.js';
+export { matchBiFa } from './bifa.js';
+export type { BiFaMatch, BiFaRule, BiFaCategory, ZhanShi } from './bifa.js';
+export { BI_FA_RULES } from './bifaRules.js';
+export { analyzeTianJiang, TIAN_JIANG_MEANINGS } from './tianjiang-meaning.js';
+export type { TianJiangAnalysis, TianJiangMeaning } from './tianjiang-meaning.js';
+export { analyzeLiuQin, LIU_QIN_SCENES } from './liuqin-analysis.js';
+export type { LiuQinAnalysis, LiuQinScene } from './liuqin-analysis.js';
+export { analyzeFramework } from './framework.js';
+export type { FrameworkAnalysis, JudgmentSignal } from './framework.js';

@@ -17,6 +17,7 @@ import { FEATURE_LIUREN_ENABLED } from './lib/constants'
 // 六壬模块 - 懒加载
 const LiurenView = lazy(() => import('./pages/LiurenView'))
 const LiurenResultView = lazy(() => import('./pages/LiurenResultView'))
+const LiurenDetailView = lazy(() => import('./pages/LiurenDetailView'))
 
 function PageSkeleton() {
   return (
@@ -59,6 +60,11 @@ export default function App() {
                 <Route path="/liuren/:id" element={
                   <Suspense fallback={<PageSkeleton />}>
                     <ProtectedRoute><LiurenResultView /></ProtectedRoute>
+                  </Suspense>
+                } />
+                <Route path="/liuren/:id/detail" element={
+                  <Suspense fallback={<PageSkeleton />}>
+                    <ProtectedRoute><LiurenDetailView /></ProtectedRoute>
                   </Suspense>
                 } />
               </>

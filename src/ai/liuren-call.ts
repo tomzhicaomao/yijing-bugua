@@ -6,8 +6,10 @@
 
 import { callDeepSeek, sleep, backoffDelay, DeepSeekError, type DeepSeekRequest } from './deepseek-client.js';
 import { DEFAULT_MODEL, DEFAULT_TEMPERATURE, PROMPT_VERSION } from '../lib/constants.js';
-import { buildLiurenSystemPrompt, buildLiurenUserPrompt } from './liuren-prompt-builder.js';
+import { buildLiurenSystemPrompt, buildLiurenUserPrompt, buildLiurenSystemPromptV2, buildLiurenUserPromptV2 } from './liuren-prompt-builder.js';
 import type { LiurenPan } from '../engine/liuren/types.js';
+import { analyzeFramework } from '../engine/liuren/framework.js';
+import type { ZhanShi } from '../engine/liuren/bifa.js';
 import type { InterpretationResult } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -147,4 +149,97 @@ function parseAIResponse(content: string): {
   } catch {
     return null;
   }
+}
+
+// ==================== V2: 框架层集成版本 ====================
+
+/**
+ * 调用 AI 解读大六壬课式（V2）
+ *
+ * 先进行框架层分析（确定性计算），再调用 AI 进行叙事合成
+ *
+ * @param pan 完整课式
+ * @param question 用户问题
+ * @param zhanShi 占事类型
+ * @param model AI 模型
+ * @param maxRetries 最大重试次数
+ */
+export async function callLiurenInterpretationV2(
+  pan: LiurenPan,
+  question: string,
+  zhanShi?: ZhanShi,
+  model: string = DEFAULT_MODEL,
+  maxRetries: number = 3,
+): Promise<LiurenCallResult> {
+  // 1. 框架层分析（确定性，无AI调用）
+  const framework = analyzeFramework(pan, zhanShi);
+
+  // 2. 构建 prompt（结构化输入）
+  const systemPrompt = buildLiurenSystemPromptV2();
+  const userPrompt = buildLiurenUserPromptV2(pan, question, framework, zhanShi);
+
+  let lastError: string | undefined;
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    if (attempt > 0) {
+      await sleep(backoffDelay(attempt - 1));
+    }
+
+    try {
+      const req: DeepSeekRequest = {
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.3,  // 降低温度，提高一致性
+        response_format: { type: 'json_object' },
+        max_tokens: 3000,
+      };
+
+      const response = await callDeepSeek(req);
+      const content = response.choices?.[0]?.message?.content;
+
+      if (!content) {
+        lastError = 'AI 返回空内容';
+        continue;
+      }
+
+      const parsed = parseAIResponse(content);
+      if (!parsed) {
+        lastError = 'AI 响应格式不符合预期';
+        continue;
+      }
+
+      return {
+        success: true,
+        interpretation: {
+          id: uuidv4(),
+          type: 'default',
+          trend: parsed.trend,
+          analysis: parsed.analysis,
+          conditions: parsed.conditions,
+          timeWindow: parsed.timeWindow,
+          answer: parsed.answer,
+          confidence: parsed.confidence,
+          model,
+          promptVersion: `${PROMPT_VERSION}-v2`,
+          temperature: 0.3,
+          rawResponse: content,
+          claims: parsed.claims,
+        },
+      };
+    } catch (err) {
+      if (err instanceof DeepSeekError) {
+        lastError = err.message;
+      } else {
+        lastError = err instanceof Error ? err.message : '未知错误';
+      }
+    }
+  }
+
+  return {
+    success: false,
+    error: lastError || 'AI 调用失败（已重试）',
+  };
 }

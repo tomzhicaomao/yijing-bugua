@@ -8,6 +8,7 @@ test-results/
 *.bak
 __pycache__/
 .vercel
+data/
 
 .env
 .env.*

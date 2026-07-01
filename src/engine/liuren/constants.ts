@@ -6,6 +6,7 @@
  */
 
 import type { Branch, Gan, WuXing } from './types.js';
+import { ALL_BRANCHES } from './types.js';
 
 // ========== 五行相克矩阵 ==========
 
@@ -175,6 +176,17 @@ export function isSheng(a: WuXing, b: WuXing): boolean {
 }
 
 /**
+ * 五行生克关系判断
+ * @returns 'sheng' | 'ke' | 'bihe'
+ */
+export function getShengKe(a: WuXing, b: WuXing): 'sheng' | 'ke' | 'bihe' {
+  if (a === b) return 'bihe';
+  if (isSheng(a, b)) return 'sheng';
+  if (isKe(a, b)) return 'ke';
+  return 'bihe';
+}
+
+/**
  * 判断两个地支是否相冲
  */
 export function isChong(a: Branch, b: Branch): boolean {
@@ -228,16 +240,14 @@ export function isYangBranch(branch: Branch): boolean {
  * 地支顺行一步（顺数）
  */
 export function nextBranch(branch: Branch, steps: number = 1): Branch {
-  const branches: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-  const idx = branches.indexOf(branch);
-  return branches[(idx + steps) % 12];
+  const idx = ALL_BRANCHES.indexOf(branch);
+  return ALL_BRANCHES[(idx + steps) % 12];
 }
 
 /**
  * 地支逆行一步（逆数）
  */
 export function prevBranch(branch: Branch, steps: number = 1): Branch {
-  const branches: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-  const idx = branches.indexOf(branch);
-  return branches[(idx - steps + 12) % 12];
+  const idx = ALL_BRANCHES.indexOf(branch);
+  return ALL_BRANCHES[(idx - steps + 12) % 12];
 }

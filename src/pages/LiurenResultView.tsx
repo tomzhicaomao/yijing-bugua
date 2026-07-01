@@ -16,74 +16,11 @@ import LiurenPanTable from '../components/liuren/LiurenPanTable';
 import Interpretation from '../components/result/Interpretation';
 import FeedbackForm from '../components/feedback/FeedbackForm';
 import type { DivinationRecord, LiurenPanData } from '../types';
-import type { LiurenPan, TianDiPan, TianJiangName } from '../engine/liuren/types';
-
-// ─── Section header ─────────────────────────────────────────────
-
-function SectionLabel({ label, sub }: { label: string; sub?: string }) {
-  return (
-    <div className="flex items-center gap-2 mb-3">
-      <span className="font-mono text-xs tracking-[0.15em] text-nothing-text-secondary">{label}</span>
-      {sub && <span className="font-mono text-[10px] text-nothing-text-disabled">· {sub}</span>}
-    </div>
-  );
-}
-
-// ─── Collapsible section ────────────────────────────────────────
-
-function Collapsible({
-  title,
-  defaultOpen = false,
-  badge,
-  children,
-}: {
-  title: string;
-  defaultOpen?: boolean;
-  badge?: number;
-  children: React.ReactNode;
-}) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="border border-nothing-border rounded-md overflow-hidden">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-nothing-bg-secondary hover:bg-nothing-raised transition-colors"
-      >
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-xs tracking-[0.15em] text-nothing-text-secondary">
-            {title}
-          </span>
-          {badge !== undefined && badge > 0 && (
-            <span className="font-mono text-[9px] text-nothing-text-disabled bg-nothing-raised px-1.5 py-0.5 rounded">
-              {badge}
-            </span>
-          )}
-        </div>
-        <span className="font-mono text-[10px] text-nothing-text-disabled">
-          {open ? '收起' : '展开'}
-        </span>
-      </button>
-      {open && <div className="p-4">{children}</div>}
-    </div>
-  );
-}
-
-// ─── Trend badge ────────────────────────────────────────────────
-
-function TrendBadge({ trend }: { trend: string }) {
-  const style =
-    trend === '利'
-      ? 'bg-green-500/10 text-green-600 border-green-500/20'
-      : trend === '不利'
-        ? 'bg-red-500/10 text-red-600 border-red-500/20'
-        : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
-
-  return (
-    <span className={`inline-block font-mono text-xs px-3 py-1 rounded-full border ${style}`}>
-      {trend}
-    </span>
-  );
-}
+import type { LiurenPan, TianJiangName } from '../engine/liuren/types';
+import { deserializePan } from '../engine/liuren/serialize';
+import SectionLabel from '../components/liuren/SectionLabel';
+import Collapsible from '../components/liuren/Collapsible';
+import TrendBadge from '../components/liuren/TrendBadge';
 
 // ─── SanChuan — 竖排，每传一行 ─────────────────────────────────
 
@@ -355,6 +292,7 @@ export default function LiurenResultView() {
 
   const pan = record.liurenPan;
   const interp = record.interpretation || record.interpretations?.[0];
+  const deserializedPan = pan ? deserializePan(pan) : null;
 
   // 计算天将/神煞是否有实际内容
   const hasTianJiang = pan?.tianJiang?.branchToJiang && Object.keys(pan.tianJiang.branchToJiang).length > 0;
@@ -439,7 +377,7 @@ export default function LiurenResultView() {
 
           {pan?.tianDiPan ? (
             <div className="mb-6">
-              <LiurenPanTable tianDiPan={pan.tianDiPan as unknown as TianDiPan} />
+              <LiurenPanTable tianDiPan={deserializedPan!.tianDiPan} />
             </div>
           ) : pan ? (
             <div className="mb-6">

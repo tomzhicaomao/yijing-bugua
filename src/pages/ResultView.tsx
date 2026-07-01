@@ -49,7 +49,8 @@ export default function ResultView() {
         setRecord(r)
         setLoading(false)
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('获取记录失败:', err)
         setLoading(false)
       })
   }, [id, user])

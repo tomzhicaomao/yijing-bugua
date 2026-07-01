@@ -18,8 +18,9 @@ export default function HomeView() {
       const today = new Date()
       today.setHours(0, 0, 0, 0)
       setTodayCount(r.filter(rec => new Date(rec.timestamp) >= today).length)
-    })
+    }).catch(err => console.error('加载记录失败:', err))
     queryPendingDue(user.id).then(r => setPending(r.length))
+      .catch(err => console.error('加载待反馈失败:', err))
   }, [user])
 
   return (

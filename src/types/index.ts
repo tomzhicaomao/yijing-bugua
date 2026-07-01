@@ -1,4 +1,6 @@
 // ========== 2.1 LineValue ==========
+import type { FrameworkAnalysis } from '../engine/liuren/framework.js';
+
 /** Line value from coin casting: 6=老阴, 7=少阳, 8=少阴, 9=老阳 */
 export type LineValue = 6 | 7 | 8 | 9
 
@@ -170,8 +172,10 @@ export interface DivinationRecord {
   duplicate?: DuplicateInfo
   /** 大六壬完整课式（JSONB） */
   liurenPan?: LiurenPanData
-  /** AI 解读结果 */
+  /** @deprecated 旧字段，已迁移到 interpretations[0]。读取时向后兼容 */
   interpretation?: InterpretationResult
+  /** 框架层分析结果（JSONB）— 复用引擎层 FrameworkAnalysis 类型 */
+  framework?: FrameworkAnalysis
 }
 
 // ========== Export format ==========

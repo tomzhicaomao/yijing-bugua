@@ -1,5 +1,42 @@
 # 项目变更记录
 
+## 2026-07-01 (修复计划执行)
+
+### ✅ FIX-PLAN.md 全量执行完成
+
+**Phase 1 — 常量去重 + 引擎输入验证**：
+- `types.ts:getShengKe()` → 复用 `constants.ts` 的 `isSheng`/`isKe`
+- `dungan.ts:calcLiuQin()` → 复用 `constants.ts`，删除本地 shengCycle/keCycle
+- 5 个文件的局部地支数组 → 统一导入 `ALL_BRANCHES`
+- `yingqi.ts` → 删除本地 `chongMap`/`riMaMap`/`sanHeMap`，改用 `constants.ts`
+- `calculateLiuren()` 入口添加日期/时辰/年份输入验证
+
+**Phase 2 — 类型安全 + 错误处理**：
+- 新增 `serialize.ts`：`serializePan()`/`deserializePan()` 替代 `as unknown as` 断言
+- `interpretation` 字段标记 `@deprecated`，不再写入新记录
+- 5 个文件添加错误处理（`HomeView`/`ResultView`/`FeedbackForm`/`bifa.ts`/`shensha.ts`）
+- `deleteRecord`/`clearAll` 包裹 `withRetry`
+- `shensha.ts` 4 处 `as Branch` → `assertBranch()` 验证
+
+**Phase 3 — AI + UI 一致性**：
+- `useLiuren.ts` 改用 `callLiurenInterpretationV2()`，新增 `zhanShi.ts`
+- 提取共享组件 `SectionLabel`/`TrendBadge`/`Collapsible` 消除 DRY 违反
+- `LiurenDetailView` 移除 `framer-motion`/`dark:` 变体
+- 删除 `warnings.ts`/`jieqi-boundary.ts` 死代码
+- `biyong.ts` 恒等式修复
+- `KeGeCategory` 移至 `framework-types.ts` 消除循环依赖
+- `DivinationRecord.framework` 复用 `FrameworkAnalysis` 类型
+
+**Phase 4 — 测试 + 工程化**：
+- 新增 `serialize.test.ts`（9 tests）、`validation.test.ts`（7 tests）
+- 交叉验证增强：10 个参考案例具体值断言
+- `.gitignore` 添加 `data/`
+- 安装缺失依赖 `lucide-react`
+
+**结果**：14 test files, 159 tests passing, 0 type errors, build succeeds
+
+---
+
 ## 2026-07-01
 
 ### 📝 第一性原理审查 + 修复方案

@@ -20,47 +20,53 @@ src/
 ├── engine/              # 纯算法层（无副作用）
 │   ├── hexagram-lookup.ts   # 卦象数据库（64卦完整）
 │   └── liuren/              # 大六壬引擎
-│       ├── index.ts         # 主入口：calcLiuren()
+│       ├── index.ts         # 主入口：calculateLiuren()（含输入验证）
 │       ├── types.ts         # 核心类型 + 常量表
+│       ├── constants.ts     # 编译时常量矩阵（五行/地支/天干关系的唯一定义）
+│       ├── serialize.ts     # LiurenPan ↔ LiurenPanData 序列化/反序列化
 │       ├── tiandi-pan.ts    # 天地盘构建
 │       ├── sike.ts          # 四课生成
 │       ├── sanchuan.ts      # 三传级联调度
 │       ├── jiuzongmen/      # 九宗门算法（9个文件）
 │       ├── tianjiang.ts     # 十二天将排布
 │       ├── dungan.ts        # 五子元遁 + 六亲
-│       ├── shensha.ts       # 神煞计算
+│       ├── shensha.ts       # 神煞计算（带 assertBranch 验证）
 │       ├── validation.ts    # 防误判检查
-│       ├── constants.ts     # 编译时常量矩阵
 │       ├── keGe.ts + keGeDb.ts  # 课格分类（64课名）
 │       ├── bifa.ts + bifaRules.ts  # 毕法赋匹配（20条规则）
+│       ├── zhanShi.ts       # 占事推断（问题关键词 → 占事类型）
 │       ├── tianjiang-meaning.ts  # 天将象义（12天将×8占事）
 │       ├── liuqin-analysis.ts    # 六亲分析（8种场景）
 │       ├── framework.ts     # 框架层总入口：analyzeFramework()
-│       ├── framework-types.ts  # 框架层共享类型
+│       ├── framework-types.ts  # 框架层共享类型（KeGeCategory）
 │       ├── kongwang-analysis.ts  # 空亡四级分类
 │       ├── yingqi.ts        # 应期推算
 │       ├── jieqi.ts         # 节气 + 月将计算
 │       ├── kongwang-detect.ts # 空亡检测
 │       ├── shensha-conflict.ts # 神煞冲突检测
-│       ├── tai-sui-check.ts # 太岁检查
-│       ├── warnings.ts      # ⚠️ 死代码（index.ts 内联了相同逻辑）
-│       └── jieqi-boundary.ts # ⚠️ 死代码
+│       └── tai-sui-check.ts # 太岁检查
 ├── ai/                  # AI 解读
 │   ├── liuren-call.ts       # 大六壬 AI 调用（V1+V2）
 │   ├── liuren-prompt-builder.ts  # Prompt 构建器（V1+V2）
 │   └── reasoning-call.ts    # 易经 AI prompt
 ├── db/records.ts        # Supabase CRUD（JSONB 存储）
 ├── pages/               # 路由页面
-├── components/          # UI 组件
+├── components/
+│   └── liuren/          # 大六壬共享组件
+│       ├── SectionLabel.tsx  # 区块标题
+│       ├── Collapsible.tsx   # 折叠面板
+│       ├── TrendBadge.tsx    # 吉凶标签
+│       └── ...               # LiurenPanTable, SiKeTable 等
 ├── types/index.ts       # 全局类型定义
 └── lib/                 # 工具函数
 ```
 
 ## Key Patterns
 
-- **数据存储**: Supabase `records` 表，`liuren_pan`、`interpretation`、`framework` 为 JSONB 列
+- **数据存储**: Supabase `records` 表，`liuren_pan`、`framework` 为 JSONB 列
 - **类型定义**: `types/index.ts` 中 `LiurenPanData` 定义 JSONB schema（与引擎层 `LiurenPan` 类型对应）
-- **天地盘类型转换**: `LiurenPanData.tianDiPan` 用 `string[]`，传给 `LiurenPanTable` 时需 `as unknown as TianDiPan`
+- **天地盘类型转换**: 保存时 `serializePan()` 序列化，读取时 `deserializePan()` 反序列化（含运行时验证）
+- **AI 解读**: 使用 V2 路径 `callLiurenInterpretationV2()` — 先框架层确定性分析，后 AI 叙事合成
 - **占卜方式**: `method` 字段 — `'virtual'`(摇卦) / `'liuren-zhengshi'`(正时) / `'liuren-huoshi'`(活时)
 - **路由**: `/liuren/:id` → LiurenResultView, `/liuren/:id/detail` → LiurenDetailView（框架层详情）, `/history/:id` → HistoryDetailView；HistoryView 根据 `method` 字段自动分流（`liuren-*` → `/liuren/:id`，其余 → `/history/:id`）
 
@@ -85,6 +91,7 @@ src/
 - Supabase migration 时间戳必须晚于 `20260530000000`（initial schema）
 - 框架层 (`framework.ts`) 的 `FrameworkAnalysis` 接口变更需同步更新 `types/index.ts` 的 `framework` 字段
 - 引擎层常量（五行关系、地支映射等）统一定义在 `constants.ts`，禁止在其他文件重复定义
+- 保存大六壬记录时必须调用 `serializePan()`，读取时调用 `deserializePan()`
 
 ## 深入文档
 

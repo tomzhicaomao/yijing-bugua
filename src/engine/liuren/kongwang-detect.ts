@@ -6,6 +6,7 @@
  */
 
 import type { Branch, Gan, SiKeItem, SanChuanItem } from './types.js';
+import { ALL_BRANCHES, ALL_GANS } from './types.js';
 
 /**
  * 空亡检测结果
@@ -25,16 +26,13 @@ export interface KongWangResult {
  * @returns 空亡的两个地支
  */
 export function calcKongWang(dayGan: Gan, dayZhi: Branch): [Branch, Branch] {
-  const ganOrder: Gan[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-  const zhiOrder: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-
-  const dayGanIdx = ganOrder.indexOf(dayGan);
-  const dayZhiIdx = zhiOrder.indexOf(dayZhi);
+  const dayGanIdx = ALL_GANS.indexOf(dayGan);
+  const dayZhiIdx = ALL_BRANCHES.indexOf(dayZhi);
   const xunStartZhiIdx = (dayZhiIdx - dayGanIdx + 12) % 12;
 
   return [
-    zhiOrder[(xunStartZhiIdx + 10) % 12],
-    zhiOrder[(xunStartZhiIdx + 11) % 12],
+    ALL_BRANCHES[(xunStartZhiIdx + 10) % 12],
+    ALL_BRANCHES[(xunStartZhiIdx + 11) % 12],
   ];
 }
 

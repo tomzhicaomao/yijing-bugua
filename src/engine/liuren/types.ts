@@ -172,15 +172,8 @@ export const TIAN_JIANG_NI: TianJiangName[] = [
   '贵人', '天后', '太阴', '玄武', '太常', '白虎', '天空', '青龙', '勾陈', '六合', '朱雀', '螣蛇',
 ];
 
-/** 五行生克 */
-export function getShengKe(a: WuXing, b: WuXing): 'sheng' | 'ke' | 'bihe' {
-  const shengCycle: Record<WuXing, WuXing> = { '木': '火', '火': '土', '土': '金', '金': '水', '水': '木' };
-  const keCycle: Record<WuXing, WuXing> = { '木': '土', '土': '水', '水': '火', '火': '金', '金': '木' };
-  if (a === b) return 'bihe';
-  if (shengCycle[a] === b) return 'sheng';
-  if (keCycle[a] === b) return 'ke';
-  return 'bihe';
-}
+/** 五行生克（委托 constants.ts 实现，此处 re-export 保持向后兼容） */
+export { getShengKe } from './constants.js';
 
 /** 所有地支（顺序索引 0-11，子=0） */
 export const ALL_BRANCHES: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];

@@ -12,7 +12,9 @@ import {
   BRANCH_WUXING,
   GAN_INDEX,
   ALL_GANS,
+  ALL_BRANCHES,
 } from './types.js';
+import { isSheng, isKe } from './constants.js';
 
 // ========== 五子元遁 ==========
 
@@ -43,7 +45,7 @@ const WUZI_YUAN_DUN: Record<Gan, Gan> = {
 export function calcShiGan(dayGan: Gan, shiZhi: Branch): Gan {
   const startGan = WUZI_YUAN_DUN[dayGan];
   const startIdx = GAN_INDEX[startGan];
-  const shiZhiIdx = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'].indexOf(shiZhi);
+  const shiZhiIdx = ALL_BRANCHES.indexOf(shiZhi);
   return ALL_GANS[(startIdx + shiZhiIdx) % 10];
 }
 
@@ -58,7 +60,7 @@ export function calcShiGan(dayGan: Gan, shiZhi: Branch): Gan {
 /** 六十甲子表 */
 const JIAZI_60: string[] = [];
 const jiaziGanOrder: Gan[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-const jiaziZhiOrder: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+const jiaziZhiOrder: Branch[] = [...ALL_BRANCHES];
 for (let i = 0; i < 60; i++) {
   JIAZI_60.push(jiaziGanOrder[i % 10] + jiaziZhiOrder[i % 12]);
 }
@@ -94,21 +96,14 @@ export function calcDunGan(dayGan: Gan, dayZhi: Branch, branch: Branch): Gan {
  */
 export function calcLiuQin(dayGanWuXing: WuXing, targetWuXing: WuXing): LiuQin {
   if (dayGanWuXing === targetWuXing) return '兄弟';
-
-  // 五行相生
-  const shengCycle: Record<WuXing, WuXing> = { '木': '火', '火': '土', '土': '金', '金': '水', '水': '木' };
-  // 五行相克
-  const keCycle: Record<WuXing, WuXing> = { '木': '土', '土': '水', '水': '火', '火': '金', '金': '木' };
-
   // 我生者为子孙
-  if (shengCycle[dayGanWuXing] === targetWuXing) return '子孙';
+  if (isSheng(dayGanWuXing, targetWuXing)) return '子孙';
   // 生我者为父母
-  if (shengCycle[targetWuXing] === dayGanWuXing) return '父母';
+  if (isSheng(targetWuXing, dayGanWuXing)) return '父母';
   // 我克者为妻财
-  if (keCycle[dayGanWuXing] === targetWuXing) return '妻财';
+  if (isKe(dayGanWuXing, targetWuXing)) return '妻财';
   // 克我者为官鬼
-  if (keCycle[targetWuXing] === dayGanWuXing) return '官鬼';
-
+  if (isKe(targetWuXing, dayGanWuXing)) return '官鬼';
   return '兄弟'; // fallback
 }
 

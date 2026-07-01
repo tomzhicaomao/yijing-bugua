@@ -27,7 +27,7 @@ export function biyong(
   const zekeResult = getZekeCandidates(siKe);
   if (!zekeResult) return null;
 
-  const { candidates, type } = zekeResult;
+  const { candidates, type: _type } = zekeResult;
 
   // 如果只有一个候选，不应该进入比用法
   if (candidates.length <= 1) return null;
@@ -42,7 +42,8 @@ export function biyong(
     // 恰好一个 → 取为初传
     const chuChuan = filtered[0];
     const [zhongChuan, moChuan] = deriveZhongMoChuan(chuChuan, tianDiPan);
-    const geJu = type === '下贼上' ? '知一' : '知一';
+    // TODO: 确认古法定义 — 比用法课体是否始终为"知一"
+    const geJu = '知一';
     return {
       chuChuan,
       zhongChuan,

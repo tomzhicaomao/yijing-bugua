@@ -49,7 +49,8 @@ function toSupabaseRow(record: DivinationRecord): Record<string, unknown> {
   }
   // 仅当 liuren 字段有值时才包含（兼容未执行 migration 的数据库）
   if (record.liurenPan) row.liuren_pan = record.liurenPan
-  if (record.interpretation) row.interpretation = record.interpretation
+  // interpretation 字段已废弃，不再写入新记录
+  if (record.framework) row.framework = record.framework
   return row
 }
 
@@ -71,6 +72,7 @@ function fromSupabaseRow(row: Record<string, unknown>): DivinationRecord {
     duplicate: (row.duplicate as DivinationRecord['duplicate']) ?? undefined,
     liurenPan: (row.liuren_pan as DivinationRecord['liurenPan']) ?? undefined,
     interpretation: (row.interpretation as DivinationRecord['interpretation']) ?? undefined,
+    framework: (row.framework as DivinationRecord['framework']) ?? undefined,
   }
 }
 
@@ -182,25 +184,29 @@ export async function queryByFeedbackStatus(status: FeedbackStatus, userId: stri
 
 export async function deleteRecord(id: string, userId: string): Promise<void> {
   checkSupabase()
-  const { error } = await supabase
-    .from('records')
-    .delete()
-    .eq('id', id)
-    .eq('user_id', userId)
-  if (error) {
-    throw new Error(`Failed to delete record: ${error.message}`)
-  }
+  await withRetry(async () => {
+    const { error } = await supabase
+      .from('records')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', userId)
+    if (error) {
+      throw new Error(`Failed to delete record: ${error.message}`)
+    }
+  })
 }
 
 export async function clearAll(userId: string): Promise<void> {
   checkSupabase()
-  const { error } = await supabase
-    .from('records')
-    .delete()
-    .eq('user_id', userId)
-  if (error) {
-    throw new Error(`Failed to clear records: ${error.message}`)
-  }
+  await withRetry(async () => {
+    const { error } = await supabase
+      .from('records')
+      .delete()
+      .eq('user_id', userId)
+    if (error) {
+      throw new Error(`Failed to clear records: ${error.message}`)
+    }
+  })
 }
 
 export async function queryByMethod(method: string, userId: string): Promise<DivinationRecord[]> {

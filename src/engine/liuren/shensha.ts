@@ -6,9 +6,18 @@
  */
 
 import type { Branch, Gan, ShenShaItem, ShenShaCategory } from './types.js';
-import { GAN_JI_GONG } from './types.js';
+import { GAN_JI_GONG, ALL_BRANCHES, ALL_GANS } from './types.js';
 import shenshaRules from '../../data/liuren/shensha-rules.json' with { type: 'json' };
 import { CHONG_MAP } from './constants.js';
+
+const VALID_BRANCHES_SET = new Set<string>(ALL_BRANCHES);
+
+function assertBranch(value: string, label: string): Branch {
+  if (!VALID_BRANCHES_SET.has(value)) {
+    throw new Error(`无效的${label}: "${value}"`);
+  }
+  return value as Branch;
+}
 
 /** 神煞规则条目 */
 interface ShenShaRule {
@@ -62,8 +71,8 @@ export function collectShenSha(
         yearGan, yearZhi, monthZhi, dayGan, dayZhi, shiZhi,
       });
       result.push(...items);
-    } catch {
-      // 跳过无法解析的规则
+    } catch (err) {
+      console.warn(`神煞规则 "${rule.name}" 解析出错:`, err);
     }
   }
 
@@ -99,7 +108,7 @@ function resolveRule(
           items.push({
             name: rule.name,
             category: rule.category,
-            branch: b as Branch,
+            branch: assertBranch(b, '神煞地支'),
           });
         });
       }
@@ -113,7 +122,7 @@ function resolveRule(
         items.push({
           name: rule.name,
           category: rule.category,
-          branch: branch as Branch,
+          branch: assertBranch(branch, '日支查表'),
         });
       }
       break;
@@ -134,7 +143,7 @@ function resolveRule(
           items.push({
             name: rule.name,
             category: rule.category,
-            branch: value as Branch,
+            branch: assertBranch(value, '月支查表'),
           });
         }
       }
@@ -152,13 +161,12 @@ function resolveRule(
 
     case 'year_branch_offset': {
       const offset = rule.rules.offset || 0;
-      const branches: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-      const idx = branches.indexOf(ctx.yearZhi);
+      const idx = ALL_BRANCHES.indexOf(ctx.yearZhi);
       const targetIdx = ((idx + offset) % 12 + 12) % 12;
       items.push({
         name: rule.name,
         category: rule.category,
-        branch: branches[targetIdx],
+        branch: ALL_BRANCHES[targetIdx],
       });
       break;
     }
@@ -168,22 +176,19 @@ function resolveRule(
         items.push({
           name: rule.name,
           category: rule.category,
-          branch: rule.rules.branch as Branch,
+          branch: assertBranch(rule.rules.branch!, '固定地支'),
         });
       }
       break;
     }
 
     case 'jiazi_cycle_null': {
-      const ganOrder: Gan[] = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
-      const zhiOrder: Branch[] = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
-
-      const dayGanIdx = ganOrder.indexOf(ctx.dayGan);
-      const dayZhiIdx = zhiOrder.indexOf(ctx.dayZhi);
+      const dayGanIdx = ALL_GANS.indexOf(ctx.dayGan);
+      const dayZhiIdx = ALL_BRANCHES.indexOf(ctx.dayZhi);
       const xunStartZhiIdx = (dayZhiIdx - dayGanIdx + 12) % 12;
 
-      const null1 = zhiOrder[(xunStartZhiIdx + 10) % 12];
-      const null2 = zhiOrder[(xunStartZhiIdx + 11) % 12];
+      const null1 = ALL_BRANCHES[(xunStartZhiIdx + 10) % 12];
+      const null2 = ALL_BRANCHES[(xunStartZhiIdx + 11) % 12];
 
       items.push({ name: rule.name, category: rule.category, branch: null1 });
       items.push({ name: rule.name, category: rule.category, branch: null2 });

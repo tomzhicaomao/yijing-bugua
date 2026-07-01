@@ -27,38 +27,53 @@ export default function FeedbackForm({ record, onUpdated }: FeedbackFormProps) {
   const submitQuick = async (status: FeedbackStatus) => {
     if (!user) return
     setSubmitting(true)
-    const updated = { ...record, feedback: { ...record.feedback, status } }
-    await updateRecord(updated, user.id)
-    onUpdated(updated)
-    setSubmitting(false)
+    try {
+      const updated = { ...record, feedback: { ...record.feedback, status } }
+      await updateRecord(updated, user.id)
+      onUpdated(updated)
+    } catch (err) {
+      console.error('保存反馈失败:', err)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const submitDetail = async () => {
     if (!user) return
     setSubmitting(true)
-    const detail = {
-      actualResult: actualResult || undefined,
-      satisfaction,
-      actualDuration: actualDuration || undefined,
-      actionTaken: actionTaken || undefined,
-      aiInfluencedDecision: aiInfluenced ?? undefined,
-      notes: notes || undefined,
-      claimFeedback: claimFeedback.length > 0 ? claimFeedback : undefined,
+    try {
+      const detail = {
+        actualResult: actualResult || undefined,
+        satisfaction,
+        actualDuration: actualDuration || undefined,
+        actionTaken: actionTaken || undefined,
+        aiInfluencedDecision: aiInfluenced ?? undefined,
+        notes: notes || undefined,
+        claimFeedback: claimFeedback.length > 0 ? claimFeedback : undefined,
+      }
+      const updated = { ...record, feedback: { ...record.feedback, detail } }
+      await updateRecord(updated, user.id)
+      onUpdated(updated)
+      setShowDetail(false)
+    } catch (err) {
+      console.error('保存反馈失败:', err)
+    } finally {
+      setSubmitting(false)
     }
-    const updated = { ...record, feedback: { ...record.feedback, detail } }
-    await updateRecord(updated, user.id)
-    onUpdated(updated)
-    setShowDetail(false)
-    setSubmitting(false)
   }
 
   const handleRemindLater = async () => {
     if (!user) return
     setSubmitting(true)
-    const updated = { ...record, feedback: { ...record.feedback, dueAt: remindLater() } }
-    await updateRecord(updated, user.id)
-    onUpdated(updated)
-    setSubmitting(false)
+    try {
+      const updated = { ...record, feedback: { ...record.feedback, dueAt: remindLater() } }
+      await updateRecord(updated, user.id)
+      onUpdated(updated)
+    } catch (err) {
+      console.error('保存反馈失败:', err)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const isPending = record.feedback.status === 'pending'

@@ -9,7 +9,9 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import type { LiurenPan, Branch } from '../engine/liuren/types.js';
 import { calculateLiuren } from '../engine/liuren/index.js';
-import { callLiurenInterpretation } from '../ai/liuren-call.js';
+import { serializePan } from '../engine/liuren/serialize.js';
+import { callLiurenInterpretationV2 } from '../ai/liuren-call.js';
+import { inferZhanShi } from '../engine/liuren/zhanShi.js';
 import { generateLiurenFallback } from '../ai/liuren-fallback.js';
 import { createRecord, getAllRecords } from '../db/records.js';
 import { checkDuplicate } from '../engine/duplicate-check.js';
@@ -84,7 +86,7 @@ export function useLiuren() {
       dueAt: null,
       status: 'pending',
     },
-    liurenPan: panData,
+    liurenPan: serializePan(panData),
     duplicate: duplicateWarning ? { countInWindow: 1, relatedRecordIds: [] } : undefined,
   }), [category, duplicateWarning]);
 
@@ -143,7 +145,8 @@ export function useLiuren() {
     let finalInterp: InterpretationResult | null;
 
     try {
-      const result = await callLiurenInterpretation(panData, q);
+      const zhanShi = inferZhanShi(q);
+      const result = await callLiurenInterpretationV2(panData, q, zhanShi);
 
       if (aiCancelled.current) return;
 
